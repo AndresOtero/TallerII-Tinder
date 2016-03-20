@@ -1,0 +1,12 @@
+2016-03-19 20:40:34,773 INFO  [default] My first info log using default logger
+2016-03-20 13:10:13,367 INFO  [default] My first info log using default logger
+2016-03-20 13:10:13,368 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGSEGV] signal
+2016-03-20 13:10:13,368 WARN  [default] Aborting application. Reason: Fatal log at [../src/../lib/easylogging++.h:5583]
+2016-03-20 13:10:53,600 INFO  [default] My first info log using default logger
+2016-03-20 13:12:30,927 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGSEGV] signal
+2016-03-20 13:12:30,927 WARN  [default] Aborting application. Reason: Fatal log at [../src/../lib/easylogging++.h:5583]
+2016-03-20 13:12:37,849 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGSEGV] signal
+2016-03-20 13:12:37,849 WARN  [default] Aborting application. Reason: Fatal log at [../src/../lib/easylogging++.h:5583]
+2016-03-20 13:12:39,840 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGSEGV] signal
+2016-03-20 13:12:39,841 WARN  [default] Aborting application. Reason: Fatal log at [../src/../lib/easylogging++.h:5583]
+2016-03-20 13:14:27,274 INFO  [default] My first info log using default logger

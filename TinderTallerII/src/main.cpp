@@ -29,7 +29,6 @@ static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 void basic_server(){
 	struct mg_mgr mgr;
 	  struct mg_connection *nc;
-
 	  mg_mgr_init(&mgr, NULL);
 	  nc = mg_bind(&mgr, s_http_port, ev_handler);
 
