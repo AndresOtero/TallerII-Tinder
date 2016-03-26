@@ -4,10 +4,16 @@
 #include <string.h>
 #include <stdlib.h>
 #include <assert.h>
-
 #include "../lib/easylogging++.h"
-
 INITIALIZE_EASYLOGGINGPP
+#include <cstdio>
+#include <string>
+#include <json/json.h>
+#include <assert.h>
+#include "rocksdb/db.h"
+
+
+std::string kDBPath = "/tmp/rocksdb_simple_example";
 
 
 /** Implementacion de server web**/
@@ -20,6 +26,18 @@ int logg()
 	   LOG(INFO) << "My first info log using default logger";
 
     return 0;
+}
+
+
+int rocksdb_basic() {
+ rocksdb::DB *db;
+ rocksdb::Options options;
+ options.create_if_missing = true;
+ rocksdb::Status status = rocksdb::DB::Open(options, "/tmp/testdb/", &db);
+ printf(status.ok() ? "true" :"false");
+
+ assert(status.ok());
+ return 0;
 }
 static void ev_handler(struct mg_connection *nc, int ev, void *p) {
   if (ev == MG_EV_HTTP_REQUEST) {
@@ -49,9 +67,8 @@ void basic_server(){
 
 int main(int argc,char*  argv[]) {
 	// Initialize Google's logging library.
-
+	rocksdb_basic();
 	logg();
 	basic_server();
-
     return 0;
 }
