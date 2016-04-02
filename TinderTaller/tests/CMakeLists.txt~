@@ -1,0 +1,25 @@
+ #uso estandar c++11
+ set (CMAKE_CXX_STANDARD 11)
+SET(CMAKE_CXX_FLAGS "-g -fprofile-arcs -ftest-coverage")
+
+
+#includes
+include_directories(/usr/local/include)
+include_directories(../include)
+
+
+#Library:
+LINK_DIRECTORIES(../lib)
+LINK_DIRECTORIES(../src)
+
+
+#exe
+add_executable(Test Test.cpp)
+
+
+#Agrego el rocksdb
+ TARGET_LINK_LIBRARIES(test_tinder libtindertaller)
+ TARGET_LINK_LIBRARIES(test_tinder rocksdb)
+ TARGET_LINK_LIBRARIES(test_tinder gtest)
+ TARGET_LINK_LIBRARIES(test_tinder gtest_main)
+ TARGET_LINK_LIBRARIES(test_tinder pthread)

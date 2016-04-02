@@ -1,0 +1,24 @@
+ #uso estandar c++11
+ set (CMAKE_CXX_STANDARD 11)
+SET(CMAKE_CXX_FLAGS "-g -fprofile-arcs -ftest-coverage")
+
+
+#includes
+include_directories(/usr/local/include)
+include_directories(../include)
+
+
+#Library:
+LINK_DIRECTORIES(../lib)
+
+#Src
+file(GLOB SOURCES "./*")
+
+#exe
+add_executable(tindertaller ${SOURCES})
+add_library(libtindertaller SHARED ${SOURCES})
+
+#Agrego el rocksdb
+ TARGET_LINK_LIBRARIES(tindertaller rocksdb) 
+ TARGET_LINK_LIBRARIES(tindertaller -fprofile-arcs)
+ TARGET_LINK_LIBRARIES(tindertaller -ftest-coverage)

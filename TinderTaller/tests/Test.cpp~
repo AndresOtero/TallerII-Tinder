@@ -1,0 +1,30 @@
+/*
+ * Test.cpp
+ *
+ *  Created on: 1 de abr. de 2016
+ *      Author: andres
+ */
+#include "gtest/gtest.h"
+#include "../include/DataBase.h"
+
+TEST(DataBase, StoreAValue)
+{
+  EXPECT_TRUE(true);
+}
+TEST(DataBase,CreateADataBase){
+	DataBase* db=new DataBase();
+	EXPECT_TRUE(db->se_creo_ok());
+	delete db;
+}
+
+int test(int argc, char **argv) {
+
+  ::testing::InitGoogleTest(&argc, argv);
+
+  return RUN_ALL_TESTS();
+
+}
+
+
+
+
