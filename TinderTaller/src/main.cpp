@@ -31,9 +31,9 @@ int main(int argc,char*  argv[]) {
 		server->runServer();
 		continuar=client->runClient();
 	}
-	while(true){
+	/**while(true){
 		server->runServer();
 
-	}
+	}**/
     return 0;
 }
