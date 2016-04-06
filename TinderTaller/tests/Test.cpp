@@ -4,7 +4,7 @@
  *  Created on: 1 de abr. de 2016
  *      Author: andres
  */
-#include "gtest/gtest.h"
+#include "../include/gtest/gtest.h"
 #include "../include/DataBase.h"
 #include <iostream>
 
