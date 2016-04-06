@@ -4,16 +4,15 @@ dist: vivid
 compiler: gcc
 os: linux
 ruby: 2.2.0
-
-before_script: ./beforeinstall.sh
 addons:
   apt:
     sources:
-    - ubuntu-toolchain-r-test
+      - ubuntu-toolchain-r-test
     packages:
-    - gcc-5.1
-    - g++-5.1
-    - clang
+      - g++-4.8
+before_install:
+  - g++ --version
+  - ./beforeinstall.sh
 install: true
 script: ./build.sh
 

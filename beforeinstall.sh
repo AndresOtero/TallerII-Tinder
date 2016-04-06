@@ -2,7 +2,7 @@
 set -ex
 sudo apt-get update
 sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-sudo apt-cache search libgflags-dev
+#sudo apt-cache search libgflags-dev
 #sudo apt-get install libgflags-dev
 sudo apt-get install libsnappy-dev
 sudo apt-get install zlib1g-dev
