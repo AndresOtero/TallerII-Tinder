@@ -1,5 +1,6 @@
 #!/bin/sh
 set -ex
+sudo apt-get update
 sudo apt-get install libgflags-dev
 sudo apt-get install libsnappy-dev
 sudo apt-get install zlib1g-dev
