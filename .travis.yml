@@ -19,7 +19,7 @@ before_install:
   - export CXX="g++-4.8"
   - g++ --version
   - ./beforeinstall.sh
-install: true
-script: ./build.sh
+install: ./build.sh
+script: ./Test.sh
 
 
