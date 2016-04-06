@@ -8,7 +8,6 @@
 INITIALIZE_EASYLOGGINGPP
 #include <cstdio>
 #include <string>
-#include <json/json.h>
 #include <assert.h>
 #include "../include/Client.h"
 #include "../include/Server.h"
