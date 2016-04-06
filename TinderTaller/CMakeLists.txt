@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5.0)
+cmake_minimum_required(VERSION 2.8.7)
 #Nombre del proyecto
 project (tindertaller)
 
