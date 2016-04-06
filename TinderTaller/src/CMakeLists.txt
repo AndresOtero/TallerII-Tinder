@@ -1,6 +1,6 @@
  #uso estandar c++11
  set (CMAKE_CXX_STANDARD 11)
-SET(CMAKE_CXX_FLAGS "-g -fprofile-arcs -ftest-coverage")
+SET(CMAKE_CXX_FLAGS "-g -fprofile-arcs -ftest-coverage -std=c++11")
 
 
 #includes
