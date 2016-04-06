@@ -4,9 +4,9 @@
  *  Created on: 1 de abr. de 2016
  *      Author: andres
  */
-#include "rocksdb/db.h"
-#include "rocksdb/slice.h"
-#include "rocksdb/options.h"
+#include "../include/rocksdb/db.h"
+#include "../include/rocksdb/slice.h"
+#include "../include/rocksdb/options.h"
 #include <string>
 using namespace rocksdb;
 using namespace std;
