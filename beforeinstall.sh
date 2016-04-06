@@ -8,4 +8,3 @@ sudo apt-get install libsnappy-dev
 sudo apt-get install zlib1g-dev
 sudo apt-get install libbz2-dev
 sudo apt-get install libpthread-stubs0-dev
-sudo apt-get install -qq g++-4.8
