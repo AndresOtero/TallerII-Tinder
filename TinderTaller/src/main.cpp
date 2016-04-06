@@ -24,8 +24,16 @@ int logg()
 
 int main(int argc,char*  argv[]) {
 	std::shared_ptr<Server> server(new Server());
-	server->startServer();
-	//logg();
-	//basic_server();
+	std::shared_ptr<Client> client(new Client());
+
+	bool continuar=true;
+	while(continuar){
+		server->runServer();
+		continuar=client->runClient();
+	}
+	while(true){
+		server->runServer();
+
+	}
     return 0;
 }

@@ -1,0 +1,4 @@
+# python
+*.pyc
+/libgtest_main.so
+/libgtest.so

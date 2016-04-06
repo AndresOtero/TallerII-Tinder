@@ -41,11 +41,9 @@ Client::Client() {
 	  nc = mg_connect_http(&mgr, ev_handler, s_url, NULL, NULL);
 	  mg_set_protocol_http_websocket(nc);
 }
-void Client::startClient() {
-	 printf("Starting RESTful client against %s\n", s_url);
-	  while (s_exit_flag == 0) {
-	    mg_mgr_poll(&mgr, 1000);
-	  }
+bool Client::runClient() {
+	  mg_mgr_poll(&mgr, 1000);
+	  return (s_exit_flag == 0);
 }
 Client::~Client() {
 	// TODO Auto-generated destructor stub

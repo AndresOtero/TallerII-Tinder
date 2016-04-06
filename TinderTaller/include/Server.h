@@ -13,7 +13,7 @@ class Server {
 	  struct mg_connection *nc;
 public:
 	Server();
-	void startServer();
+	void runServer();
 	virtual ~Server();
 };
 

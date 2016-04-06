@@ -9,7 +9,9 @@ include_directories(../include)
 
 
 #Library:
-LINK_DIRECTORIES(../lib)
+
+LINK_DIRECTORIES( ../lib/rocksdb-master/)
+LINK_DIRECTORIES( ../lib/googletest/)
 LINK_DIRECTORIES(../src)
 
 
@@ -19,7 +21,7 @@ add_executable(Test Test.cpp)
 
 #Agrego el rocksdb
  TARGET_LINK_LIBRARIES(Test libtindertaller)
- TARGET_LINK_LIBRARIES(Test rocksdb)
  TARGET_LINK_LIBRARIES(Test gtest)
  TARGET_LINK_LIBRARIES(Test gtest_main)
  TARGET_LINK_LIBRARIES(Test pthread)
+ TARGET_LINK_LIBRARIES(Test rocksdb )

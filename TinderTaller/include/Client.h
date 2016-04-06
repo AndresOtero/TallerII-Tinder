@@ -13,7 +13,7 @@ class Client {
 public:
 	Client();
 	virtual ~Client();
-	void startClient();
+	bool runClient();
 private:
 	struct mg_mgr mgr;
 	struct mg_connection *nc;
