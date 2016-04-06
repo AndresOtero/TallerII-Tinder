@@ -8,3 +8,12 @@ ruby: 2.2.0
 before_script: ./beforeinstall.sh
 install: true
 script: ./build.sh
+
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - gcc-5.1
+    - g++-5.1
+    - clang
