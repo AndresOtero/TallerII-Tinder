@@ -1,2 +1,7 @@
 # python
 *.pyc
+/CMakeCache.txt
+/Makefile
+/cmake_install.cmake
+/libgtest.so
+/libgtest_main.so
