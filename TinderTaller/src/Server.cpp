@@ -57,6 +57,7 @@ static void ev_handler(struct mg_connection *nc, int ev, void *ev_data) {
       if (has_prefix(&hm->uri, &api_prefix)) {
         key.p = hm->uri.p + api_prefix.len;
         key.len = hm->uri.len - api_prefix.len;
+        LOG(INFO)<<"Got reply:\n%.*s\n", (int) hm->body.len, hm->body.p;
         if (is_equal(&hm->method, &s_get_method)) {
             handle_sum_call(nc, hm);                    /* Handle RESTful call */
         } else if (is_equal(&hm->method, &s_put_method)) {
@@ -87,6 +88,7 @@ Server::Server() {
 	  nc = mg_bind(&mgr, s_http_port, ev_handler);
 	  mg_set_protocol_http_websocket(nc);
 	  s_http_server_opts.document_root = "web_root";
+	  LOG(INFO)<< "Inicio servidor";
 }
 void Server::runServer() {
 	  /* Run event loop until signal is received */
@@ -94,6 +96,8 @@ void Server::runServer() {
 }
 Server::~Server() {
 	  /* Cleanup */
+		LOG(INFO)<< "Borro el server";
+
 	  mg_mgr_free(&mgr);
 }
 

@@ -22,6 +22,7 @@ DataBase::DataBase() {
 	// create the DB if it's not already present
 	options.create_if_missing = true;
 	Status s = DB::Open(options, kDBPath, &db);
+	LOG(INFO)<< "Creo base de datos";
 	this->st=s;
 	//chequear s
 	/*// open DB
@@ -57,6 +58,7 @@ DataBase::~DataBase() {
 	    Status s = BackupEngine::Open(Env::Default(), BackupableDBOptions("/tmp/rocksdb_backup"), &backup_engine);
 	    assert(s.ok());
 	    backup_engine->CreateNewBackup(db);*/
+	LOG(INFO)<< "Borro la base de datos";
 	delete db;
 }
 bool DataBase::ok(){

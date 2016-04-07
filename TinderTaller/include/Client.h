@@ -5,6 +5,7 @@
  *      Author: andres
  */
 #include "mongoose.h"
+#include "easylogging++.h"
 
 #ifndef SRC_CLIENT_H_
 #define SRC_CLIENT_H_

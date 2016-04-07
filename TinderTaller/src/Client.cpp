@@ -27,7 +27,7 @@ static void ev_handler(struct mg_connection *nc, int ev, void *ev_data) {
       }
       break;
     case MG_EV_HTTP_REPLY:
-      printf("Got reply:\n%.*s\n", (int) hm->body.len, hm->body.p);
+      printf("Cliente Got reply:\n%.*s\n", (int) hm->body.len, hm->body.p);
       nc->flags |= MG_F_SEND_AND_CLOSE;
       s_exit_flag = 1;
       break;
@@ -40,6 +40,7 @@ Client::Client() {
 	  mg_mgr_init(&mgr, NULL);
 	  nc = mg_connect_http(&mgr, ev_handler, s_url, NULL, NULL);
 	  mg_set_protocol_http_websocket(nc);
+	  LOG(INFO)<< "Inicio CLiente";
 }
 bool Client::runClient() {
 	  mg_mgr_poll(&mgr, 1000);
@@ -47,6 +48,7 @@ bool Client::runClient() {
 }
 Client::~Client() {
 	// TODO Auto-generated destructor stub
+	LOG(INFO)<< "Borro el Cliente";
 	  mg_mgr_free(&mgr);
 }
 

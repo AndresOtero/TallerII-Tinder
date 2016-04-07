@@ -4,7 +4,9 @@
  *  Created on: 3 de abr. de 2016
  *      Author: andres
  */
-#include "../include/mongoose.h"
+#include "mongoose.h"
+#include "easylogging++.h"
+
 #ifndef SRC_SERVER_H_
 #define SRC_SERVER_H_
 

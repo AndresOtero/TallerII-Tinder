@@ -6,6 +6,7 @@
 #include <assert.h>
 #include "easylogging++.h"
 INITIALIZE_EASYLOGGINGPP
+#define ELPP_THREAD_SAFE
 #include <cstdio>
 #include <string>
 #include <assert.h>

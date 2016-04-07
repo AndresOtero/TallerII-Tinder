@@ -7,6 +7,7 @@
 #include "../include/rocksdb/db.h"
 #include "../include/rocksdb/slice.h"
 #include "../include/rocksdb/options.h"
+#include "easylogging++.h"
 #include <string>
 using namespace rocksdb;
 using namespace std;
