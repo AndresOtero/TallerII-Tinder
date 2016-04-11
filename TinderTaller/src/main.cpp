@@ -29,7 +29,6 @@ int main(int argc,char*  argv[]) {
 	bool continuar=true;
 	while(continuar){
 		server->runServer();
-		continuar=client->runClient();
 	}
 	/**while(true){
 		server->runServer();
