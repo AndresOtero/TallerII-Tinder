@@ -15,7 +15,6 @@ std::string kDBPath = "/tmp/rocksdb_simple_example";
 
 
 DataBase::DataBase() {
-
 	// Optimize RocksDB. This is the easiest way to get RocksDB to perform well
 	options.IncreaseParallelism();
 	options.OptimizeLevelStyleCompaction();
@@ -62,7 +61,6 @@ DataBase::~DataBase() {
 	delete db;
 }
 bool DataBase::ok(){
-
 	return this->st.ok();
 };
 

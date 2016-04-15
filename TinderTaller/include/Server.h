@@ -9,14 +9,22 @@
 
 #ifndef SRC_SERVER_H_
 #define SRC_SERVER_H_
-
+using namespace std;
 class Server {
-	  struct mg_mgr mgr;// is an event manager that holds all active connections
-	  struct mg_connection *nc;//describes a connection
+
 public:
-	Server();
 	void runServer();
 	virtual ~Server();
-};
+	static void staticEvHandler(struct mg_connection *nc, int ev, void *ev_data) ;
+	shared_ptr<Server> getServer();
+	Server();
+
+	private:
+		static std::shared_ptr<Server> serverInstance; //Singleton Patron
+		struct mg_mgr mgr;// is an event manager that holds all active connections
+		struct mg_connection *nc;//describes a connection
+		void evHandler(struct mg_connection *nc, int ev, void *ev_data);
+
+	};
 
 #endif /* SRC_SERVER_H_ */
