@@ -50,3 +50,4 @@ jsoncpp_lib_static.dir/
 .project
 .cproject
 /.settings/
+/src/

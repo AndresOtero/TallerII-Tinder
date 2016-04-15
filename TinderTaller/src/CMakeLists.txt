@@ -8,11 +8,13 @@ include_directories(/usr/local/include)
 include_directories(../include)
 include_directories(../lib/rocksdb-master/include)
 include_directories(../lib/googletest/include/)
+include_directories(../include/json)
 
 
 #Library:
 LINK_DIRECTORIES( ../lib/rocksdb-master/)
 LINK_DIRECTORIES( ../lib/googletest/)
+LINK_DIRECTORIES( ../lib/jsoncpp-master/)
 
 #Src
 file(GLOB SOURCES "./*")
@@ -25,4 +27,5 @@ add_library(libtindertaller SHARED ${SOURCES})
  TARGET_LINK_LIBRARIES(tindertaller -fprofile-arcs)
  TARGET_LINK_LIBRARIES(tindertaller -ftest-coverage)
 TARGET_LINK_LIBRARIES(tindertaller rocksdb )
+TARGET_LINK_LIBRARIES(tindertaller jsoncpp )
 
