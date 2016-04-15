@@ -6,7 +6,7 @@
  */
 #include "mongoose.h"
 #include "easylogging++.h"
-
+#include "HandlerServer.h"
 #ifndef SRC_SERVER_H_
 #define SRC_SERVER_H_
 using namespace std;
@@ -24,7 +24,7 @@ public:
 		struct mg_mgr mgr;// is an event manager that holds all active connections
 		struct mg_connection *nc;//describes a connection
 		void evHandler(struct mg_connection *nc, int ev, void *ev_data);
-
+		std::shared_ptr<HandlerServer> handlerServ;
 	};
 
 #endif /* SRC_SERVER_H_ */

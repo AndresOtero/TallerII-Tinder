@@ -9,24 +9,32 @@
 #include "../include/rocksdb/options.h"
 #include "easylogging++.h"
 #include <string>
+#include "../include/rocksdb/status.h"
 using namespace rocksdb;
 using namespace std;
 
 #ifndef DATABASE_H_
 #define DATABASE_H_
 
+typedef struct DBtuple {
+   string key;
+   string value;
+}DBtuple_t;
+
 class DataBase {
 	 DB* db;
 	 Options options;
 	 Status st;
-
+private:
+		string status();
 public:
-	DataBase();
-	bool put(string key,string value);
+	DataBase(const std::string& db_path, bool create_if_missing, bool clean);
+	bool put(DBtuple& tuple);
 	bool ok();
-	bool get(string key , string* value);
-	bool delete_(string key);
-	string status();
+	bool get(DBtuple& tuple);
+	bool delete_(DBtuple& tuple);
+	bool deleteAll();
+	void logStatus();
 	virtual ~DataBase();
 };
 

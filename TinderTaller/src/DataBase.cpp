@@ -14,41 +14,25 @@ std::string kDBPath = "/tmp/rocksdb_simple_example";
 
 
 
-DataBase::DataBase() {
+DataBase::DataBase(const std::string& dbPath, bool createIfMissing, bool eraseAll) {
+	//DB creation
+	//For more info on the DB. Go to: https://github.com/facebook/rocksdb/wiki/Basic-Operations
 	// Optimize RocksDB. This is the easiest way to get RocksDB to perform well
 	options.IncreaseParallelism();
 	options.OptimizeLevelStyleCompaction();
 	// create the DB if it's not already present
-	options.create_if_missing = true;
-	Status s = DB::Open(options, kDBPath, &db);
+    if(dbPath.compare("")==0){
+    	LOG(FATAL)<< "El path esta vacio";
+        return;
+    }
+
+    Options options;
+    options.create_if_missing = createIfMissing;
+    st = DB::Open(options, dbPath, &db);
+    if(st.ok() && eraseAll){
+        this->deleteAll();
+    }
 	LOG(INFO)<< "Creo base de datos";
-	this->st=s;
-	//chequear s
-	/*// open DB
-
-
-	// Put key-value
-	s = db->Put(WriteOptions(), "key1", Slice("value"));
-	assert(s.ok());
-	std::string value;
-	// get value
-	s = db->Get(ReadOptions(), "key1", &value);
-	assert(s.ok());
-	assert(value == "value");
-
-	// atomically apply a set of updates
-	{
-		WriteBatch batch;
-		batch.Delete("key1");
-		batch.Put("key2", value);
-		s = db->Write(WriteOptions(), &batch);
-	}
-
-	s = db->Get(ReadOptions(), "key1", &value);
-	assert(s.IsNotFound());
-
-	db->Get(ReadOptions(), "key2", &value);
-	assert(value == "value");*/
 }
 
 DataBase::~DataBase() {
@@ -64,23 +48,38 @@ bool DataBase::ok(){
 	return this->st.ok();
 };
 
-bool DataBase::put(string key , string value){
-	Status s = db->Put(WriteOptions(), key, value);
-	st=s;
+
+bool DataBase::put(DBtuple& tuple){
+	st =db->Put(WriteOptions(), tuple.key, tuple.value);
 	return ok();
 }
-bool DataBase::get(string key , string* value){
-	Status s = db->Get(ReadOptions(), key, value);
-	st=s;
+bool DataBase::get(DBtuple& tuple){
+	st= db->Get(ReadOptions(), tuple.key,&tuple.value);
 	return ok();
 }
 
 string DataBase::status(){
 	return st.ToString();
 }
-bool DataBase::delete_(string key){
-
-	Status s = db->Delete(WriteOptions(), key);
-	st=s;
+void DataBase::logStatus(){
+	if(this->ok()){
+		LOG(INFO)<< status();
+		return;
+	}
+	LOG(FATAL)<<status();
+}
+bool DataBase::delete_(DBtuple& tuple){
+	st=db->Delete(WriteOptions(), tuple.key);
 	return ok();
+}
+bool DataBase::deleteAll(){
+	 DBtuple tuple;
+	 rocksdb::Iterator* it = db->NewIterator(rocksdb::ReadOptions());
+	  for (it->SeekToFirst(); it->Valid(); it->Next()) {
+		  tuple.key =it->key().ToString();
+		  this->delete_(tuple);
+	  }
+	  st=it->status();
+	  delete it;
+	  return ok();
 }

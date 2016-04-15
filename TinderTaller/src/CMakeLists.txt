@@ -14,7 +14,7 @@ include_directories(../include/json)
 #Library:
 LINK_DIRECTORIES( ../lib/rocksdb-master/)
 LINK_DIRECTORIES( ../lib/googletest/)
-LINK_DIRECTORIES( ../lib/jsoncpp-master/)
+LINK_DIRECTORIES( ../lib/jsoncpp-master/src/build/src/lib_json)
 
 #Src
 file(GLOB SOURCES "./*")

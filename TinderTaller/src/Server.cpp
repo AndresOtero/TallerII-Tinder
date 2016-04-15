@@ -72,10 +72,11 @@ void Server::evHandler(struct mg_connection *nc, int ev, void *ev_data) {
 
   switch (ev) {
     case MG_EV_HTTP_REQUEST:
-      if (has_prefix(&hm->uri, &api_prefix)) {
-        key.p = hm->uri.p + api_prefix.len;
-        key.len = hm->uri.len - api_prefix.len;
-        LOG(INFO)<< "Got reply: "<<(int) hm->body.len<<","<< hm->body.p<<"\n";
+    	handlerServ->handler(nc,hm);
+    	if (has_prefix(&hm->uri, &api_prefix)) {
+    		key.p = hm->uri.p + api_prefix.len;
+    		key.len = hm->uri.len - api_prefix.len;
+    		LOG(INFO)<< "Got reply: "<<(int) hm->body.len<<","<< hm->body.p<<"\n";
         if (is_equal(&hm->method, &s_get_method)) {
             handle_sum_call(nc, hm);                    /* Handle RESTful call */
         } else if (is_equal(&hm->method, &s_put_method)) {
