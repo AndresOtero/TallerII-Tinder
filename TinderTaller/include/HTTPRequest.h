@@ -31,7 +31,7 @@ typedef enum MethodType {
 	POST, PUT, GET, DELETE, INVALID_METHOD
 } MethodType;
 
-const string usersString="users/";
+const string usersString="/users";
 
 
 typedef enum PrefixType {

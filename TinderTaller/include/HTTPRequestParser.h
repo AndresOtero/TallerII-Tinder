@@ -7,6 +7,7 @@
 #include <iostream>
 #include "mongoose.h"
 #include "HTTPRequest.h"
+#include "easylogging++.h"
 #ifndef SRC_HTTPREQUESTPARSER_H_
 #define SRC_HTTPREQUESTPARSER_H_
 using namespace std;

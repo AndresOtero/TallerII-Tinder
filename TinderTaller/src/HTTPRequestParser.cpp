@@ -11,9 +11,7 @@ HTTPRequestParser::HTTPRequestParser() {
 
 }
 bool HTTPRequestParser::isPrefix(struct http_message *hm, string prefix){
-	string prefixM="";
-	prefixM.append(hm->uri.p, hm->uri.len);
-	return (prefixM.compare(prefix)==0);
+	return (mg_vcmp(&hm->uri, prefix.c_str()) == 0);
 }
 bool HTTPRequestParser::isMethod(struct http_message *hm, string method){
 	string methodM="";

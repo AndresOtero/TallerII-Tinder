@@ -29,7 +29,7 @@ void Server::evHandler(struct mg_connection *nc, int ev, void *ev_data) {
 	msg_t msg;
 	switch (ev) {
 	case MG_EV_HTTP_REQUEST:
-		msg=server->handlerServ->handler( hm);
+		msg=server->handlerServ->handler(hm);
 		break;
 	default:
 		break;
@@ -37,8 +37,8 @@ void Server::evHandler(struct mg_connection *nc, int ev, void *ev_data) {
 	msg.body="OK";
 	msg.status=OK;
 	mg_printf(nc, "HTTP/1.1 %d\r\n"
-	                            "Transfer-Encoding: chunked\r\n"
-	                            "\r\n",msg.status);
+			"Transfer-Encoding: chunked\r\n"
+			"\r\n", msg.status);
     mg_printf_http_chunk(nc, "%s", msg.body.c_str());
 	mg_send_http_chunk(nc, "", 0);
 }
