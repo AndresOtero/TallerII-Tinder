@@ -5,14 +5,23 @@
  *      Author: andres
  */
 #include <iostream>
+#include "mongoose.h"
+#include "HTTPRequest.h"
 #ifndef SRC_HTTPREQUESTPARSER_H_
 #define SRC_HTTPREQUESTPARSER_H_
-
+using namespace std;
 class HTTPRequestParser {
 public:
 	HTTPRequestParser();
-    bool isUri(struct http_message *hm, std::string uri);
+
+	MethodType methodType(struct http_message *hm);
+	PrefixType prefixType(struct http_message *hm);
+
 	virtual ~HTTPRequestParser();
+
+private:
+	bool isPrefix(struct http_message *hm, string prefix);
+	bool isMethod(struct http_message *hm, string method);
 };
 
 #endif /* SRC_HTTPREQUESTPARSER_H_ */

@@ -23,7 +23,7 @@ int logg()
 
 
 int main(int argc,char*  argv[]) {
-	std::shared_ptr<Server> server(new Server());
+	Server* server=Server::getServer();
 	std::shared_ptr<Client> client(new Client());
 
 	bool continuar=true;
@@ -34,5 +34,6 @@ int main(int argc,char*  argv[]) {
 		server->runServer();
 
 	}**/
+	delete server;
     return 0;
 }

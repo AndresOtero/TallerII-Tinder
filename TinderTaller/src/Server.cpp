@@ -7,7 +7,7 @@
 
 #include "Server.h"
 
-std::shared_ptr<Server> Server::serverInstance = NULL; //Singleton Patron
+Server* Server::serverInstance = NULL; //Singleton Patron
 
 static const char *s_http_port = "8000";
 static int s_sig_num = 0;
@@ -19,26 +19,32 @@ static void *s_db_handle = NULL;
 
 void Server::staticEvHandler(struct mg_connection *nc, int ev, void *ev_data) {
 	/**Has to be static for mongoose to use it**/
-	std::shared_ptr<Server> instance = Server::serverInstance;
+	Server* instance = Server::serverInstance;
 	instance->evHandler(nc, ev, ev_data);
 }
 
 void Server::evHandler(struct mg_connection *nc, int ev, void *ev_data) {
 	struct http_message *hm = (struct http_message *) ev_data;
-
+	Server* server=Server::getServer();
+	msg_t msg;
 	switch (ev) {
 	case MG_EV_HTTP_REQUEST:
-		handlerServ->handler(nc, hm);
-
-
+		msg=server->handlerServ->handler( hm);
 		break;
 	default:
 		break;
 	}
+	msg.body="OK";
+	msg.status=OK;
+	mg_printf(nc, "HTTP/1.1 %d\r\n"
+	                            "Transfer-Encoding: chunked\r\n"
+	                            "\r\n",msg.status);
+    mg_printf_http_chunk(nc, "%s", msg.body.c_str());
+	mg_send_http_chunk(nc, "", 0);
 }
-shared_ptr<Server> Server::getServer() {
+Server* Server::getServer() {
 	if (serverInstance == NULL) {
-		serverInstance = std::make_shared<Server>();
+		serverInstance=new Server();
 	}
 	return serverInstance;
 }
@@ -47,8 +53,8 @@ Server::Server() {
 	mg_mgr_init(&mgr, NULL);  //Initialize Mongoose manager
 	nc = mg_bind(&mgr, s_http_port, Server::staticEvHandler); //Create listening connection.
 	mg_set_protocol_http_websocket(nc); //Attach built-in HTTP event handler to the given connection.
-	std::shared_ptr < HandlerServer > handlerServ = make_shared < HandlerServer
-			> ("/tmp/test");
+	std::shared_ptr < HandlerServer > handlerServ(new HandlerServer("/tmp/test"));
+	serverInstance=this;
 	LOG(INFO)<< "Inicio servidor";
 }
 void Server::runServer() {
@@ -57,7 +63,6 @@ void Server::runServer() {
 Server::~Server() {
 	/* Cleanup */
 	LOG(INFO)<< "Borro el server";
-
 	mg_mgr_free(&mgr);
 }
 

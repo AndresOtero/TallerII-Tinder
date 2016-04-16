@@ -8,6 +8,7 @@
 #include <iostream>
 #include "DataBase.h"
 #include "HTTPRequestParser.h"
+#include "HTTPRequest.h"
 
 #ifndef SRC_HANDLERSERVER_H_
 #define SRC_HANDLERSERVER_H_
@@ -15,11 +16,13 @@ class HandlerServer {
 
 public:
 	HandlerServer(const std::string& db_path);
-	std::string  handler(struct mg_connection *nc,struct http_message *hm);
+	msg_t  handler(struct http_message *hm);
 	virtual ~HandlerServer();
 private:
-	std::shared_ptr<DataBase>DB;
+	msg_t handlerUsers(struct http_message * hm);
+	DataBase* DB;
 	HTTPRequestParser httpReqParser;
+	msg_t badRequest();
 };
 
 #endif /* SRC_HANDLERSERVER_H_ */
