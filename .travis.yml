@@ -20,6 +20,8 @@ before_install:
   - g++ --version
   - ./beforeinstall.sh
 install: 
+- export CXX="g++-4.8"
+- g++ --version
 - ./build.sh
 - cd ${TRAVIS_BUILD_DIR}
 # install latest LCOV (1.9 was failing for me) [1]

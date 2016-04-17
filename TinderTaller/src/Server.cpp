@@ -54,7 +54,7 @@ Server::Server() {
 	mg_mgr_init(&mgr, NULL);  //Initialize Mongoose manager
 	nc = mg_bind(&mgr, s_http_port, Server::staticEvHandler); //Create listening connection.
 	mg_set_protocol_http_websocket(nc); //Attach built-in HTTP event handler to the given connection.
-	std::shared_ptr < HandlerServer > handlerServ(new HandlerServer("/tmp/test"));
+	std::shared_ptr < HandlerServer > handlerServ(new HandlerServer("./DB"));
 	serverInstance=this;
 	LOG(INFO)<< "Inicio servidor";
 }

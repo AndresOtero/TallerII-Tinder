@@ -25,7 +25,7 @@ DBtuple tupleDBGet2{
 		""
 	};
 TEST(DataBase,CreateADataBase){
-	DataBase* db=new DataBase("/tmp/test",true,true);
+	DataBase* db=new DataBase(".DB/",true,true);
 	EXPECT_TRUE(db->ok());
 	delete db;
 }
