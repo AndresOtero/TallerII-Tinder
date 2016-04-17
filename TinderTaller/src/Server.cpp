@@ -14,9 +14,6 @@ static int s_sig_num = 0;
 static void *s_db_handle = NULL;
 
 
-
-
-
 void Server::staticEvHandler(struct mg_connection *nc, int ev, void *ev_data) {
 	/**Has to be static for mongoose to use it**/
 	Server* instance = Server::serverInstance;

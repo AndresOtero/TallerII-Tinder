@@ -27,7 +27,7 @@ MethodType HTTPRequestParser::methodType(struct http_message *hm){
 	if(isMethod(hm,postString)) return POST;
 	if(isMethod(hm,getString)) return GET;
 	if(isMethod(hm,deleteString)) return DELETE;
-	if(isMethod(hm,invalidMethodString)) return INVALID_METHOD;
+	if(isMethod(hm,invalidMethodString)) return INVALID_METHOD;**/
 }
 HTTPRequestParser::~HTTPRequestParser() {
 }
