@@ -20,7 +20,7 @@ before_install:
   - g++ --version
   - ./beforeinstall.sh
 install: 
--./build.sh
+- ./build.sh
 - cd ${TRAVIS_BUILD_DIR}
 # install latest LCOV (1.9 was failing for me) [1]
 - wget http://ftp.de.debian.org/debian/pool/main/l/lcov/lcov_1.11.orig.tar.gz
