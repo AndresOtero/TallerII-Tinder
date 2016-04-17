@@ -25,13 +25,13 @@ DBtuple tupleDBGet2{
 		""
 	};
 TEST(DataBase,CreateADataBase){
-	DataBase* db=new DataBase(".DB/",true,true);
+	DataBase* db=new DataBase("./DB/test",true,true);
 	EXPECT_TRUE(db->ok());
 	delete db;
 }
 TEST(DataBase, StoreAValue)
 {
-	DataBase* db=new DataBase("/tmp/test",true,true);
+	DataBase* db=new DataBase("./DB/test",true,true);
 	EXPECT_TRUE(db->ok());
 
 	EXPECT_TRUE(db->put(tupleDB));
@@ -40,7 +40,7 @@ TEST(DataBase, StoreAValue)
 }
 TEST(DataBase, GetAValueWithoutErasing)
 {
-	DataBase* db=new DataBase("/tmp/test",true,false);
+	DataBase* db=new DataBase("./DB/test",true,false);
 	EXPECT_TRUE(db->ok());
 	EXPECT_TRUE(db->get(tupleDBGet));
 	EXPECT_TRUE(tupleDBGet.value=="mundo");
@@ -48,14 +48,14 @@ TEST(DataBase, GetAValueWithoutErasing)
 }
 TEST(DataBase, NotGetAValueErasing)
 {
-	DataBase* db=new DataBase("/tmp/test",true,true);
+	DataBase* db=new DataBase("./DB/test",true,true);
 	EXPECT_TRUE(db->ok());
 	EXPECT_FALSE(db->get(tupleDBGet));
 	delete db;
 }
 TEST(DataBase, GetAValueErasing)
 {
-	DataBase* db=new DataBase("/tmp/test",true,true);
+	DataBase* db=new DataBase("./DB/test",true,true);
 	EXPECT_TRUE(db->ok());
 	EXPECT_TRUE(db->put(tupleDB));
 	EXPECT_TRUE(db->get(tupleDBGet));
@@ -64,7 +64,7 @@ TEST(DataBase, GetAValueErasing)
 }
 TEST(DataBase, DeleteAKey)
 {
-	DataBase* db=new DataBase("/tmp/test",true,true);
+	DataBase* db=new DataBase("./DB/test",true,true);
 	EXPECT_TRUE(db->ok());
 	EXPECT_TRUE(db->put(tupleDB));
 	EXPECT_TRUE(db->get(tupleDBGet));
@@ -74,7 +74,7 @@ TEST(DataBase, DeleteAKey)
 }
 TEST(DataBase, DeleteAllKeys)
 {
-	DataBase* db=new DataBase("/tmp/test",true,true);
+	DataBase* db=new DataBase("./DB/test",true,true);
 	EXPECT_TRUE(db->ok());
 	EXPECT_TRUE(db->put(tupleDB));
 	EXPECT_TRUE(db->get(tupleDBGet));
