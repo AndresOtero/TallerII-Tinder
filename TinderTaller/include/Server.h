@@ -25,7 +25,7 @@ public:
 		struct mg_mgr mgr;// is an event manager that holds all active connections
 		struct mg_connection *nc;//describes a connection
 		void evHandler(struct mg_connection *nc, int ev, void *ev_data);
-		std::shared_ptr<HandlerServer> handlerServ;
-	};
+		HandlerServer* handlerServ;
+};
 
 #endif /* SRC_SERVER_H_ */
