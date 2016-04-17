@@ -36,11 +36,11 @@ msg_t HandlerServer::handlerUsers(struct http_message *hm){
 			case PUT:
 				LOG(INFO) << "Entro al put";
 				msg.status=OK;
-				msg.body.append("{/users/: 1}");
+				msg.body.append("{ \"result\": 2 }");
 			default:
-				return badRequest();
+				msg.status=OK;
 	}
-
+	return msg;
 
 }
 

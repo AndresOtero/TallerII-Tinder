@@ -5,7 +5,7 @@ print "url bien"
 print "put"
 response = requests.put(url, data=data)
 print response
-#print response.json()	
+print response.json()	
 print "post"
 response = requests.post(url, data=data)
 print response
