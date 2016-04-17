@@ -7,7 +7,7 @@
 #include "HTTPRequest.h"
 #include "mongoose.h"
 #include "HTTPRequestParser.h"
-
+#include "JsonParser.h"
 #ifndef SRC_HANDLERINTERFACE_H_
 #define SRC_HANDLERINTERFACE_H_
 
@@ -17,6 +17,7 @@ public:
 	virtual msg_t handle(struct http_message *hm)=0;
 protected:
 	HTTPRequestParser httpReqParser;
+	JsonParser jsonParse;
 
 };
 

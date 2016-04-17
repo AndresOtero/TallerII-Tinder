@@ -15,9 +15,11 @@ LINK_DIRECTORIES( ../lib/rocksdb-master/)
 LINK_DIRECTORIES( ../lib/googletest/)
 LINK_DIRECTORIES(../src)
 
+#srcTests
+file(GLOB_RECURSE _SOURCES_CPP_TESTS "*.cpp")
 
 #exe
-add_executable(Test Test.cpp)
+add_executable(Test ${_SOURCES_CPP_TESTS})
 
 
 #Agrego el rocksdb

@@ -16,7 +16,6 @@ msg_t HandlerServer::badRequest(){
 HandlerServer::HandlerServer(const std::string& db_path) {
 	// Por ahora solo configuro el path , crea una si no existe pero no borra la que existe.
 	this->DB= new DataBase(db_path,true,false);
-	this->handlerUsers= new HandlerUsers();
 }
 msg_t  HandlerServer::handler(struct http_message *hm) {
 	LOG(INFO) << "Entro al handler";
@@ -24,7 +23,7 @@ msg_t  HandlerServer::handler(struct http_message *hm) {
 	switch(prefixT){
 		case USERS:
 			LOG(INFO) << "Entro a users";
-			return handleUsers(hm);
+			return this->handlerUsers.handle(hm);
 		default:
 			LOG(INFO) << "Entro a Bad request";
 			return badRequest();
@@ -47,7 +46,7 @@ msg_t HandlerServer::handleUsers(struct http_message *hm){
 }
 
 HandlerServer::~HandlerServer() {
-	delete  handlerUsers;
+
 	delete DB;
 }
 

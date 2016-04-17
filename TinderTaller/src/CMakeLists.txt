@@ -8,7 +8,7 @@ include_directories(/usr/local/include)
 include_directories(../include)
 include_directories(../lib/rocksdb-master/include)
 include_directories(../lib/googletest/include/)
-include_directories(../include/json)
+include_directories(../include/json/)
 
 
 #Library:

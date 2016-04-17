@@ -5,7 +5,6 @@
  *      Author: andres
  */
 #include "json/json.h"
-#include "json/reader.h"
 #include <iostream>
 #include "easylogging++.h"
 
@@ -16,6 +15,8 @@ class JsonParser {
 public:
 	JsonParser();
 	Json::Value stringToValue(std::string jsonStr);
+	int getIntFromValue(Json::Value jsonValue,std::string key);
+	std::string getStringFromValue(Json::Value jsonValue,std::string key);
 	virtual ~JsonParser();
 };
 

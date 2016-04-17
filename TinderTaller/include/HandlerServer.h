@@ -20,7 +20,7 @@ public:
 	msg_t handleUsers(struct http_message *hm);
 	virtual ~HandlerServer();
 private:
-	HandlerUsers* handlerUsers;
+	HandlerUsers handlerUsers;
 	DataBase*DB;
 	HTTPRequestParser httpReqParser;
 	msg_t badRequest();

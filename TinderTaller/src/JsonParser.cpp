@@ -22,6 +22,12 @@ Json::Value JsonParser::stringToValue(std::string jsonStr) {
 	}
 	return root;
 }
+int JsonParser::getIntFromValue(Json::Value jsonValue,std::string key) {
+	return jsonValue[key].asInt();
+}
+std::string JsonParser::getStringFromValue(Json::Value jsonValue,std::string key) {
+	return jsonValue[key].asString();
+}
 
 JsonParser::~JsonParser() {
 	// TODO Auto-generated destructor stub
