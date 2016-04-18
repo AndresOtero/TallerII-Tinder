@@ -23,7 +23,9 @@ int logg()
 
 
 int main(int argc,char*  argv[]) {
+	DataBase* db=new DataBase("./DB/server",true,false);
 	Server* server=Server::getServer();
+	server->setServerDB(db);
 	std::shared_ptr<Client> client(new Client());
 
 	bool continuar=true;

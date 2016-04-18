@@ -13,9 +13,9 @@ msg_t HandlerServer::badRequest(){
 				msg.body="Not specified prefix";
 			return msg;
 }
-HandlerServer::HandlerServer(const std::string& db_path) {
+HandlerServer::HandlerServer(DataBase *DB) {
 	// Por ahora solo configuro el path , crea una si no existe pero no borra la que existe.
-	this->DB= new DataBase(db_path,true,false);
+	this->DB= DB;
 }
 msg_t  HandlerServer::handler(struct http_message *hm) {
 	LOG(INFO) << "Entro al handler";
@@ -23,7 +23,7 @@ msg_t  HandlerServer::handler(struct http_message *hm) {
 	switch(prefixT){
 		case USERS:
 			LOG(INFO) << "Entro a users";
-			return this->handlerUsers.handle(hm);
+			return this->handlerUsers.handle(hm,DB);
 		default:
 			LOG(INFO) << "Entro a Bad request";
 			return badRequest();

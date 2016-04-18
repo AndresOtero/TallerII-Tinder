@@ -13,7 +13,7 @@
 class HandlerUsers: public HandlerInterface {
 public:
 	HandlerUsers();
-	virtual msg_t handle(struct http_message *hm);
+	virtual msg_t handle(struct http_message *hm,DataBase* db);
 	virtual ~HandlerUsers();
 };
 

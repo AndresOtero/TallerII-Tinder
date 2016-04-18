@@ -8,13 +8,14 @@
 #include "mongoose.h"
 #include "HTTPRequestParser.h"
 #include "JsonParser.h"
+#include "DataBase.h"
 #ifndef SRC_HANDLERINTERFACE_H_
 #define SRC_HANDLERINTERFACE_H_
 
 class HandlerInterface {
 public:
 	virtual ~HandlerInterface();
-	virtual msg_t handle(struct http_message *hm)=0;
+	virtual msg_t handle(struct http_message *hm,DataBase* db)=0;
 protected:
 	HTTPRequestParser httpReqParser;
 	JsonParser jsonParse;

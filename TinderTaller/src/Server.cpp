@@ -8,6 +8,7 @@
 #include "Server.h"
 
 Server* Server::serverInstance = NULL; //Singleton Patron
+bool Server::set = false; //Singleton Patron
 
 static const char *s_http_port = "8000";
 static int s_sig_num = 0;
@@ -51,9 +52,16 @@ Server::Server() {
 	mg_mgr_init(&mgr, NULL);  //Initialize Mongoose manager
 	nc = mg_bind(&mgr, s_http_port, Server::staticEvHandler); //Create listening connection.
 	mg_set_protocol_http_websocket(nc); //Attach built-in HTTP event handler to the given connection.
-	HandlerServer* handlerServ=new HandlerServer("./DB/server");
 	serverInstance=this;
+}
+bool Server::setServerDB(DataBase* DB) {
+	this->handlerServ=new HandlerServer(DB);
 	LOG(INFO)<< "Inicio servidor";
+	set=true;
+	return isSet();
+}
+bool Server::isSet() {
+	return set;
 }
 void Server::runServer() {
 	mg_mgr_poll(&mgr, 1000); // checks all connection for IO readines. Must be called in loop

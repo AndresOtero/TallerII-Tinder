@@ -15,13 +15,13 @@
 class HandlerServer {
 
 public:
-	HandlerServer(const std::string& db_path);
+	HandlerServer(DataBase* DB);
 	msg_t  handler(struct http_message *hm);
 	msg_t handleUsers(struct http_message *hm);
 	virtual ~HandlerServer();
 private:
 	HandlerUsers handlerUsers;
-	DataBase*DB;
+	DataBase* DB;
 	HTTPRequestParser httpReqParser;
 	msg_t badRequest();
 };

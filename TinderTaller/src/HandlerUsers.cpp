@@ -11,17 +11,23 @@ HandlerUsers::HandlerUsers() {
 	// TODO Auto-generated constructor stub
 
 }
-msg_t HandlerUsers::handle(struct http_message *hm){
+msg_t HandlerUsers::handle(struct http_message *hm,DataBase* db){
 	MethodType methodT=httpReqParser.methodType(hm);
 		msg_t msg;
 		Json::Value val= jsonParse.stringToValue(hm->body.p);
-		int a =jsonParse.getIntFromValue(val,"users");
+		string a =jsonParse.getStringFromValue(val["user"],"name");
+		DBtuple tp;
+		tp.key=a;
+		tp.value=hm->body.p;
+		//db->put(tp); TODO ERROR NO SE PORQUE
+		LOG(INFO)<<"Creo "<<a<<" como usuario";
 		std::ostringstream stringStream;
 		switch(methodT){
-				case PUT:
-					LOG(INFO) << "Entro al put";
-					msg.status=OK;
-					stringStream <<"{ \"result\":"<< a <<"  }";
+				case POST:
+					LOG(INFO) << "Entro al POST";
+					msg.status=CREATED;
+					stringStream <<"{ \"result\": \""<< a <<" \" }";
+					LOG(INFO) << stringStream.str();
 					msg.body.append(stringStream.str());
 				default:
 					msg.status=OK;

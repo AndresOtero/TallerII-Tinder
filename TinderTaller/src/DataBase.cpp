@@ -11,7 +11,7 @@
 using namespace rocksdb;
 
 DataBase::DataBase(const std::string& dbPath, bool createIfMissing,
-		bool eraseAll) {
+		bool deleteAll) {
 	//DB creation
 	//For more info on the DB. Go to: https://github.com/facebook/rocksdb/wiki/Basic-Operations
 	// Optimize RocksDB. This is the easiest way to get RocksDB to perform well
@@ -26,7 +26,7 @@ DataBase::DataBase(const std::string& dbPath, bool createIfMissing,
 	Options options;
 	options.create_if_missing = createIfMissing;
 	st = DB::Open(options, dbPath, &db);
-	if (st.ok() && eraseAll) {
+	if (st.ok() && deleteAll) {
 		this->deleteAll();
 	}
 	LOG(INFO)<< "Creo base de datos";
