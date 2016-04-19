@@ -8,16 +8,18 @@
 #include "HandlerServer.h"
 
 msg_t HandlerServer::badRequest(){
+	/**Devuelvo el msg  que no fue un buen request.**/
 	msg_t msg;
 	msg.status=BAD_REQUEST;
 				msg.body="Not specified prefix";
 			return msg;
 }
 HandlerServer::HandlerServer(DataBase *DB) {
-	// Por ahora solo configuro el path , crea una si no existe pero no borra la que existe.
+	/**Asigna la base de datos al handler del server.**/
 	this->DB= DB;
 }
 msg_t  HandlerServer::handler(struct http_message *hm) {
+	/**Recibe el mensaje de htttp y devuelve el msg que el server debe responder.**/
 	LOG(INFO) << "Entro al handler";
 	PrefixType prefixT=httpReqParser.prefixType(hm);
 	switch(prefixT){
@@ -30,22 +32,9 @@ msg_t  HandlerServer::handler(struct http_message *hm) {
 	}
 }
 
-msg_t HandlerServer::handleUsers(struct http_message *hm){
-	MethodType methodT=httpReqParser.methodType(hm);
-	msg_t msg;
-	switch(methodT){
-			case PUT:
-				LOG(INFO) << "Entro al put";
-				msg.status=OK;
-				msg.body.append("{ \"result\": 2 }");
-			default:
-				msg.status=OK;
-	}
-	return msg;
-
-}
 
 HandlerServer::~HandlerServer() {
+	/**Elimina el handler del server.**/
 
 	delete DB;
 }

@@ -15,7 +15,8 @@ public:
 	HandlerUsers();
 	virtual msg_t handle(struct http_message *hm,DataBase* db);
 	virtual ~HandlerUsers();
-	bool postUser(struct http_message * hm,DataBase* db);
+	msg_t postUser(struct http_message * hm,DataBase* db);
+	msg_t getUser(struct http_message * hm,DataBase* db);
 
 };
 

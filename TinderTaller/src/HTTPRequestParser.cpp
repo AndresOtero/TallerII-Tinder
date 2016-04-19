@@ -10,66 +10,83 @@ using namespace std;
 HTTPRequestParser::HTTPRequestParser() {
 
 }
-bool HTTPRequestParser::isPrefix(struct http_message *hm, string prefix,size_t position){
-	std::vector<std::string> vec=parsePrefix(hm);
-	return (vec[position]== prefix);
+bool HTTPRequestParser::isPrefix(struct http_message *hm, string prefix,
+		size_t position) {
+	/**Compara un string con un prefijo con el prefijo del mensaje en la posicion position. Devuelve ture si es igual , false sino.**/
+	std::vector < std::string > vec = parsePrefix(hm);
+	return (vec[position] == prefix);
 }
-vector<string> HTTPRequestParser::parsePrefix(struct http_message *hm){
-	vector<string> uri_parsed;
-	string str{hm->uri.p};
-    std::vector<std::string> uri_semi_parsed{StringToVector(str, '/')};
-    for (std::vector<string>::iterator it = uri_semi_parsed.begin() ; it != uri_semi_parsed.end(); ++it){
-    	std::vector<std::string> b{StringToVector(str, ' ')};
-    	uri_parsed.insert(uri_parsed.end(), b.begin(), b.end());
-    }
-//**Hacer lista de  con los strings y parsear con ' '**//
-	return uri_parsed;
+vector<string> HTTPRequestParser::parsePrefix(struct http_message *hm) {
+	/**Recibe el mensaje y devuelve el uri como un vector de strings**/
+	vector < string > uri_parsed;
+	string str { hm->uri.p };
+	std::vector < std::string > uri_semi_parsed { StringToVector(str, '/') };
+	/** for (std::vector<string>::iterator it = uri_semi_parsed.begin() ; it != uri_semi_parsed.end(); ++it){
+	 std::vector<std::string> b{StringToVector(str, ' ')};
+	 uri_parsed.insert(uri_parsed.end(), b.begin(), b.end());
+	 }**/
+	return uri_semi_parsed;
 }
-bool HTTPRequestParser::isMethod(struct http_message *hm, string method){
-	string methodM="";
+bool HTTPRequestParser::isMethod(struct http_message *hm, string method) {
+	/** Recibe un metodo en forma de string y un mensaje. Luego devuelve si el mensaje tiene es metodo es true , sino es false.**/
+	string methodM = "";
 	methodM.append(hm->method.p, hm->method.len);
-	return (methodM.compare(method)==0);
+	return (methodM.compare(method) == 0);
 }
-PrefixType HTTPRequestParser::prefixType(struct http_message *hm){
-	if(isPrefix(hm,usersString,0)) return USERS;
+PrefixType HTTPRequestParser::prefixType(struct http_message *hm) {
+	/**Recibe un mensaje y devuelve el tipo del primer elemento del uri**/
+	if (isPrefix(hm, usersString, 0))
+		return USERS;
 }
-
-MethodType HTTPRequestParser::methodType(struct http_message *hm){
-	if(isMethod(hm,putString)) return PUT;
-	if(isMethod(hm,postString)) return POST;
-	if(isMethod(hm,getString)) return GET;
-	if(isMethod(hm,deleteString)) return DELETE;
-	if(isMethod(hm,invalidMethodString)) return INVALID_METHOD;
+bool isNumber(const std::string& s) {
+	/** Devuelve true si el string es un numero , false sino**/
+	return !s.empty()
+			&& std::find_if(s.begin(), s.end(),
+					[](char c) {return !std::isdigit(c);}) == s.end();
+}
+int HTTPRequestParser::getId(struct http_message *hm) {
+	/**Recibe un mensaje y devuelve el segundo elemento del uri convertido a numero sino se puede devuelve -1.**/
+	std::vector < std::string > vec = parsePrefix(hm);
+	string id = vec[1];
+	if (isNumber(id)) {
+		return atoi(id.c_str());
+	}
+	return -1;
+}
+MethodType HTTPRequestParser::methodType(struct http_message *hm) {
+	/**Recibe un mensaje y devuelve un el tipo de metodo que tiene ese mensaje.**/
+	if (isMethod(hm, putString))
+		return PUT;
+	if (isMethod(hm, postString))
+		return POST;
+	if (isMethod(hm, getString))
+		return GET;
+	if (isMethod(hm, deleteString))
+		return DELETE;
+	return INVALID_METHOD;
 }
 HTTPRequestParser::~HTTPRequestParser() {
 }
-std::vector<std::string> HTTPRequestParser::StringToVector(std::string const& str, char const delimiter){
 
-    std::vector<std::string> vec;
-    std::string element;
-
-
-    //we are going to loop through each character of the string slowly building an element string.
-    //whenever we hit a delimiter, we will push the element into the vector, and clear it to get ready for the next element
-    for_each(begin(str),end(str),[&](char const ch){
-        if(ch!=delimiter){
-            element+=ch;
-        }
-        else{
-            if (element.length()>0){
-            vec.push_back(element);
-            element.clear();
-            }
-        }
-    });
-
-
-    //push in the last element if the string does not end with the delimiter
-    if (element.length()>0){
-        vec.push_back(element);
-    }
-
-
-    return vec;
+std::vector<std::string> HTTPRequestParser::StringToVector(
+		std::string const& str, char const delimiter) {
+	/**Convierte a un string en un vector de strings , spearandolos por el delimitador.**/
+	std::vector < std::string > vec;
+	std::string element;
+	for_each(begin(str), end(str), [&](char const ch) {//Recorro caracter por caracter
+		if(ch!=delimiter) {
+			element+=ch;
+		}
+		else {
+			if (element.length()>0) {
+				vec.push_back(element);
+				element.clear();
+			}
+		}
+	});
+	if (element.length() > 0) {
+		vec.push_back(element);
+	}
+	return vec;
 }
 

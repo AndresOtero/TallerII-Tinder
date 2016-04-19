@@ -16,9 +16,7 @@ typedef struct msg{
 }msg_t;
 
 typedef enum StatusCode {
-	OK = 200,CREATED=201, BAD_REQUEST = 400, UNAUTHORIZED = 401, NOT_FOUND = 404,
-	//CONFLICT = 409,
-	INTERNAL_ERROR = 500
+	OK = 200,CREATED=201,ACCEPTED=202, BAD_REQUEST = 400, UNAUTHORIZED = 401, NOT_FOUND = 404,METHOD_NOT_ALLOWED=405,INTERNAL_ERROR = 500,NOT_IMPLEMENTED=501,
 } StatusCode;
 
 const string putString="PUT";
@@ -31,7 +29,7 @@ typedef enum MethodType {
 	POST, PUT, GET, DELETE, INVALID_METHOD
 } MethodType;
 
-const string usersString="/users";
+const string usersString="users";
 
 
 typedef enum PrefixType {

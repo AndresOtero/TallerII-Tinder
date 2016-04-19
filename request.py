@@ -3,7 +3,7 @@
 import requests
 import json
 
-url = 'http://localhost:8000/users'
+url = 'http://localhost:8000/users/1121/'
 data = { 
 "user": { 
 "name": "andy", 

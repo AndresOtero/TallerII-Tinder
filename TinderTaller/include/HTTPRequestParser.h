@@ -15,16 +15,15 @@ using namespace std;
 class HTTPRequestParser {
 public:
 	HTTPRequestParser();
-
 	MethodType methodType(struct http_message *hm);
 	PrefixType prefixType(struct http_message *hm);
 	vector<string> parsePrefix(struct http_message *hm);
-
+	int getId(struct http_message *hm);
 	virtual ~HTTPRequestParser();
 
 private:
-	vector<string>  StringToVector(std::string const& str, char const delimiter);
-	bool isPrefix(struct http_message *hm, string prefix,size_t position);
+	vector<string> StringToVector(std::string const& str, char const delimiter);
+	bool isPrefix(struct http_message *hm, string prefix, size_t position);
 	bool isMethod(struct http_message *hm, string method);
 };
 
