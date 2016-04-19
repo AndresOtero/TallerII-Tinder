@@ -7,7 +7,7 @@ url = 'http://localhost:8000/users'
 data = { 
 "user": { 
 "name": "andy", 
- "alias": "a user", 
+"alias": "a user", 
                           "email": "usuario@usuario.com", 
 "interests": [{ 
 "category": "music/band", 
