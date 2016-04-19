@@ -25,7 +25,7 @@ msg_t  HandlerServer::handler(struct http_message *hm) {
 			LOG(INFO) << "Entro a users";
 			return this->handlerUsers.handle(hm,DB);
 		default:
-			LOG(INFO) << "Entro a Bad request";
+			LOG(WARNING) << "Entro a Bad request";
 			return badRequest();
 	}
 }

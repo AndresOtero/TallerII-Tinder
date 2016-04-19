@@ -15,6 +15,8 @@ public:
 	HandlerUsers();
 	virtual msg_t handle(struct http_message *hm,DataBase* db);
 	virtual ~HandlerUsers();
+	bool postUser(struct http_message * hm,DataBase* db);
+
 };
 
 #endif /* SRC_HANDLERUSERS_H_ */

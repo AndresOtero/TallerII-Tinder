@@ -8,6 +8,7 @@
 #include "mongoose.h"
 #include "HTTPRequest.h"
 #include "easylogging++.h"
+#include <vector>
 #ifndef SRC_HTTPREQUESTPARSER_H_
 #define SRC_HTTPREQUESTPARSER_H_
 using namespace std;
@@ -17,11 +18,13 @@ public:
 
 	MethodType methodType(struct http_message *hm);
 	PrefixType prefixType(struct http_message *hm);
+	vector<string> parsePrefix(struct http_message *hm);
 
 	virtual ~HTTPRequestParser();
 
 private:
-	bool isPrefix(struct http_message *hm, string prefix);
+	vector<string>  StringToVector(std::string const& str, char const delimiter);
+	bool isPrefix(struct http_message *hm, string prefix,size_t position);
 	bool isMethod(struct http_message *hm, string method);
 };
 
