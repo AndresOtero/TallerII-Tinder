@@ -19,6 +19,7 @@ public:
 	PrefixType prefixType(struct http_message *hm);
 	vector<string> parsePrefix(struct http_message *hm);
 	int getId(struct http_message *hm);
+	bool idOk(int id);
 	virtual ~HTTPRequestParser();
 
 private:

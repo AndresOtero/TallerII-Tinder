@@ -26,6 +26,8 @@ msg_t  HandlerServer::handler(struct http_message *hm) {
 		case USERS:
 			LOG(INFO) << "Entro a users";
 			return this->handlerUsers.handle(hm,DB);
+		case MATCHS:
+
 		default:
 			LOG(WARNING) << "Entro a Bad request";
 			return badRequest();

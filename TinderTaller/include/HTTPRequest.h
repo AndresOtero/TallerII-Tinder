@@ -10,14 +10,16 @@
 #define INCLUDE_HTTPREQUEST_H_
 using namespace std;
 
-typedef struct msg{
-	int status;
-	string body;
-}msg_t;
-
 typedef enum StatusCode {
 	OK = 200,CREATED=201,ACCEPTED=202, BAD_REQUEST = 400, UNAUTHORIZED = 401, NOT_FOUND = 404,METHOD_NOT_ALLOWED=405,INTERNAL_ERROR = 500,NOT_IMPLEMENTED=501,
 } StatusCode;
+
+typedef struct msg{
+	StatusCode status;
+	string body;
+}msg_t;
+
+
 
 const string putString="PUT";
 const string getString="GET";
@@ -30,10 +32,11 @@ typedef enum MethodType {
 } MethodType;
 
 const string usersString="users";
-
+const string matchString="matchs";
+const string photoString="photo";
 
 typedef enum PrefixType {
-	USERS
+	USERS,MATCHS,
 } PrefixType;
 
 

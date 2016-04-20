@@ -24,9 +24,9 @@ TEST(HTTPRequestParser,parseUriToVector){
 TEST(HTTPRequestParser,getId){
 	HTTPRequestParser httpParser;
 	http_message* hm=new http_message;
-	hm->uri.p="users/1000";
+	hm->uri.p="/users/1000/";
 	EXPECT_TRUE(1000==httpParser.getId(hm));
-	hm->uri.p="users/mil";
+	hm->uri.p="/users/mil/";
 	EXPECT_TRUE(-1==httpParser.getId(hm));
 	delete hm;
 }
