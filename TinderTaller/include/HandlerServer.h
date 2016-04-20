@@ -13,17 +13,16 @@
 #ifndef SRC_HANDLERSERVER_H_
 #define SRC_HANDLERSERVER_H_
 class HandlerServer {
-
-public:
-	HandlerServer(DataBase* DB);
-	msg_t  handler(struct http_message *hm);
-	msg_t handleUsers(struct http_message *hm);
-	virtual ~HandlerServer();
-private:
-	HandlerUsers handlerUsers;
-	DataBase* DB;
-	HTTPRequestParser httpReqParser;
-	msg_t badRequest();
+	public:
+		HandlerServer(shared_ptr<DataBase> DB);
+		msg_t  handler(struct http_message *hm);
+		msg_t handleUsers(struct http_message *hm);
+		virtual ~HandlerServer();
+	private:
+		HandlerUsers handlerUsers;
+		shared_ptr<DataBase> DB;
+		HTTPRequestParser httpReqParser;
+		msg_t badRequest();
 };
 
 #endif /* SRC_HANDLERSERVER_H_ */

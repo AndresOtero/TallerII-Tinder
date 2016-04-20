@@ -7,10 +7,12 @@
 #define TERCERA_POSITION 3
 #include "HandlerUsers.h"
 const string json_example = "{\"holis\" :\"andy\" }";
+
 HandlerUsers::HandlerUsers() {
 	/**Creo el handler de users**/
 }
-msg_t HandlerUsers::getUser(struct http_message * hm, DataBase* db) {
+
+msg_t HandlerUsers::getUser(struct http_message * hm, shared_ptr<DataBase> db) {
 	/**Manejo el get de user, recibe un mensaje y una base de datos. Devuelve el msg correspondiente**/
 	msg_t msg;
 	int id = httpReqParser.getId(hm);
@@ -25,7 +27,9 @@ msg_t HandlerUsers::getUser(struct http_message * hm, DataBase* db) {
 	}
 	return msg;
 }
-msg_t HandlerUsers::postUser(struct http_message * hm, DataBase* db) {
+
+msg_t HandlerUsers::postUser(struct http_message * hm,
+		shared_ptr<DataBase> db) {
 	/**Manejo el post de user, recibe un mensaje y una base de datos.Devuelve el msg correspondiente.Crea un usuario**/
 	Json::Value val = jsonParse.stringToValue(hm->body.p);
 	string a = jsonParse.getStringFromValue(val["user"], "name");
@@ -45,18 +49,20 @@ msg_t HandlerUsers::postUser(struct http_message * hm, DataBase* db) {
 	}
 	return msg;
 }
-msg_t HandlerUsers::putUser(struct http_message * hm, DataBase* db) {
+
+msg_t HandlerUsers::putUser(struct http_message * hm, shared_ptr<DataBase> db) {
 	/**Manejo el put de user, recibe un mensaje y una base de datos.Devuelve el msg correspondiente.Modifica un usuario**/
-	vector<string> uriVector=httpReqParser.parsePrefix(hm);
-	string p=uriVector[TERCERA_POSITION];
-	if(p==photoString){
-		return this->putUserUpdatePhoto(hm,db);
-	}else{
-		return this->putUserUpdateProfile(hm,db);
+	vector < string > uriVector = httpReqParser.parsePrefix(hm);
+	string p = uriVector[TERCERA_POSITION];
+	if (p == photoString) {
+		return this->putUserUpdatePhoto(hm, db);
+	} else {
+		return this->putUserUpdateProfile(hm, db);
 	}
 }
 
-msg_t HandlerUsers::putUserUpdateProfile(struct http_message * hm, DataBase* db) {
+msg_t HandlerUsers::putUserUpdateProfile(struct http_message * hm,
+		shared_ptr<DataBase> db) {
 	/**Manejo el put de user, recibe un mensaje y una base de datos.Devuelve el msg correspondiente.Modifica un usuario**/
 	Json::Value val = jsonParse.stringToValue(hm->body.p);
 	string a = jsonParse.getStringFromValue(val["user"], "name");
@@ -66,7 +72,7 @@ msg_t HandlerUsers::putUserUpdateProfile(struct http_message * hm, DataBase* db)
 	int id = httpReqParser.getId(hm);
 	msg_t msg;
 	bool ok = db->put(tp);
-	if (ok&&httpReqParser.idOk(id)) {
+	if (ok && httpReqParser.idOk(id)) {
 		LOG(INFO)<<"Modifico "<< a <<" como usuario";
 		LOG(INFO)<<"Modifico "<< id <<" como id_usuario";
 		msg.status = ACCEPTED;
@@ -79,7 +85,8 @@ msg_t HandlerUsers::putUserUpdateProfile(struct http_message * hm, DataBase* db)
 	return msg;
 }
 
-msg_t HandlerUsers::putUserUpdatePhoto(struct http_message * hm, DataBase* db) {
+msg_t HandlerUsers::putUserUpdatePhoto(struct http_message * hm,
+		shared_ptr<DataBase> db) {
 	/**Manejo el put de user, recibe un mensaje y una base de datos.Devuelve el msg correspondiente.Modifica un usuario**/
 	Json::Value val = jsonParse.stringToValue(hm->body.p);
 	string a = jsonParse.getStringFromValue(val["user"], "name");
@@ -89,7 +96,7 @@ msg_t HandlerUsers::putUserUpdatePhoto(struct http_message * hm, DataBase* db) {
 	int id = httpReqParser.getId(hm);
 	msg_t msg;
 	bool ok = db->put(tp);
-	if (ok&&httpReqParser.idOk(id)) {
+	if (ok && httpReqParser.idOk(id)) {
 		LOG(INFO)<<"Modifico la foto de "<< a <<" como usuario";
 		msg.status = ACCEPTED;
 		msg.body.append(json_example);
@@ -101,8 +108,8 @@ msg_t HandlerUsers::putUserUpdatePhoto(struct http_message * hm, DataBase* db) {
 	return msg;
 }
 
-
-msg_t HandlerUsers::deleteUser(struct http_message * hm, DataBase* db) {
+msg_t HandlerUsers::deleteUser(struct http_message * hm,
+		shared_ptr<DataBase> db) {
 	/**Manejo el delete de user, recibe un mensaje y una base de datos.Devuelve el msg correspondiente.Borro Usuario**/
 	Json::Value val = jsonParse.stringToValue(hm->body.p);
 	string a = jsonParse.getStringFromValue(val["user"], "name");
@@ -112,7 +119,7 @@ msg_t HandlerUsers::deleteUser(struct http_message * hm, DataBase* db) {
 	int id = httpReqParser.getId(hm);
 	msg_t msg;
 	bool ok = db->put(tp);
-	if (ok&&httpReqParser.idOk(id)) {
+	if (ok && httpReqParser.idOk(id)) {
 		LOG(INFO)<<"Elimino "<< a <<" como usuario";
 		LOG(INFO)<<"Elimino "<< id <<" como id_usuario";
 		msg.status = ACCEPTED;
@@ -125,7 +132,7 @@ msg_t HandlerUsers::deleteUser(struct http_message * hm, DataBase* db) {
 	return msg;
 }
 
-msg_t HandlerUsers::handle(struct http_message *hm, DataBase* db) {
+msg_t HandlerUsers::handle(struct http_message *hm, shared_ptr<DataBase> db) {
 	/**Manejo los mensajes recibidos por el server con prefix de users.Recibe el mensaje y la base de datos. Devuelve la respuesta como un msg.**/
 	MethodType methodT = httpReqParser.methodType(hm);
 	msg_t msg;
@@ -137,10 +144,10 @@ msg_t HandlerUsers::handle(struct http_message *hm, DataBase* db) {
 		msg = this->getUser(hm, db);
 		break;
 	case PUT:
-		msg =this->putUser(hm,db);
+		msg = this->putUser(hm, db);
 		break;
 	case DELETE:
-		msg =this->deleteUser(hm,db);
+		msg = this->deleteUser(hm, db);
 		break;
 	default:
 		msg.status = METHOD_NOT_ALLOWED;

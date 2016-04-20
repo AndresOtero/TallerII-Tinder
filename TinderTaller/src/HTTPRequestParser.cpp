@@ -8,43 +8,51 @@
 #define SECOND_POSITION 2
 #include "HTTPRequestParser.h"
 using namespace std;
+
 HTTPRequestParser::HTTPRequestParser() {
 
 }
+
 bool HTTPRequestParser::isPrefix(struct http_message *hm, string prefix,
 		size_t position) {
 	/**Compara un string con un prefijo con el prefijo del mensaje en la posicion position. Devuelve ture si es igual , false sino.**/
 	std::vector < std::string > vec = parsePrefix(hm);
 	return (vec[position] == prefix);
 }
+
 vector<string> HTTPRequestParser::parsePrefix(struct http_message *hm) {
 	/**Recibe el mensaje y devuelve el uri como un vector de strings**/
 	vector < string > uri_parsed;
 	string str { hm->uri.p };
 	std::vector < std::string > uri_semi_parsed { StringToVector(str, '/') };
-	for (std::vector<string>::iterator it = uri_semi_parsed.begin() ; it != uri_semi_parsed.end(); ++it){
-	string s=(*it);
-	 std::vector<std::string> b{StringToVector(s,' ')};
-	 uri_parsed.insert(uri_parsed.end(), b.begin(), b.end());
+	for (std::vector<string>::iterator it = uri_semi_parsed.begin();
+			it != uri_semi_parsed.end(); ++it) {
+		string s = (*it);
+		std::vector < std::string > b { StringToVector(s, ' ') };
+		uri_parsed.insert(uri_parsed.end(), b.begin(), b.end());
 	}
 	return uri_semi_parsed;
 }
+
 bool HTTPRequestParser::isMethod(struct http_message *hm, string method) {
 	/** Recibe un metodo en forma de string y un mensaje. Luego devuelve si el mensaje tiene es metodo es true , sino es false.**/
 	string methodM = "";
 	methodM.append(hm->method.p, hm->method.len);
 	return (methodM.compare(method) == 0);
 }
+
 PrefixType HTTPRequestParser::prefixType(struct http_message *hm) {
 	/**Recibe un mensaje y devuelve el tipo del primer elemento del uri**/
 	if (isPrefix(hm, usersString, FIRST_POSITION))
 		return USERS;
 }
+
 bool isNumber(const std::string& s) {
 	return !s.empty()
 			&& std::find_if(s.begin(), s.end(),
 					[](char c) {return !std::isdigit(c);}) == s.end();
 }
+
 int HTTPRequestParser::getId(struct http_message *hm) {
 	/**Recibe un mensaje y devuelve el segundo elemento del uri convertido a numero sino se puede devuelve -1.**/
 	std::vector < std::string > vec = parsePrefix(hm);
@@ -54,9 +62,11 @@ int HTTPRequestParser::getId(struct http_message *hm) {
 	}
 	return -1;
 }
+
 bool HTTPRequestParser::idOk(int id) {
-	return (id>=0);
+	return (id >= 0);
 }
+
 MethodType HTTPRequestParser::methodType(struct http_message *hm) {
 	/**Recibe un mensaje y devuelve un el tipo de metodo que tiene ese mensaje.**/
 	if (isMethod(hm, putString))
@@ -69,35 +79,19 @@ MethodType HTTPRequestParser::methodType(struct http_message *hm) {
 		return DELETE;
 	return INVALID_METHOD;
 }
+
 HTTPRequestParser::~HTTPRequestParser() {
 }
 
 std::vector<std::string> HTTPRequestParser::StringToVector(
 		std::string const& str, char const delimiter) {
 	/**Convierte a un string en un vector de strings , spearandolos por el delimitador.**/
-	/**std::vector < std::string > vec;
-	std::string element;
-	for_each(begin(str), end(str), [&](char const ch) {//Recorro caracter por caracter
-		if(ch!=delimiter) {
-			element+=ch;
-		}
-		else {
-			if (element.length()>0) {
-				vec.push_back(element);
-				element.clear();
-			}
-		}
-	});
-	if (element.length() > 0) {
-		vec.push_back(element);
-	}
-	return vec;**/
 	std::vector < std::string > elems;
 	std::stringstream ss(str);
 	std::string item;
 	while (std::getline(ss, item, delimiter)) {
-	        elems.push_back(item);
-	 }
-	 return elems;
+		elems.push_back(item);
+	}
+	return elems;
 }
 

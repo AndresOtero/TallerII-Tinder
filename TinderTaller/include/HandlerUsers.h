@@ -13,15 +13,15 @@
 class HandlerUsers: public HandlerInterface {
 public:
 	HandlerUsers();
-	virtual msg_t handle(struct http_message *hm,DataBase* db);
+	virtual msg_t handle(struct http_message *hm,shared_ptr<DataBase> db);
 	virtual ~HandlerUsers();
 private:
-	msg_t postUser(struct http_message * hm,DataBase* db);
-	msg_t getUser(struct http_message * hm,DataBase* db);
-	msg_t putUser(struct http_message * hm, DataBase* db);
-	msg_t deleteUser(struct http_message * hm, DataBase* db);
-	msg_t putUserUpdateProfile(struct http_message * hm, DataBase* db);
-	msg_t putUserUpdatePhoto(struct http_message * hm, DataBase* db);
+	msg_t postUser(struct http_message * hm,shared_ptr<DataBase> db);
+	msg_t getUser(struct http_message * hm,shared_ptr<DataBase>db);
+	msg_t putUser(struct http_message * hm, shared_ptr<DataBase>db);
+	msg_t deleteUser(struct http_message * hm, shared_ptr<DataBase> db);
+	msg_t putUserUpdateProfile(struct http_message * hm, shared_ptr<DataBase> db);
+	msg_t putUserUpdatePhoto(struct http_message * hm, shared_ptr<DataBase> db);
 
 
 

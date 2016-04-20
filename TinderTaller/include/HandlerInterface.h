@@ -13,12 +13,12 @@
 #define SRC_HANDLERINTERFACE_H_
 
 class HandlerInterface {
-public:
-	virtual ~HandlerInterface();
-	virtual msg_t handle(struct http_message *hm,DataBase* db)=0;
-protected:
-	HTTPRequestParser httpReqParser;
-	JsonParser jsonParse;
+	public:
+		virtual ~HandlerInterface();
+		virtual msg_t handle(struct http_message *hm,shared_ptr<DataBase> db)=0;
+	protected:
+		HTTPRequestParser httpReqParser;
+		JsonParser jsonParse;
 
 };
 

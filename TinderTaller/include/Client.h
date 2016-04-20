@@ -11,13 +11,13 @@
 #define SRC_CLIENT_H_
 
 class Client {
-public:
-	Client();
-	virtual ~Client();
-	bool runClient();
-private:
-	struct mg_mgr mgr;
-	struct mg_connection *nc;
+	public:
+		Client();
+		bool runClient();
+		virtual ~Client();
+	private:
+		struct mg_mgr mgr;
+		struct mg_connection *nc;
 };
 
 #endif /* SRC_CLIENT_H_ */

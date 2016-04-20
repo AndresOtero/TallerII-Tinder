@@ -14,7 +14,7 @@ msg_t HandlerServer::badRequest(){
 				msg.body="Not specified prefix";
 			return msg;
 }
-HandlerServer::HandlerServer(DataBase *DB) {
+HandlerServer::HandlerServer(shared_ptr<DataBase> DB) {
 	/**Asigna la base de datos al handler del server.**/
 	this->DB= DB;
 }
@@ -38,6 +38,5 @@ msg_t  HandlerServer::handler(struct http_message *hm) {
 HandlerServer::~HandlerServer() {
 	/**Elimina el handler del server.**/
 
-	delete DB;
 }
 

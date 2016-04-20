@@ -19,8 +19,6 @@ typedef struct msg{
 	string body;
 }msg_t;
 
-
-
 const string putString="PUT";
 const string getString="GET";
 const string postString="POST";
@@ -38,8 +36,5 @@ const string photoString="photo";
 typedef enum PrefixType {
 	USERS,MATCHS,
 } PrefixType;
-
-
-
 
 #endif /* INCLUDE_HTTPREQUEST_H_ */

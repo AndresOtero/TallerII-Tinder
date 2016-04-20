@@ -83,7 +83,7 @@ bool DataBase::deleteAll() {
 	}
 	st = it->status();
 	delete it;
-	if (ok()){
+	if (ok()) {
 		LOG(INFO)<< "Borro los registros anteriores de la  base de datos";
 	}
 	return ok();

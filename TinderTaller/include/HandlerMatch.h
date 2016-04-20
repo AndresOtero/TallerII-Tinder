@@ -11,7 +11,7 @@
 class HandlerMatch: public HandlerInterface {
 public:
 	HandlerMatch();
-	virtual msg_t handle(struct http_message *hm,DataBase* db);
+	virtual msg_t handle(struct http_message *hm,shared_ptr<DataBase> db);
 	virtual ~HandlerMatch();
 };
 

@@ -7,12 +7,11 @@
 
 #include "HandlerInterface.h"
 /**
-HandlerInterface::HandlerInterface() {
-	// TODO Auto-generated constructor stub
+ HandlerInterface::HandlerInterface() {
 
-}
-**/
+ }
+ **/
+
 HandlerInterface::~HandlerInterface() {
-	// TODO Auto-generated destructor stub
 }
 

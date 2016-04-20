@@ -12,12 +12,12 @@
 #define SRC_JSONPARSER_H_
 
 class JsonParser {
-public:
-	JsonParser();
-	Json::Value stringToValue(std::string jsonStr);
-	int getIntFromValue(Json::Value jsonValue,std::string key);
-	std::string getStringFromValue(Json::Value jsonValue,std::string key);
-	virtual ~JsonParser();
+	public:
+		JsonParser();
+		Json::Value stringToValue(std::string jsonStr);
+		int getIntFromValue(Json::Value jsonValue,std::string key);
+		std::string getStringFromValue(Json::Value jsonValue,std::string key);
+		virtual ~JsonParser();
 };
 
 #endif /* SRC_JSONPARSER_H_ */
