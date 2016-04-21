@@ -6,15 +6,15 @@
  */
 #define TERCERA_POSITION 3
 #include "HandlerUsers.h"
-const string json_example = "{\"holis\" :\"andy\" }";
 
 HandlerUsers::HandlerUsers(shared_ptr<DataBase> DB) {
 	/**Creo el handler de users**/
 	this->DB=DB;
+	this->prefix=USERS;
 }
 bool HandlerUsers::isHandler(struct http_message *hm) {
 	/**Creo el handler de users**/
-	return (httpReqParser.prefixType(hm)==USERS);
+	return (httpReqParser.prefixType(hm)==prefix);
 }
 msg_t HandlerUsers::getUser(struct http_message * hm) {
 	/**Manejo el get de user, recibe un mensaje y una base de datos. Devuelve el msg correspondiente**/

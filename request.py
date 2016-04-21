@@ -50,18 +50,21 @@ print "\n photo"
 print "put"
 response = requests.put(url, data=data_json)
 print response
-#print response.json()
-#print "url mal"
-#url = 'http://localhost:8000/ole'
-#print "put"
-#response = requests.put(url, data=data_json)
-#print response
-#print "post"
-#response = requests.post(url, data=data_json)
-#print response
-#print "get"
-#response = requests.get(url, data=data_json)
-#print response
-#print "delete"
-#response = requests.delete(url, data=data_json)
-#print response
+print "\n MATCH"
+url='http://localhost:8000/match/'
+print url
+print "post"
+response = requests.post(url, data=data_json)
+print response
+print "get"
+response = requests.get(url, data=data_json)
+print response
+print "\n CHAT"
+url='http://localhost:8000/chat/'
+print url
+print "post"
+response = requests.post(url, data=data_json)
+print response
+print "get"
+response = requests.get(url, data=data_json)
+print response

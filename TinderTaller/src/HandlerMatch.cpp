@@ -6,15 +6,15 @@
  */
 
 #include "HandlerMatch.h"
-const string json_example = "{\"holis\" :\"andy\" }";
 
 HandlerMatch::HandlerMatch(shared_ptr<DataBase> DB) {
 	/**Creo el handler de match**/
 	this->DB=DB;
+	this->prefix=MATCH;
 }
 bool HandlerMatch::isHandler(struct http_message *hm) {
 	/**Creo el handler de users**/
-	return (httpReqParser.prefixType(hm)==MATCH);
+	return (httpReqParser.prefixType(hm)==prefix);
 }
 msg_t HandlerMatch::handle(struct http_message *hm) {
 	/**Manejo los mensajes recibidos por el server con prefix de users.Recibe el mensaje y la base de datos. Devuelve la respuesta como un msg.**/
@@ -23,7 +23,7 @@ msg_t HandlerMatch::handle(struct http_message *hm) {
 	switch (methodT) {
 		case POST:
 			LOG(INFO) << "Hago matches";
-			msg.change(ACCEPTED,"Posted maych");
+			msg.change(ACCEPTED,"Posted match");
 			break;
 		case GET:
 			LOG(INFO) << "Busco matches";

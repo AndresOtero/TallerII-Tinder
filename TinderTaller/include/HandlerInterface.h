@@ -11,6 +11,7 @@
 #include "DataBase.h"
 #ifndef SRC_HANDLERINTERFACE_H_
 #define SRC_HANDLERINTERFACE_H_
+const string json_example = "{\"holis\" :\"andy\" }";
 
 class HandlerInterface {
 	public:
@@ -22,6 +23,7 @@ class HandlerInterface {
 		HTTPRequestParser httpReqParser;
 		JsonParser jsonParse;
 		shared_ptr<DataBase> DB;
+		PrefixType prefix;
 };
 
 #endif /* SRC_HANDLERINTERFACE_H_ */

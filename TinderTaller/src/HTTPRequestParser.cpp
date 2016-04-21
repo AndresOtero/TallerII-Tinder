@@ -49,7 +49,7 @@ PrefixType HTTPRequestParser::prefixType(struct http_message *hm) {
 	if (isPrefix(hm, chatString, FIRST_POSITION)){
 			return CHAT;
 	}
-	if (isPrefix(hm, usersString, FIRST_POSITION)){
+	if (isPrefix(hm, matchString, FIRST_POSITION)){
 			return MATCH;
 		}
 }

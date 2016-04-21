@@ -17,6 +17,8 @@ HandlerServer::HandlerServer(shared_ptr<DataBase> DB) {
 	this->DB= DB;
 	vecHandler.push_back(shared_ptr<HandlerInterface>(new HandlerUsers(DB)));
 	vecHandler.push_back(shared_ptr<HandlerInterface>(new HandlerMatch(DB)));
+	vecHandler.push_back(shared_ptr<HandlerInterface>(new HandlerChat(DB)));
+
 }
 msg_t  HandlerServer::handler(struct http_message *hm) {
 	/**Recibe el mensaje de htttp y devuelve el msg que el server debe responder.**/
@@ -27,6 +29,7 @@ msg_t  HandlerServer::handler(struct http_message *hm) {
 			return hi->handle(hm);
 		}
 	}
+	return this->badRequest();
 }
 
 

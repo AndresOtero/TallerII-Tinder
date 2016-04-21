@@ -11,6 +11,7 @@
 #include "HTTPRequest.h"
 #include "HandlerUsers.h"
 #include "HandlerMatch.h"
+#include "HandlerChat.h"
 #ifndef SRC_HANDLERSERVER_H_
 #define SRC_HANDLERSERVER_H_
 class HandlerServer {
