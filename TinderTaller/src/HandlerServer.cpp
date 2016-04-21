@@ -9,28 +9,23 @@
 
 msg_t HandlerServer::badRequest(){
 	/**Devuelvo el msg  que no fue un buen request.**/
-	msg_t msg;
-	msg.status=BAD_REQUEST;
-				msg.body="Not specified prefix";
-			return msg;
+	LOG(INFO)<<"Not specified prefix";
+	return msg(BAD_REQUEST,"Not specified prefix");
 }
 HandlerServer::HandlerServer(shared_ptr<DataBase> DB) {
 	/**Asigna la base de datos al handler del server.**/
 	this->DB= DB;
+	vecHandler.push_back(shared_ptr<HandlerInterface>(new HandlerUsers(DB)));
+	vecHandler.push_back(shared_ptr<HandlerInterface>(new HandlerMatch(DB)));
 }
 msg_t  HandlerServer::handler(struct http_message *hm) {
 	/**Recibe el mensaje de htttp y devuelve el msg que el server debe responder.**/
 	LOG(INFO) << "Entro al handler";
 	PrefixType prefixT=httpReqParser.prefixType(hm);
-	switch(prefixT){
-		case USERS:
-			LOG(INFO) << "Entro a users";
-			return this->handlerUsers.handle(hm,DB);
-		case MATCHS:
-
-		default:
-			LOG(WARNING) << "Entro a Bad request";
-			return badRequest();
+	for(shared_ptr<HandlerInterface> hi : vecHandler){
+		if(hi->isHandler(hm)){
+			return hi->handle(hm);
+		}
 	}
 }
 

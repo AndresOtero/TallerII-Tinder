@@ -10,7 +10,7 @@
 using namespace std;
 
 HTTPRequestParser::HTTPRequestParser() {
-
+	IdOk=true;
 }
 
 bool HTTPRequestParser::isPrefix(struct http_message *hm, string prefix,
@@ -43,8 +43,15 @@ bool HTTPRequestParser::isMethod(struct http_message *hm, string method) {
 
 PrefixType HTTPRequestParser::prefixType(struct http_message *hm) {
 	/**Recibe un mensaje y devuelve el tipo del primer elemento del uri**/
-	if (isPrefix(hm, usersString, FIRST_POSITION))
+	if (isPrefix(hm, usersString, FIRST_POSITION)){
 		return USERS;
+	}
+	if (isPrefix(hm, chatString, FIRST_POSITION)){
+			return CHAT;
+	}
+	if (isPrefix(hm, usersString, FIRST_POSITION)){
+			return MATCH;
+		}
 }
 
 bool isNumber(const std::string& s) {
@@ -58,13 +65,16 @@ int HTTPRequestParser::getId(struct http_message *hm) {
 	std::vector < std::string > vec = parsePrefix(hm);
 	string id = vec[SECOND_POSITION];
 	if (isNumber(id)) {
+		IdOk=true;
 		return atoi(id.c_str());
 	}
+	IdOk=false;
+
 	return -1;
 }
 
-bool HTTPRequestParser::idOk(int id) {
-	return (id >= 0);
+bool HTTPRequestParser::idOk() {
+	return IdOk;
 }
 
 MethodType HTTPRequestParser::methodType(struct http_message *hm) {

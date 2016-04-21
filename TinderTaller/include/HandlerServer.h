@@ -10,16 +10,16 @@
 #include "HTTPRequestParser.h"
 #include "HTTPRequest.h"
 #include "HandlerUsers.h"
+#include "HandlerMatch.h"
 #ifndef SRC_HANDLERSERVER_H_
 #define SRC_HANDLERSERVER_H_
 class HandlerServer {
 	public:
 		HandlerServer(shared_ptr<DataBase> DB);
 		msg_t  handler(struct http_message *hm);
-		msg_t handleUsers(struct http_message *hm);
 		virtual ~HandlerServer();
 	private:
-		HandlerUsers handlerUsers;
+		vector<shared_ptr<HandlerInterface>> vecHandler;
 		shared_ptr<DataBase> DB;
 		HTTPRequestParser httpReqParser;
 		msg_t badRequest();

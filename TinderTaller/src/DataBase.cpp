@@ -75,7 +75,7 @@ bool DataBase::delete_(DBtuple& tuple) {
 }
 bool DataBase::deleteAll() {
 	/**Borra todos los registros de la base de datos**/
-	DBtuple tuple;
+	DBtuple tuple("a","a");
 	rocksdb::Iterator* it = db->NewIterator(rocksdb::ReadOptions());
 	for (it->SeekToFirst(); it->Valid(); it->Next()) {
 		tuple.key = it->key().ToString();

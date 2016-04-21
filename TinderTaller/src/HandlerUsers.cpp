@@ -8,150 +8,137 @@
 #include "HandlerUsers.h"
 const string json_example = "{\"holis\" :\"andy\" }";
 
-HandlerUsers::HandlerUsers() {
+HandlerUsers::HandlerUsers(shared_ptr<DataBase> DB) {
 	/**Creo el handler de users**/
+	this->DB=DB;
 }
-
-msg_t HandlerUsers::getUser(struct http_message * hm, shared_ptr<DataBase> db) {
+bool HandlerUsers::isHandler(struct http_message *hm) {
+	/**Creo el handler de users**/
+	return (httpReqParser.prefixType(hm)==USERS);
+}
+msg_t HandlerUsers::getUser(struct http_message * hm) {
 	/**Manejo el get de user, recibe un mensaje y una base de datos. Devuelve el msg correspondiente**/
-	msg_t msg;
-	int id = httpReqParser.getId(hm);
-	if (id >= 0) {
-		LOG(INFO)<<"Busco "<< id <<" como identificador";
-		msg.status = OK;
-		msg.body.append(json_example); //aca va el client o la base de datos
-	} else {
-		LOG(WARNING)<<"Not success, id not int.";
-		msg.status = BAD_REQUEST;
-		msg.body.append(json_example);
-	}
-	return msg;
-}
-
-msg_t HandlerUsers::postUser(struct http_message * hm,
-		shared_ptr<DataBase> db) {
-	/**Manejo el post de user, recibe un mensaje y una base de datos.Devuelve el msg correspondiente.Crea un usuario**/
 	Json::Value val = jsonParse.stringToValue(hm->body.p);
 	string a = jsonParse.getStringFromValue(val["user"], "name");
-	DBtuple tp;
-	tp.key = a;
-	tp.value = hm->body.p;
+	DBtuple tp(a);
+	bool ok =DB->get(tp);
 	msg_t msg;
-	bool ok = db->put(tp);
-	if (ok) {
-		LOG(INFO)<<"Creo "<< a <<" como usuario";
-		msg.status = CREATED;
-		msg.body.append(json_example);
+	int id = httpReqParser.getId(hm);
+	if (httpReqParser.idOk()&&ok) {
+		LOG(INFO)<<"Busco "<< id <<" como identificador";
+		msg.change(CREATED,json_example);
 	} else {
 		LOG(WARNING)<<"Not success";
-		msg.status = BAD_REQUEST;
-		msg.body.append(json_example);
+		msg.change(BAD_REQUEST,json_example);
 	}
 	return msg;
 }
 
-msg_t HandlerUsers::putUser(struct http_message * hm, shared_ptr<DataBase> db) {
+msg_t HandlerUsers::postUser(struct http_message * hm) {
+	/**Manejo el post de user, recibe un mensaje y una base de datos.Devuelve el msg correspondiente.Crea un usuario**/
+	/*Candidata a funcion*/
+	Json::Value val = jsonParse.stringToValue(hm->body.p);
+	string a = jsonParse.getStringFromValue(val["user"], "name");
+	DBtuple tp(a,hm->body.p);
+
+	msg_t msg;
+	bool ok = DB->put(tp);
+	if (ok) {
+		LOG(INFO)<<"Creo "<< a <<" como usuario";
+		msg.change(CREATED,json_example);
+	} else {
+		LOG(WARNING)<<"Not success";
+		msg.change(BAD_REQUEST,json_example);
+	}
+	return msg;
+}
+
+msg_t HandlerUsers::putUser(struct http_message * hm) {
 	/**Manejo el put de user, recibe un mensaje y una base de datos.Devuelve el msg correspondiente.Modifica un usuario**/
 	vector < string > uriVector = httpReqParser.parsePrefix(hm);
 	string p = uriVector[TERCERA_POSITION];
 	if (p == photoString) {
-		return this->putUserUpdatePhoto(hm, db);
+		return this->putUserUpdatePhoto(hm);
 	} else {
-		return this->putUserUpdateProfile(hm, db);
+		return this->putUserUpdateProfile(hm);
 	}
 }
 
-msg_t HandlerUsers::putUserUpdateProfile(struct http_message * hm,
-		shared_ptr<DataBase> db) {
+msg_t HandlerUsers::putUserUpdateProfile(struct http_message * hm) {
 	/**Manejo el put de user, recibe un mensaje y una base de datos.Devuelve el msg correspondiente.Modifica un usuario**/
 	Json::Value val = jsonParse.stringToValue(hm->body.p);
 	string a = jsonParse.getStringFromValue(val["user"], "name");
-	DBtuple tp;
-	tp.key = a;
-	tp.value = hm->body.p;
+	DBtuple tp(a,hm->body.p);
 	int id = httpReqParser.getId(hm);
 	msg_t msg;
-	bool ok = db->put(tp);
-	if (ok && httpReqParser.idOk(id)) {
+	bool ok = DB->put(tp);
+	if (ok && httpReqParser.idOk()) {
 		LOG(INFO)<<"Modifico "<< a <<" como usuario";
 		LOG(INFO)<<"Modifico "<< id <<" como id_usuario";
-		msg.status = ACCEPTED;
-		msg.body.append(json_example);
+		msg.change(ACCEPTED,json_example);
 	} else {
 		LOG(WARNING)<<"Not success";
-		msg.status = BAD_REQUEST;
-		msg.body.append(json_example);
+		msg.change(BAD_REQUEST,json_example);
 	}
 	return msg;
 }
 
-msg_t HandlerUsers::putUserUpdatePhoto(struct http_message * hm,
-		shared_ptr<DataBase> db) {
+msg_t HandlerUsers::putUserUpdatePhoto(struct http_message * hm) {
 	/**Manejo el put de user, recibe un mensaje y una base de datos.Devuelve el msg correspondiente.Modifica un usuario**/
 	Json::Value val = jsonParse.stringToValue(hm->body.p);
 	string a = jsonParse.getStringFromValue(val["user"], "name");
-	DBtuple tp;
-	tp.key = a;
-	tp.value = hm->body.p;
+	DBtuple tp(a,hm->body.p);
 	int id = httpReqParser.getId(hm);
 	msg_t msg;
-	bool ok = db->put(tp);
-	if (ok && httpReqParser.idOk(id)) {
+	bool ok = DB->put(tp);
+	if (ok && httpReqParser.idOk()) {
 		LOG(INFO)<<"Modifico la foto de "<< a <<" como usuario";
-		msg.status = ACCEPTED;
-		msg.body.append(json_example);
+		msg.change(ACCEPTED,json_example);
 	} else {
 		LOG(WARNING)<<"Not success";
-		msg.status = BAD_REQUEST;
-		msg.body.append(json_example);
+		msg.change(BAD_REQUEST,json_example);
 	}
 	return msg;
 }
 
-msg_t HandlerUsers::deleteUser(struct http_message * hm,
-		shared_ptr<DataBase> db) {
+msg_t HandlerUsers::deleteUser(struct http_message * hm) {
 	/**Manejo el delete de user, recibe un mensaje y una base de datos.Devuelve el msg correspondiente.Borro Usuario**/
 	Json::Value val = jsonParse.stringToValue(hm->body.p);
 	string a = jsonParse.getStringFromValue(val["user"], "name");
-	DBtuple tp;
-	tp.key = a;
-	tp.value = hm->body.p;
+	DBtuple tp(a,hm->body.p);
 	int id = httpReqParser.getId(hm);
 	msg_t msg;
-	bool ok = db->put(tp);
-	if (ok && httpReqParser.idOk(id)) {
+	bool ok = DB->delete_(tp);
+	if (ok && httpReqParser.idOk()) {
 		LOG(INFO)<<"Elimino "<< a <<" como usuario";
 		LOG(INFO)<<"Elimino "<< id <<" como id_usuario";
-		msg.status = ACCEPTED;
-		msg.body.append(json_example);
+		msg.change(ACCEPTED,json_example);
 	} else {
 		LOG(WARNING)<<"Not success";
-		msg.status = BAD_REQUEST;
-		msg.body.append(json_example);
+		msg.change(BAD_REQUEST,json_example);
 	}
 	return msg;
 }
 
-msg_t HandlerUsers::handle(struct http_message *hm, shared_ptr<DataBase> db) {
+msg_t HandlerUsers::handle(struct http_message *hm) {
 	/**Manejo los mensajes recibidos por el server con prefix de users.Recibe el mensaje y la base de datos. Devuelve la respuesta como un msg.**/
 	MethodType methodT = httpReqParser.methodType(hm);
 	msg_t msg;
 	switch (methodT) {
 	case POST:
-		msg = this->postUser(hm, db);
+		msg = this->postUser(hm);
 		break;
 	case GET:
-		msg = this->getUser(hm, db);
+		msg = this->getUser(hm);
 		break;
 	case PUT:
-		msg = this->putUser(hm, db);
+		msg = this->putUser(hm);
 		break;
 	case DELETE:
-		msg = this->deleteUser(hm, db);
+		msg = this->deleteUser(hm);
 		break;
 	default:
-		msg.status = METHOD_NOT_ALLOWED;
-		msg.body.append(json_example);
+		msg.change(METHOD_NOT_ALLOWED,json_example);
 		break;
 	}
 	return msg;

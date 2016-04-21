@@ -8,28 +8,34 @@
 #include "HandlerMatch.h"
 const string json_example = "{\"holis\" :\"andy\" }";
 
-HandlerMatch::HandlerMatch() {
-
+HandlerMatch::HandlerMatch(shared_ptr<DataBase> DB) {
+	/**Creo el handler de match**/
+	this->DB=DB;
 }
-msg_t HandlerMatch::handle(struct http_message *hm, shared_ptr<DataBase> db) {
+bool HandlerMatch::isHandler(struct http_message *hm) {
+	/**Creo el handler de users**/
+	return (httpReqParser.prefixType(hm)==MATCH);
+}
+msg_t HandlerMatch::handle(struct http_message *hm) {
 	/**Manejo los mensajes recibidos por el server con prefix de users.Recibe el mensaje y la base de datos. Devuelve la respuesta como un msg.**/
 	MethodType methodT = httpReqParser.methodType(hm);
 	msg_t msg;
 	switch (methodT) {
-	case POST:
-		LOG(INFO) << "Hago matches";
-		break;
-	case GET:
-		LOG(INFO) << "Busco matches";
-		break;
-		/**case PUT:
-		 break;
-		 case DELETE:
-		 break;**/
-	default:
-		msg.status = METHOD_NOT_ALLOWED;
-		msg.body.append(json_example);
-		break;
+		case POST:
+			LOG(INFO) << "Hago matches";
+			msg.change(ACCEPTED,"Posted maych");
+			break;
+		case GET:
+			LOG(INFO) << "Busco matches";
+			msg.change(OK,"Get match");
+			break;
+			/**case PUT:
+			 break;
+			 case DELETE:
+			 break;**/
+		default:
+			msg.change(METHOD_NOT_ALLOWED,json_example);
+			break;
 	}
 	return msg;
 }

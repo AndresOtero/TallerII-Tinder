@@ -19,8 +19,10 @@ public:
 	PrefixType prefixType(struct http_message *hm);
 	vector<string> parsePrefix(struct http_message *hm);
 	int getId(struct http_message *hm);
-	bool idOk(int id);
+	bool idOk();
 	virtual ~HTTPRequestParser();
+private:
+	bool IdOk;
 
 private:
 	vector<string> StringToVector(std::string const& str, char const delimiter);

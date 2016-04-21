@@ -5,7 +5,6 @@
  *      Author: andres
  */
 #include <iostream>
-
 #ifndef INCLUDE_HTTPREQUEST_H_
 #define INCLUDE_HTTPREQUEST_H_
 using namespace std;
@@ -17,7 +16,20 @@ typedef enum StatusCode {
 typedef struct msg{
 	StatusCode status;
 	string body;
+	/**msg(StatusCode status,string body){
+		this->body=body;
+		this->status=status;
+	}**/
+	msg(StatusCode status,string body){
+		change(status,body);
+	}
+	void change(StatusCode status,string body){
+		this->body=body;
+		this->status=status;
+	}
+	msg(){};
 }msg_t;
+
 
 const string putString="PUT";
 const string getString="GET";
@@ -30,11 +42,12 @@ typedef enum MethodType {
 } MethodType;
 
 const string usersString="users";
-const string matchString="matchs";
+const string matchString="match";
+const string chatString="chat";
 const string photoString="photo";
 
 typedef enum PrefixType {
-	USERS,MATCHS,
+	USERS,MATCH,CHAT,
 } PrefixType;
 
 #endif /* INCLUDE_HTTPREQUEST_H_ */

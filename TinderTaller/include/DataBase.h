@@ -19,6 +19,15 @@ using namespace std;
 typedef struct DBtuple {
    string key;
    string value;
+   DBtuple(string key,string value){
+	   this->key=key;
+	   this->value=value;
+   }
+   DBtuple();
+   DBtuple(string key){
+	   this->key=key;
+   }
+
 }DBtuple_t;
 
 class DataBase {

@@ -15,11 +15,13 @@
 class HandlerInterface {
 	public:
 		virtual ~HandlerInterface();
-		virtual msg_t handle(struct http_message *hm,shared_ptr<DataBase> db)=0;
+		virtual msg_t handle(struct http_message *hm)=0;
+		virtual bool isHandler(struct http_message *hm)=0;
+
 	protected:
 		HTTPRequestParser httpReqParser;
 		JsonParser jsonParse;
-
+		shared_ptr<DataBase> DB;
 };
 
 #endif /* SRC_HANDLERINTERFACE_H_ */
