@@ -65,6 +65,4 @@ print url
 print "post"
 response = requests.post(url, data=data_json)
 print response
-print "get"
-response = requests.get(url, data=data_json)
-print response
+

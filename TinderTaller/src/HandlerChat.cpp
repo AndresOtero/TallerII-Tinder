@@ -16,21 +16,19 @@ HandlerChat::HandlerChat(shared_ptr<DataBase> DB) {
 	this->DB=DB;
 	this->prefix=CHAT;
 }
+
 bool HandlerChat::isHandler(struct http_message *hm) {
-	/**Creo el handler de users**/
+	/**Creo el handler de match**/
 	return (httpReqParser.prefixType(hm)==prefix);
 }
+
 msg_t HandlerChat::handle(struct http_message *hm) {
+	/**Manejo los mensajes recibidos por el server con prefix de match.Recibe el mensaje. Devuelve la respuesta como un msg.**/
 	MethodType methodT = httpReqParser.methodType(hm);
 		msg_t msg;
 		switch (methodT) {
 			case POST:
-				LOG(INFO) << "Mando un mensaje";
-				msg.change(ACCEPTED,"Posted maych");
-				break;
-			case GET:
-				LOG(INFO) << "Busco un mensaje";
-				msg.change(OK,"Get match");
+				msg=handlePost(hm);
 				break;
 			default:
 				msg.change(METHOD_NOT_ALLOWED,json_example);
@@ -38,3 +36,12 @@ msg_t HandlerChat::handle(struct http_message *hm) {
 		}
 		return msg;
 	}
+
+msg_t HandlerChat::handlePost(struct http_message *hm) {
+	/**	Recibo el post de un mensaje y devuelvo un accepted si se realizo correctamente**/
+	msg_t msg;
+	LOG(INFO) << "Mando un mensaje";
+	msg.change(ACCEPTED,"Posted maych");
+	return msg;
+}
+

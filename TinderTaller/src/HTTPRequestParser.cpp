@@ -10,6 +10,7 @@
 using namespace std;
 
 HTTPRequestParser::HTTPRequestParser() {
+	/**Creo el htttp parser**/
 	IdOk=true;
 }
 
@@ -55,6 +56,7 @@ PrefixType HTTPRequestParser::prefixType(struct http_message *hm) {
 }
 
 bool isNumber(const std::string& s) {
+	/* Devuelve true si es un numero, fasle si no lo es.***/
 	return !s.empty()
 			&& std::find_if(s.begin(), s.end(),
 					[](char c) {return !std::isdigit(c);}) == s.end();
@@ -74,6 +76,7 @@ int HTTPRequestParser::getId(struct http_message *hm) {
 }
 
 bool HTTPRequestParser::idOk() {
+	/**True si el id es correctamente parseado.**/
 	return IdOk;
 }
 

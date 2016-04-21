@@ -15,16 +15,14 @@ DataBase::DataBase(const std::string& dbPath, bool createIfMissing,
 	/**Creacion de la DB. Fuente: https://github.com/facebook/rocksdb/wiki/Basic-Operations
 	 *
 	 * **/
-	// Optimize RocksDB. This is the easiest way to get RocksDB to perform well
+	// Optimiza RocksDB.
 	options.IncreaseParallelism();
 	options.OptimizeLevelStyleCompaction();
-	// create the DB if it's not already present
 	if (dbPath.compare("") == 0) {
 		LOG(FATAL)<< "El path esta vacio del base de datos";
 		return;
 	}
-
-	Options options;
+	//Crea la base de datos si no esta creada
 	options.create_if_missing = createIfMissing;
 	st = DB::Open(options, dbPath, &db);
 	if (st.ok() && deleteAll) {

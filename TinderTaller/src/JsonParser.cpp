@@ -8,7 +8,7 @@
 #include "JsonParser.h"
 
 JsonParser::JsonParser() {
-
+	/**Creo el parser de Json**/
 }
 
 Json::Value JsonParser::stringToValue(std::string jsonStr) {
@@ -36,5 +36,6 @@ std::string JsonParser::getStringFromValue(Json::Value jsonValue,
 }
 
 JsonParser::~JsonParser() {
+	/**Destruyo el parser de Json**/
 }
 

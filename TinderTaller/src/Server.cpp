@@ -16,10 +16,9 @@ static void *s_db_handle = NULL;
 
 Server::Server() {
 	/**Creo el server**/
-	mg_mgr_init(&mgr, NULL);  //Initialize Mongoose manager
-	nc = mg_bind(&mgr, s_http_port, Server::staticEvHandler); //Create listening connection.
-	mg_set_protocol_http_websocket(nc); //Attach built-in HTTP event handler to the given connection.
-	//serverInstance=this;
+	mg_mgr_init(&mgr, NULL);  //Inicializo el Mongoose manager
+	nc = mg_bind(&mgr, s_http_port, Server::staticEvHandler); //Creo la conexion que escucha.
+	mg_set_protocol_http_websocket(nc); //Conecta al event handler de http con la conexion.
 }
 
 void Server::staticEvHandler(struct mg_connection *nc, int ev, void *ev_data) {

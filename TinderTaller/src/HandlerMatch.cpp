@@ -22,17 +22,11 @@ msg_t HandlerMatch::handle(struct http_message *hm) {
 	msg_t msg;
 	switch (methodT) {
 		case POST:
-			LOG(INFO) << "Hago matches";
-			msg.change(ACCEPTED,"Posted match");
+			msg=handlePost(hm);
 			break;
 		case GET:
-			LOG(INFO) << "Busco matches";
-			msg.change(OK,"Get match");
+			msg=handleGet(hm);
 			break;
-			/**case PUT:
-			 break;
-			 case DELETE:
-			 break;**/
 		default:
 			msg.change(METHOD_NOT_ALLOWED,json_example);
 			break;
@@ -40,6 +34,24 @@ msg_t HandlerMatch::handle(struct http_message *hm) {
 	return msg;
 }
 
+msg_t HandlerMatch::handlePost(struct http_message *hm){
+	/**Recibo el post de un match y devuelvo un Accepted en caso de exito.**/
+	msg_t msg;
+	LOG(INFO) << "Hago matches";
+	msg.change(ACCEPTED,"Posted match");
+	return msg;
+}
+
+msg_t HandlerMatch::handleGet(struct http_message *hm){
+	/**Recibo el get de un match y devuelvo un Ok en caso de exito.**/
+	msg_t msg;
+	LOG(INFO) << "Busco matches";
+	msg.change(OK,"Get match");
+	return msg;
+}
+
 HandlerMatch::~HandlerMatch() {
+	/**Destruyo el handler de Match**/
+
 }
 
