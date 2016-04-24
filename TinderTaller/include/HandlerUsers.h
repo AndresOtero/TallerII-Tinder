@@ -9,6 +9,7 @@
 #define SRC_HANDLERUSERS_H_
 
 #include "HandlerInterface.h"
+#include "SharedClient.h"
 
 class HandlerUsers: public HandlerInterface {
 public:

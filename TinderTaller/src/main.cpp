@@ -10,7 +10,6 @@ INITIALIZE_EASYLOGGINGPP
 #include <cstdio>
 #include <string>
 #include <assert.h>
-
 #include "../include/Server.h"
 #include "../include/DataBase.h"
 

@@ -10,22 +10,26 @@
 using namespace std;
 
 typedef enum StatusCode {
-	OK = 200,CREATED=201,ACCEPTED=202, BAD_REQUEST = 400, UNAUTHORIZED = 401, NOT_FOUND = 404,METHOD_NOT_ALLOWED=405,INTERNAL_ERROR = 500,NOT_IMPLEMENTED=501,
+	OK = 200,CREATED=201,ACCEPTED=202, BAD_REQUEST = 400, UNAUTHORIZED = 401, NOT_FOUND = 404,METHOD_NOT_ALLOWED=405,INTERNAL_ERROR = 500,
+	NOT_IMPLEMENTED=501, DEFAULT_CODE = 0, ERROR_CONNECTION = 1
 } StatusCode;
 
 typedef struct msg{
 	StatusCode status;
-	string body;
+	string * body = NULL;
 	/**msg(StatusCode status,string body){
 		this->body=body;
 		this->status=status;
 	}**/
-	msg(StatusCode status,string body){
+	msg(StatusCode status,string * body){
 		change(status,body);
 	}
-	void change(StatusCode status,string body){
-		this->body=body;
-		this->status=status;
+	void change(StatusCode status,string * body){
+		if (this->body != NULL){
+			delete this->body;
+		}
+		this->body = body;
+		this->status = status;
 	}
 	msg(){};
 }msg_t;

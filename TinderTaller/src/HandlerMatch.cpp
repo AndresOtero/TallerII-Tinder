@@ -28,7 +28,9 @@ msg_t HandlerMatch::handle(struct http_message *hm) {
 			msg=handleGet(hm);
 			break;
 		default:
-			msg.change(METHOD_NOT_ALLOWED,json_example);
+			string * response = new string();
+			response->append("Method not allowed");
+			msg.change(METHOD_NOT_ALLOWED, response);
 			break;
 	}
 	return msg;
@@ -37,8 +39,9 @@ msg_t HandlerMatch::handle(struct http_message *hm) {
 msg_t HandlerMatch::handlePost(struct http_message *hm){
 	/**Recibo el post de un match y devuelvo un Accepted en caso de exito.**/
 	msg_t msg;
-	LOG(INFO) << "Hago matches";
-	msg.change(ACCEPTED,"Posted match");
+	string * response = new string();
+	response->append("Posted maych");
+	msg.change(ACCEPTED, response);
 	return msg;
 }
 
@@ -46,7 +49,9 @@ msg_t HandlerMatch::handleGet(struct http_message *hm){
 	/**Recibo el get de un match y devuelvo un Ok en caso de exito.**/
 	msg_t msg;
 	LOG(INFO) << "Busco matches";
-	msg.change(OK,"Get match");
+	string * response = new string();
+	response->append("Get match");
+	msg.change(OK, response);
 	return msg;
 }
 
