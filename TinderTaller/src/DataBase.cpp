@@ -16,8 +16,8 @@ DataBase::DataBase(const std::string& dbPath, bool createIfMissing,
 	 *
 	 * **/
 	// Optimiza RocksDB.
-	options.IncreaseParallelism();
-	options.OptimizeLevelStyleCompaction();
+	//options.IncreaseParallelism();
+	//options.OptimizeLevelStyleCompaction();
 	if (dbPath.compare("") == 0) {
 		LOG(FATAL)<< "El path esta vacio del base de datos";
 		return;

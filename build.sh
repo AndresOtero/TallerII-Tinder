@@ -24,6 +24,8 @@ cd ..
 cd ..	
 cd ..
 cd ..
+mkdir -p DBServer
+mkdir -p DBTest
 mkdir -p build
 cd build
 cmake ../

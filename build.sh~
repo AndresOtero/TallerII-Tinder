@@ -16,15 +16,17 @@ make
 cd ..
 cd jsoncpp-master
 cd src
-mkdir -p build/debug
-cd build/debug
+mkdir -p build/
+cd build/
 cmake -DCMAKE_BUILD_TYPE=debug -DJSONCPP_LIB_BUILD_STATIC=ON-DJSONCPP_LIB_BUILD_SHARED=OFF -G "Unix Makefiles" ../..
 make
-cd ..
 cd ..
 cd ..	
 cd ..
 cd ..
+mkdir -p DB
+mkdir -p DB/Server
+mkdir -p DB/test
 mkdir -p build
 cd build
 cmake ../
