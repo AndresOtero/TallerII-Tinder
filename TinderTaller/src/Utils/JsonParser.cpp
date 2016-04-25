@@ -17,9 +17,9 @@ Json::Value JsonParser::stringToValue(std::string jsonStr) {
 	Json::Reader reader;
 	bool parsingSuccessful = reader.parse(jsonStr.c_str(), root); //parse process
 	if (!parsingSuccessful) {
-		LOG(INFO)<< "No se parseo de manera satisfactoria";
+		LOG(INFO)<< "Json: No se parseo de manera satisfactoria";
 	} else {
-		LOG(INFO) << "Se parseo de manera satisfactoria";
+		LOG(INFO) << "Json: Se parseo de manera satisfactoria";
 	}
 	return root;
 }

@@ -12,15 +12,17 @@
 using namespace std;
 
 TEST(TokenAuthentificator,askTokenVerificateToken){
-	TokenAuthentificator token;
+	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
+	TokenAuthentificator token(db);
 	string strTime ="25-04-2016 11:09:16";
 	string strToken=token.createJsonToken("andy",strTime);
-	EXPECT_EQ(strToken,"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9Cg==.eyJ0aW1lIjoiMjUtMDQtMjAxNiAxMTowOToxNiIsInVzZXIiOiJhbmR5In0K.4cc4ffc7cf1091e3b4a510adaf5474d3843fa85b7a561f900d82021380f3b16f");
+	EXPECT_EQ(strToken,"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9Cg==.eyJ0aW1lIjoiMjUtMDQtMjAxNiAxMTowOToxNiIsInVzZXIiOiJhbmR5In0K.M2QxNDg4MWJhNDc3N2QyZjRmNDIzZGMzZTE2ZmE1NGEzNmY3OTlhZDg5OTlmMDlhMTBjZGFkMmJjYmQxMjliNw==");
 
 
 }
 TEST(TokenAuthentificator,askTokenVerificateUser){
-	TokenAuthentificator token;
+	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
+	TokenAuthentificator token(db);
 	Base64Utils base64;
 	JsonParser json;
 	string strTime = "25-04-2016 11:09:16";
@@ -35,7 +37,8 @@ TEST(TokenAuthentificator,askTokenVerificateUser){
 	EXPECT_EQ(user, "andy");
 }
 TEST(TokenAuthentificator,askTokenVerificateTime){
-	TokenAuthentificator token;
+	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
+	TokenAuthentificator token(db);
 	Base64Utils base64;
 	JsonParser json;
 	string strTime = "25-04-2016 11:09:16";
@@ -48,4 +51,38 @@ TEST(TokenAuthentificator,askTokenVerificateTime){
 	Json::Value val = json.stringToValue(strPayloadDecoded);
 	string time = json.getStringFromValue(val, "time");
 	EXPECT_EQ(time, "25-04-2016 11:09:16");
+}
+TEST(TokenAuthentificator,notValidateNotFormattedToken){
+	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
+	TokenAuthentificator token(db);
+	EXPECT_FALSE(token.validateJsonToken("holis"));
+}
+TEST(TokenAuthentificator,notValidateWrongSignature){
+	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
+	TokenAuthentificator token(db);
+	TimeUtils timeUtils;
+	string strTime = timeUtils.timeToString();
+	string strToken = token.createJsonToken("andy", strTime);
+	strToken += "x";
+	EXPECT_FALSE(token.validateJsonToken(strToken));
+}
+TEST(TokenAuthentificator,notValidateExperatedToken){
+	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
+	TokenAuthentificator token(db);
+	string strTime = "25-04-2010 11:09:16";
+	string strToken = token.createJsonToken("andy", strTime);
+	EXPECT_FALSE(token.validateJsonToken(strToken));
+}
+TEST(TokenAuthentificator,validateTokenWithTimeStamp){
+	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
+	TokenAuthentificator token(db);
+	TimeUtils timeUtils;
+	string strTime = timeUtils.timeToString();
+	string strToken = token.createJsonToken("andy", strTime);
+	EXPECT_TRUE(token.validateJsonToken(strToken));
+}
+TEST(TokenAuthentificator,validateTokenWithOutTimeStamp){
+	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
+	TokenAuthentificator token(db);
+	EXPECT_TRUE(token.validateJsonToken(token.createJsonToken("andy")));
 }
