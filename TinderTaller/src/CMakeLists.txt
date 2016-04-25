@@ -18,10 +18,11 @@ LINK_DIRECTORIES( ../lib/jsoncpp-master/src/build/src/lib_json)
 
 #Src
 file(GLOB SOURCES "./*")
+file(GLOB DirUtils "./Utils/*")
 
 #exe
-add_executable(tindertaller ${SOURCES})
-add_library(libtindertaller SHARED ${SOURCES})
+add_executable(tindertaller ${SOURCES} ${DirUtils})
+add_library(libtindertaller SHARED ${SOURCES} ${DirUtils})
 
 #Agrego el rocksdb
  TARGET_LINK_LIBRARIES(tindertaller -fprofile-arcs)
