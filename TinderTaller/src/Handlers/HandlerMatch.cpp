@@ -7,15 +7,13 @@
 
 #include "HandlerMatch.h"
 
-HandlerMatch::HandlerMatch(shared_ptr<DataBase> DB) {
+HandlerMatch::HandlerMatch(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificator> tokenAuthentificator) {
 	/**Creo el handler de match**/
 	this->DB=DB;
+	this->tokenAuthentificator=tokenAuthentificator;
 	this->prefix=MATCH;
 }
-bool HandlerMatch::isHandler(struct http_message *hm) {
-	/**Creo el handler de users**/
-	return (httpReqParser.prefixType(hm)==prefix);
-}
+
 msg_t HandlerMatch::handle(struct http_message *hm) {
 	/**Manejo los mensajes recibidos por el server con prefix de users.Recibe el mensaje y la base de datos. Devuelve la respuesta como un msg.**/
 	MethodType methodT = httpReqParser.methodType(hm);

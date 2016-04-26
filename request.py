@@ -35,6 +35,8 @@ print "post"
 response = requests.post(url, data=data_json)
 print response
 print response.json()
+print response.json()["token"]
+data_json=response
 print "get"
 response = requests.get(url, data=data_json)
 print response

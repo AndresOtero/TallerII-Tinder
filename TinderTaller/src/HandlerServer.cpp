@@ -17,9 +17,11 @@ msg_t HandlerServer::badRequest(){
 HandlerServer::HandlerServer(shared_ptr<DataBase> DB) {
 	/**Asigna la base de datos al handler del server.**/
 	this->DB= DB;
-	vecHandler.push_back(shared_ptr<HandlerInterface>(new HandlerUsers(DB)));
-	vecHandler.push_back(shared_ptr<HandlerInterface>(new HandlerMatch(DB)));
-	vecHandler.push_back(shared_ptr<HandlerInterface>(new HandlerChat(DB)));
+	shared_ptr<TokenAuthentificator> tokenAuth(new TokenAuthentificator(DB));
+	this->tokenAuthentificator=tokenAuth;
+	vecHandler.push_back(shared_ptr<HandlerInterface>(new HandlerUsers(DB,tokenAuthentificator)));
+	vecHandler.push_back(shared_ptr<HandlerInterface>(new HandlerMatch(DB,tokenAuthentificator)));
+	vecHandler.push_back(shared_ptr<HandlerInterface>(new HandlerChat(DB,tokenAuthentificator)));
 
 }
 msg_t  HandlerServer::handler(struct http_message *hm) {
@@ -28,7 +30,7 @@ msg_t  HandlerServer::handler(struct http_message *hm) {
 	PrefixType prefixT=httpReqParser.prefixType(hm);
 	for(shared_ptr<HandlerInterface> hi : vecHandler){
 		if(hi->isHandler(hm)){
-			return hi->handle(hm);
+			return hi->handleMsg(hm);
 		}
 	}
 	return this->badRequest();

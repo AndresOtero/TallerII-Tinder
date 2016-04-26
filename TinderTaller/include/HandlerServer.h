@@ -12,6 +12,7 @@
 #include "HandlerUsers.h"
 #include "HandlerMatch.h"
 #include "HandlerChat.h"
+#include "TokenAuthentificator.h"
 #ifndef SRC_HANDLERSERVER_H_
 #define SRC_HANDLERSERVER_H_
 class HandlerServer {
@@ -23,6 +24,7 @@ class HandlerServer {
 		vector<shared_ptr<HandlerInterface>> vecHandler;
 		shared_ptr<DataBase> DB;
 		HTTPRequestParser httpReqParser;
+		shared_ptr<TokenAuthentificator> tokenAuthentificator;
 		msg_t badRequest();
 };
 

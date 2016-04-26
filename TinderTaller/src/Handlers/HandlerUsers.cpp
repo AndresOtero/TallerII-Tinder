@@ -7,15 +7,13 @@
 #define TERCERA_POSITION 3
 #include "HandlerUsers.h"
 
-HandlerUsers::HandlerUsers(shared_ptr<DataBase> DB) {
+HandlerUsers::HandlerUsers(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificator> tokenAuthentificator){
 	/**Creo el handler de users**/
 	this->DB=DB;
+	this->tokenAuthentificator=tokenAuthentificator;
 	this->prefix=USERS;
 }
-bool HandlerUsers::isHandler(struct http_message *hm) {
-	/**Creo el handler de users**/
-	return (httpReqParser.prefixType(hm)==prefix);
-}
+
 msg_t HandlerUsers::getUser(struct http_message * hm) {
 	/**Manejo el get de user, recibe un mensaje y una base de datos. Devuelve el msg correspondiente**/
 	Json::Value val = jsonParse.stringToValue(hm->body.p);
@@ -26,16 +24,18 @@ msg_t HandlerUsers::getUser(struct http_message * hm) {
 	int id = httpReqParser.getId(hm);
 	if (httpReqParser.idOk()&&ok) {
 		LOG(INFO)<<"Busco "<< id <<" como identificador";
-
+		string * result = new string();
+		result->append(json_example);
+		msg.change(OK, result);
 		//Va a buscar el usuario en el Shared
-		SharedClient * sharedClient = new SharedClient();
-		stringstream userId;
-		userId << id;
-		msg_t * response = sharedClient->getUser(userId.str());
-		msg.status = response->status;
-		msg.body = response->body;
-		delete response;
-		delete sharedClient;
+		//SharedClient * sharedClient = new SharedClient();
+		//stringstream userId;
+		//userId << id;
+		//msg_t * response = sharedClient->getUser(userId.str());
+		//msg.status = response->status;
+		//msg.body = response->body;
+		//delete response;
+		//delete sharedClient;
 	} else {
 		LOG(WARNING)<<"Not success";
 		string * result = new string();
@@ -49,23 +49,28 @@ msg_t HandlerUsers::postUser(struct http_message * hm) {
 	/**Manejo el post de user, recibe un mensaje y una base de datos.Devuelve el msg correspondiente.Crea un usuario**/
 	/*Candidata a funcion*/
 	Json::Value val = jsonParse.stringToValue(hm->body.p);
-	string a = jsonParse.getStringFromValue(val["user"], "name");
-	DBtuple tp(a,hm->body.p);
+	string user = jsonParse.getStringFromValue(val["user"], "name");
+	DBtuple tp(user,hm->body.p);
 
 	msg_t msg;
 	bool ok = DB->put(tp);
 	if (ok) {
-		LOG(INFO)<<"Creo "<< a <<" como usuario";
+		LOG(INFO)<<"Creo "<< user <<" como usuario";
+		string token=tokenAuthentificator->createJsonToken(user);
+		val["token"]=token;
+		string * result = new string();
+		result->append(jsonParse.valueToString(val));
+		msg.change(CREATED, result);
 
 		//Va a dar de alta el usuario en el Shared
-		SharedClient * sharedClient = new SharedClient();
-		string user = "";
-		user.append(hm->body.p);
-		msg_t * response = sharedClient->setUser(user);
-		msg.status = response->status;
-		msg.body = response->body;
-		delete response;
-		delete sharedClient;
+		//SharedClient * sharedClient = new SharedClient();
+		//string user = "";
+		//user.append(hm->body.p);
+		//msg_t * response = sharedClient->setUser(user);
+		//msg.status = response->status;
+		//msg.body = response->body;
+		//delete response;
+		//delete sharedClient;
 	} else {
 		LOG(WARNING)<<"Not success";
 		string * result = new string();
@@ -95,20 +100,23 @@ msg_t HandlerUsers::putUserUpdateProfile(struct http_message * hm) {
 	msg_t msg;
 	bool ok = DB->put(tp);
 	if (ok && httpReqParser.idOk()) {
+		string * result = new string();
+		result->append(json_example);
+		msg.change(ACCEPTED, result);
 		LOG(INFO)<<"Modifico "<< a <<" como usuario";
 		LOG(INFO)<<"Modifico "<< id <<" como id_usuario";
 
 		//Va a actualizar un usuario en el Shared
-		SharedClient * sharedClient = new SharedClient();
-		stringstream userId;
-		userId << id;
-		string user = "";
-		user.append(hm->body.p);
-		msg_t * response = sharedClient->updateUser(userId.str(), user);
-		msg.status = response->status;
-		msg.body = response->body;
-		delete response;
-		delete sharedClient;
+		//SharedClient * sharedClient = new SharedClient();
+		//stringstream userId;
+		//userId << id;
+		//string user = "";
+		//user.append(hm->body.p);
+		//msg_t * response = sharedClient->updateUser(userId.str(), user);
+		//msg.status = response->status;
+		//msg.body = response->body;
+		//delete response;
+		//delete sharedClient;
 	} else {
 		LOG(WARNING)<<"Not success";
 		string * result = new string();
@@ -128,18 +136,21 @@ msg_t HandlerUsers::putUserUpdatePhoto(struct http_message * hm) {
 	bool ok = DB->put(tp);
 	if (ok && httpReqParser.idOk()) {
 		LOG(INFO)<<"Modifico la foto de "<< a <<" como usuario";
+		string * result = new string();
+		result->append(json_example);
+		msg.change(ACCEPTED, result);
 
 		//Va a actualizar la foto de un usuario en el Shared
-		SharedClient * sharedClient = new SharedClient();
-		stringstream userId;
-		userId << id;
-		string photo = "";
-		photo.append(hm->body.p);
-		msg_t * response = sharedClient->updateUserPhoto(userId.str(), photo);
-		msg.status = response->status;
-		msg.body = response->body;
-		delete response;
-		delete sharedClient;
+		//SharedClient * sharedClient = new SharedClient();
+		//stringstream userId;
+		//userId << id;
+		//string photo = "";
+		//photo.append(hm->body.p);
+		//msg_t * response = sharedClient->updateUserPhoto(userId.str(), photo);
+		//msg.status = response->status;
+		//msg.body = response->body;
+		//delete response;
+		//delete sharedClient;
 	} else {
 		LOG(WARNING)<<"Not success";
 		string * result = new string();
@@ -160,16 +171,18 @@ msg_t HandlerUsers::deleteUser(struct http_message * hm) {
 	if (ok && httpReqParser.idOk()) {
 		LOG(INFO)<<"Elimino "<< a <<" como usuario";
 		LOG(INFO)<<"Elimino "<< id <<" como id_usuario";
-
+		string * result = new string();
+		result->append(json_example);
+		msg.change(ACCEPTED, result);
 		//Va a eliminar un usuario en el Shared
-		SharedClient * sharedClient = new SharedClient();
-		stringstream userId;
-		userId << id;
-		msg_t * response = sharedClient->deleteUser(userId.str());
-		msg.status = response->status;
-		msg.body = response->body;
-		delete response;
-		delete sharedClient;
+		//SharedClient * sharedClient = new SharedClient();
+		//stringstream userId;
+		//userId << id;
+		//msg_t * response = sharedClient->deleteUser(userId.str());
+		//msg.status = response->status;
+		//msg.body = response->body;
+		//delete response;
+		//delete sharedClient;
 	} else {
 		LOG(WARNING)<<"Not success";
 		string * result = new string();
@@ -178,7 +191,12 @@ msg_t HandlerUsers::deleteUser(struct http_message * hm) {
 	}
 	return msg;
 }
-
+msg_t HandlerUsers::handleMsg(struct http_message *hm){
+	if((httpReqParser.methodType(hm)!=POST)&&(!validateToken(hm))){
+		return unathorized();
+	}
+	return handle(hm);
+}
 msg_t HandlerUsers::handle(struct http_message *hm) {
 	/**Manejo los mensajes recibidos por el server con prefix de users.Recibe el mensaje y la base de datos. Devuelve la respuesta como un msg.**/
 	MethodType methodT = httpReqParser.methodType(hm);

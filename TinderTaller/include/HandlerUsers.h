@@ -13,11 +13,11 @@
 
 class HandlerUsers: public HandlerInterface {
 public:
-	HandlerUsers(shared_ptr<DataBase> DB);
-	virtual msg_t handle(struct http_message *hm);
-	virtual bool isHandler(struct http_message *hm);
+	HandlerUsers(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificator> tokenAuthentificator);
+	virtual msg_t handleMsg(struct http_message *hm);
 	virtual ~HandlerUsers();
 private:
+	virtual msg_t handle(struct http_message *hm);
 	msg_t postUser(struct http_message * hm );
 	msg_t getUser(struct http_message * hm);
 	msg_t putUser(struct http_message * hm);
