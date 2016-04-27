@@ -35,10 +35,13 @@ print "post"
 response = requests.post(url, data=data_json)
 print response
 print response.json()
-print response.json()["token"]
+token= response.json()["token"]
+print token
 data_json=response
 print "get"
-response = requests.get(url, data=data_json)
+token=token+""
+auth={	'Authorization': { "token":token} }
+response = requests.get(url ,headers=auth)
 print response
 print "put"
 response = requests.put(url, data=data_json)

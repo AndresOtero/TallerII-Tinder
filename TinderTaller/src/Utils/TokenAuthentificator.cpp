@@ -49,7 +49,7 @@ string TokenAuthentificator::createJsonToken(string user,string time){
 string TokenAuthentificator::getSingature(string jsonToken){
 	size_t firstDot = jsonToken.find_first_of(".");
 	size_t lastDot = jsonToken.find_last_of(".");
-	string strSignature= jsonToken.substr(lastDot - firstDot + 1,jsonToken.length());
+	string strSignature= jsonToken.substr(lastDot+ 1,jsonToken.length());
 	return strSignature;
 }
 string TokenAuthentificator::getPayloadDecoded(string jsonToken){
@@ -86,6 +86,15 @@ bool TokenAuthentificator::validateJsonTokenSignature(string jsonToken){
 	DBtuple keyTuple("token_"+userName);
 	bool ok=DB->get(keyTuple);
 	string dbToken=keyTuple.value;
+	string signatureDBToken=getSingature(dbToken);
+	cout<< "db  "<<signatureDBToken<<"\n";
+	cout<< "db len "<<signatureDBToken.length()<<"\n";
+
+	string signatureToken=getSingature(jsonToken);
+	cout<< "to  "<<signatureToken<<"\n";
+	cout<< "to len "<<signatureToken.length()<<"\n";
+
+
 	if(getSingature(jsonToken)!=getSingature(dbToken)){
 		LOG(INFO)<<"No esta bien el signature del token";
 		return false;
@@ -98,6 +107,9 @@ bool TokenAuthentificator::validateJsonTokenTime(string jsonToken){
 	double timeDifference=this->timeUtils.stringtoTimeDifferencefromNow(time);
 	if(timeDifference>experationTime){
 		LOG(INFO)<<"Token expirado";
+		string user=this->getUserName(jsonToken);
+		DBtuple key("token_"+user);
+		this->DB->delete_(key);
 		return false;
 	}
 	return true;
