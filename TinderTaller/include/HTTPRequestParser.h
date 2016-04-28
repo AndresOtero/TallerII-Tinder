@@ -18,6 +18,7 @@ public:
 	MethodType methodType(struct http_message *hm);
 	PrefixType prefixType(struct http_message *hm);
 	vector<string> parsePrefix(struct http_message *hm);
+	string getTokenFromHeader(struct http_message *hm);
 	int getId(struct http_message *hm);
 	bool idOk();
 	virtual ~HTTPRequestParser();

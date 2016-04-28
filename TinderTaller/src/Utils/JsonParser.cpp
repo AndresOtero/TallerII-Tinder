@@ -10,6 +10,9 @@
 JsonParser::JsonParser() {
 	/**Creo el parser de Json**/
 }
+bool JsonParser::isNullValue(Json::Value val) {
+	return val.isNull();
+}
 
 Json::Value JsonParser::stringToValue(std::string jsonStr) {
 	/**Recibo un string y lo devuelvo con Value de Json.**/

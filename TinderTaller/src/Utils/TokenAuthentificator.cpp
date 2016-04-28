@@ -74,7 +74,7 @@ bool TokenAuthentificator::validateJsonTokenUser(string jsonToken){
 	DBtuple keyTuple("token_"+userName);
 	bool ok=DB->get(keyTuple);
 	if(!ok){
-		LOG(INFO)<<"No existe el usuario en la base de datos";
+		LOG(INFO)<<"Token: No existe el usuario en la base de datos";
 		return false;
 	}
 	return true;

@@ -7,6 +7,7 @@
 #define FIRST_POSITION 1
 #define SECOND_POSITION 2
 #include "HTTPRequestParser.h"
+#include <iostream>
 using namespace std;
 
 HTTPRequestParser::HTTPRequestParser() {
@@ -19,6 +20,28 @@ bool HTTPRequestParser::isPrefix(struct http_message *hm, string prefix,
 	/**Compara un string con un prefijo con el prefijo del mensaje en la posicion position. Devuelve ture si es igual , false sino.**/
 	std::vector < std::string > vec = parsePrefix(hm);
 	return (vec[position] == prefix);
+}
+
+string HTTPRequestParser::getTokenFromHeader(struct http_message *hm){
+
+	char token[200];
+	struct mg_str *hdr = mg_get_http_header(hm, "Authorization");
+	if(hdr==0){
+		LOG(INFO)<<"HTTPParser: header incorrecto";
+		return "";
+	}
+	cout << "Autorizacion GATO: " << hdr->p << "\n";
+	string tokenUnparsed(hdr->p);
+	cout << "TOKEN UNPARSED: " << tokenUnparsed << "FIN\n";
+	size_t pos= tokenUnparsed.find_first_of("\r");
+	cout << "posicion: "<<pos;
+	string tokenParsed=tokenUnparsed.substr(0,pos);
+	cout <<"PARSED: "<< tokenParsed<<"FIN\n";
+	//for(int i=0;i<hdr->len;i++){
+		//cout<<hdr->p[i];
+	//}
+
+	return tokenParsed;
 }
 
 vector<string> HTTPRequestParser::parsePrefix(struct http_message *hm) {

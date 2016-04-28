@@ -21,6 +21,8 @@ class HandlerInterface {
 		virtual bool isHandler(struct http_message *hm);
 		virtual bool validateToken(struct http_message *hm);
 		virtual msg_t unathorized();
+		virtual msg_t badRequest(string strMsg);
+
 	protected:
 		shared_ptr<TokenAuthentificator> tokenAuthentificator;
 		HTTPRequestParser httpReqParser;

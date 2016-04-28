@@ -14,6 +14,7 @@
 class JsonParser {
 	public:
 		JsonParser();
+		bool isNullValue(Json::Value val);
 		std::string  valueToString(Json::Value value);
 		Json::Value stringToValue(std::string jsonStr);
 		int getIntFromValue(Json::Value jsonValue,std::string key);

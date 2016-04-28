@@ -16,13 +16,17 @@ HandlerUsers::HandlerUsers(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificat
 
 msg_t HandlerUsers::getUser(struct http_message * hm) {
 	/**Manejo el get de user, recibe un mensaje y una base de datos. Devuelve el msg correspondiente**/
-	Json::Value val = jsonParse.stringToValue(hm->body.p);
-	string a = jsonParse.getStringFromValue(val["user"], "name");
+	/**Json::Value val = jsonParse.stringToValue(hm->body.p);
+	if(jsonParse.isNullValue(val))return badRequest("Bad Json");
+	if(!val.isMember("user"))return badRequest("Bad Json");
+	Json::Value user=val["user"];
+	if(jsonParse.isNullValue(user))return badRequest("Bad Json");
+	string a = jsonParse.getStringFromValue(user, "name");
 	DBtuple tp(a);
-	bool ok =DB->get(tp);
+	bool ok =DB->get(tp);**/
 	msg_t msg;
 	int id = httpReqParser.getId(hm);
-	if (httpReqParser.idOk()&&ok) {
+	if (httpReqParser.idOk()) {
 		LOG(INFO)<<"Busco "<< id <<" como identificador";
 		string * result = new string();
 		result->append(json_example);

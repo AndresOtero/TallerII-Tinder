@@ -39,35 +39,36 @@ token= response.json()["token"]
 print token
 data_json=response
 print "get"
-token=token+""
-auth={	'Authorization': { "token":token} }
-response = requests.get(url ,headers=auth)
+#token=token+"]"
+auth={}
+auth["Authorization"]=token
+response = requests.get(url ,headers=auth,data=data_json)
 print response
 print "put"
-response = requests.put(url, data=data_json)
+response = requests.put(url, headers=auth,data=data_json)
 print response
 #print response.json()
 print "delete"
-response = requests.delete(url, data=data_json)
+response = requests.delete(url, headers=auth,data=data_json)
 print response
 url='http://localhost:8000/users/1121/photo/'
 print "\n photo"
 print "put"
-response = requests.put(url, data=data_json)
+response = requests.put(url,headers=auth, data=data_json)
 print response
 print "\n MATCH"
 url='http://localhost:8000/match/'
 print url
 print "post"
-response = requests.post(url, data=data_json)
+response = requests.post(url,headers=auth, data=data_json)
 print response
 print "get"
-response = requests.get(url, data=data_json)
+response = requests.get(url, headers=auth,data=data_json)
 print response
 print "\n CHAT"
 url='http://localhost:8000/chat/'
 print url
 print "post"
-response = requests.post(url, data=data_json)
+response = requests.post(url, headers=auth,data=data_json)
 print response
 

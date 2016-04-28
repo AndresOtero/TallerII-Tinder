@@ -23,6 +23,7 @@ bool HandlerInterface::isHandler(struct http_message *hm) {
 }
 
  bool HandlerInterface::validateToken(struct http_message *hm) {
+	string token =httpReqParser.getTokenFromHeader(hm);
 /**	struct mg_str * mg_str = mg_get_http_header(hm, "Authorization");
 	string jsonTokenUnparsed = string(mg_str->p);
 	string jsonTokenHeader = string(hm->header_values[0].p);
@@ -50,13 +51,20 @@ bool HandlerInterface::isHandler(struct http_message *hm) {
 	    }
 	  }***/
 	 //return tokenAuthentificator->validateJsonToken(jsonTokenHeader);
-	 return true;
+	return tokenAuthentificator->validateJsonToken(token);
 }
  msg_t HandlerInterface::unathorized() {
 	 msg_t msg;
 	 string * result = new string();
 	 result->append(json_example);
 	 msg.change(UNAUTHORIZED, result);
+	 return msg;
+}
+ msg_t HandlerInterface::badRequest(string strMsg) {
+	 msg_t msg;
+	 string * result = new string();
+	 result->append(strMsg);
+	 msg.change(BAD_REQUEST, result);
 	 return msg;
 }
 HandlerInterface::~HandlerInterface() {
