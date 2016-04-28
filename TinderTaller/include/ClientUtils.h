@@ -9,8 +9,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//#include "easylogging++.h"
-//#include <curl/curl.h>
 
 typedef struct MemoryStruct MemoryStruct;
 

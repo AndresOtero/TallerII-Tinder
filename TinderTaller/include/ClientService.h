@@ -6,7 +6,6 @@
 #ifndef SRC_CLIENTSERVICE_H_
 #define SRC_CLIENTSERVICE_H_
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

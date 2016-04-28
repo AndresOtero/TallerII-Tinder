@@ -1,6 +1,5 @@
 /*
  * ClientService.cpp
- *
  */
 
 #include "ClientService.h"

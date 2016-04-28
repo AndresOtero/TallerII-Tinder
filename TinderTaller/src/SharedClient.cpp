@@ -175,6 +175,7 @@ msg_t * SharedClient::getInterests(){
 	return response;
 }
 
+
 msg_t * SharedClient::setInterests(string & interests){
 	LOG(INFO)<< "Va a dar de alta nuevo intereses (setInterests)";
     LOG(DEBUG)<< "El json para el alta nuevo intereses es: " << interests;

@@ -7,7 +7,6 @@
 
 #include <stdlib.h>
 #include <string>
-
 #include "ClientService.h"
 #include "easylogging++.h"
 #include "HTTPRequest.h"
