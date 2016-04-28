@@ -9,6 +9,7 @@ SharedClient::SharedClient() {
 	this->clientService = new ClientService();
 }
 
+
 SharedClient::~SharedClient() {
 	LOG(INFO)<< "Borro Shared Cliente";
 	delete this->clientService;

@@ -64,17 +64,17 @@ msg_t HandlerUsers::postUser(struct http_message * hm) {
 		val["token"]=token;
 		string * result = new string();
 		result->append(jsonParse.valueToString(val));
-		msg.change(CREATED, result);
 
 		//Va a dar de alta el usuario en el Shared
 		SharedClient * sharedClient = new SharedClient();
 		string user = "";
 		user.append(hm->body.p);
 		msg_t * response = sharedClient->setUser(user);
-		msg.status = response->status;
-		msg.body = response->body;
+		delete response->body;
 		delete response;
 		delete sharedClient;
+
+		msg.change(CREATED, result);
 	} else {
 		LOG(WARNING)<<"Not success";
 		string * result = new string();

@@ -25,7 +25,6 @@ class SharedClient {
 		msg_t * deleteUser(string userId);
 		msg_t * getInterests();
 		msg_t * setInterests(string & interests);
-
 	private:
 		ClientService * clientService;
 };

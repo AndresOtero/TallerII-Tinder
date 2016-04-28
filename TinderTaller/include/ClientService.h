@@ -14,13 +14,13 @@
 #include "ClientUtils.h"
 
 class ClientService {
-public:
-	ClientService();
-	virtual ~ClientService();
-	MemoryStruct getClientService(const char * url);
-	MemoryStruct postClientService(const char * url, const char * data);
-	MemoryStruct putClientService(const char * url, const char * data);
-	MemoryStruct deleteClientService(const char * url);
+	public:
+		ClientService();
+		virtual ~ClientService();
+		MemoryStruct getClientService(const char * url);
+		MemoryStruct postClientService(const char * url, const char * data);
+		MemoryStruct putClientService(const char * url, const char * data);
+		MemoryStruct deleteClientService(const char * url);
 };
 
 #endif /* SRC_CLIENTSERVICE_H_ */

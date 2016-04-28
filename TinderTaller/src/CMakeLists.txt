@@ -30,7 +30,7 @@ add_library(libtindertaller SHARED ${SOURCES} ${DirUtils} ${DirHandlers})
  TARGET_LINK_LIBRARIES(tindertaller -ftest-coverage)
 TARGET_LINK_LIBRARIES(tindertaller rocksdb )
 TARGET_LINK_LIBRARIES(tindertaller jsoncpp )
-TARGET_LINK_LIBRARIES(tindertaller curl )
+TARGET_LINK_LIBRARIES(tindertaller curl  )
 
 
 
