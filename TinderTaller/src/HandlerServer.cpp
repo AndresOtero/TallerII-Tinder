@@ -10,9 +10,7 @@
 msg_t HandlerServer::badRequest(){
 	/**Devuelvo el msg  que no fue un buen request.**/
 	LOG(INFO)<<"Not specified prefix";
-	string * response = new string();
-	response->append("Not specified prefix");
-	return msg(BAD_REQUEST, response);
+	return msg(BAD_REQUEST, "Not specified prefix");
 }
 HandlerServer::HandlerServer(shared_ptr<DataBase> DB) {
 	/**Asigna la base de datos al handler del server.**/

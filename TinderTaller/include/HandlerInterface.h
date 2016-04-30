@@ -30,6 +30,7 @@ class HandlerInterface {
 		shared_ptr<DataBase> DB;
 		PrefixType prefix;
 		virtual msg_t handle(struct http_message *hm)=0;
+		msg_t methodNotAllowed();
 
 };
 

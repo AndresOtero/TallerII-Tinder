@@ -23,8 +23,7 @@ msg_t  SharedClient::getUsers(){
 
 	LOG(INFO)<< "Va a cargar el resultado de obtener los usuarios (getUsers)";
 	msg_t response ;
-	response.body = new string();
-	response.body->append(memoryStruct.memory);
+	response.body.append(memoryStruct.memory);
 	free(memoryStruct.memory);
 	if (memoryStruct.status != CURLE_OK){
 		response.status = StatusCode::ERROR;
@@ -45,8 +44,7 @@ msg_t  SharedClient::setUser(string & user){
 
 	LOG(INFO)<< "Va a cargar el resultado de dar de alta un nuevo usuario (setUser)";
 	msg_t  response;
-	response.body = new string();
-	response.body->append(memoryStruct.memory);
+	response.body.append(memoryStruct.memory);
 	free(memoryStruct.memory);
 	if (memoryStruct.status != CURLE_OK){
 		response.status = StatusCode::ERROR;
@@ -68,8 +66,7 @@ msg_t  SharedClient::getUser(string userId){
 
 	LOG(INFO)<< "Va a cargar el resultado de obtener un usuario en particular (getUser)";
 	msg_t  response;
-	response.body = new string();
-	response.body->append(memoryStruct.memory);
+	response.body.append(memoryStruct.memory);
 	free(memoryStruct.memory);
 	if (memoryStruct.status != CURLE_OK){
 		response.status = StatusCode::ERROR;
@@ -92,8 +89,7 @@ msg_t  SharedClient::updateUser(string userId, string & user){
 
 	LOG(INFO)<< "Va a cargar el resultado de actualizar un usuario en particular (updateUser)";
 	msg_t  response ;
-	response.body = new string();
-	response.body->append(memoryStruct.memory);
+	response.body.append(memoryStruct.memory);
 	free(memoryStruct.memory);
 	if (memoryStruct.status != CURLE_OK){
 		response.status = StatusCode::ERROR;
@@ -118,8 +114,7 @@ msg_t  SharedClient::updateUserPhoto(string userId, string & photo){
 
 	LOG(INFO)<< "Va a cargar el resultado de actualizar la foto un usuario en particular (updateUserPhoto)";
 	msg_t  response ;
-	response.body = new string();
-	response.body->append(memoryStruct.memory);
+	response.body.append(memoryStruct.memory);
 	free(memoryStruct.memory);
 	if (memoryStruct.status != CURLE_OK){
 		response.status = StatusCode::ERROR;
@@ -142,8 +137,7 @@ msg_t  SharedClient::deleteUser(string userId){
 
 	LOG(INFO)<< "Va a cargar el resultado de eliminar un usuario en particular (deleteUser)";
 	msg_t  response;
-	response.body = new string();
-	response.body->append(memoryStruct.memory);
+	response.body.append(memoryStruct.memory);
 	free(memoryStruct.memory);
 	if (memoryStruct.status != CURLE_OK){
 		response.status = StatusCode::ERROR;
@@ -163,8 +157,7 @@ msg_t  SharedClient::getInterests(){
 
 	LOG(INFO)<< "Va a cargar el resultado de buscar los intereses (getInterests)";
 	msg_t  response ;
-	response.body = new string();
-	response.body->append(memoryStruct.memory);
+	response.body.append(memoryStruct.memory);
 	free(memoryStruct.memory);
 	if (memoryStruct.status != CURLE_OK){
 		response.status = StatusCode::ERROR;
@@ -186,8 +179,7 @@ msg_t  SharedClient::setInterests(string & interests){
 
 	LOG(INFO)<< "Va a cargar el resultado de dar de alta nuevo intereses (setInterests)";
 	msg_t  response ;
-	response.body = new string();
-	response.body->append(memoryStruct.memory);
+	response.body.append(memoryStruct.memory);
 	free(memoryStruct.memory);
 	if (memoryStruct.status != CURLE_OK){
 		response.status = StatusCode::ERROR;

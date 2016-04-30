@@ -30,20 +30,14 @@ msg_t HandlerUsers::getUser(struct http_message * hm) {
 	int id = httpReqParser.getId(hm);
 	if (httpReqParser.idOk()) {
 		LOG(INFO)<<"Busco "<< id <<" como identificador";
-		string * result = new string();
-		result->append(json_example);
-		msg.change(OK, result);
+		msg.change(OK, json_example);
 		//Va a buscar el usuario en el Shared
 		stringstream userId;
 		userId << id;
-		msg_t  response = sharedClient->getUser(userId.str());
-		msg.status = response.status;
-		msg.body = response.body;
+		msg = sharedClient->getUser(userId.str());
 	} else {
 		LOG(WARNING)<<"Not success";
-		string * result = new string();
-		result->append("Not success. Bad request");
-		msg.change(BAD_REQUEST, result);
+		msg=this->badRequest("Id isnt correct");
 	}
 	return msg;
 }
@@ -61,21 +55,15 @@ msg_t HandlerUsers::postUser(struct http_message * hm) {
 		LOG(INFO)<<"Creo "<< user <<" como usuario";
 		string token=tokenAuthentificator->createJsonToken(user);
 		val["token"]=token;
-		string * result = new string();
-		result->append(jsonParse.valueToString(val));
-
+		string  result = jsonParse.valueToString(val);
 		//Va a dar de alta el usuario en el Shared
 		string user = "";
 		user.append(hm->body.p);
 		msg_t  response = sharedClient->setUser(user);
-		delete response.body;
-
 		msg.change(CREATED, result);
 	} else {
-		LOG(WARNING)<<"Not success";
-		string * result = new string();
-		result->append("Not success. Bad request");
-		msg.change(BAD_REQUEST, result);
+		LOG(WARNING)<<"Not success.Cant write Data base";
+		msg=this->badRequest("Not success");
 	}
 	return msg;
 }
@@ -100,12 +88,9 @@ msg_t HandlerUsers::putUserUpdateProfile(struct http_message * hm) {
 	msg_t msg;
 	bool ok = DB->put(tp);
 	if (ok && httpReqParser.idOk()) {
-		string * result = new string();
-		result->append(json_example);
-		msg.change(ACCEPTED, result);
+		msg.change(ACCEPTED, json_example);
 		LOG(INFO)<<"Modifico "<< a <<" como usuario";
 		LOG(INFO)<<"Modifico "<< id <<" como id_usuario";
-
 		//Va a actualizar un usuario en el Shared
 		stringstream userId;
 		userId << id;
@@ -116,9 +101,7 @@ msg_t HandlerUsers::putUserUpdateProfile(struct http_message * hm) {
 		msg.body = response.body;
 	} else {
 		LOG(WARNING)<<"Not success";
-		string * result = new string();
-		result->append("Not success. Bad request");
-		msg.change(BAD_REQUEST, result);
+		msg=this->badRequest("Not success");
 	}
 	return msg;
 }
@@ -133,23 +116,18 @@ msg_t HandlerUsers::putUserUpdatePhoto(struct http_message * hm) {
 	bool ok = DB->put(tp);
 	if (ok && httpReqParser.idOk()) {
 		LOG(INFO)<<"Modifico la foto de "<< a <<" como usuario";
-		string * result = new string();
-		result->append(json_example);
-		msg.change(ACCEPTED, result);
+
+		msg.change(ACCEPTED, json_example);
 
 		//Va a actualizar la foto de un usuario en el Shared
 		stringstream userId;
 		userId << id;
 		string photo = "";
 		photo.append(hm->body.p);
-		msg_t  response = sharedClient->updateUserPhoto(userId.str(), photo);
-		msg.status = response.status;
-		msg.body = response.body;
+		msg = sharedClient->updateUserPhoto(userId.str(), photo);
 	} else {
 		LOG(WARNING)<<"Not success";
-		string * result = new string();
-		result->append("Not success. Bad request");
-		msg.change(BAD_REQUEST, result);
+		msg=this->badRequest("Not success");
 	}
 	return msg;
 }
@@ -165,9 +143,7 @@ msg_t HandlerUsers::deleteUser(struct http_message * hm) {
 	if (ok && httpReqParser.idOk()) {
 		LOG(INFO)<<"Elimino "<< a <<" como usuario";
 		LOG(INFO)<<"Elimino "<< id <<" como id_usuario";
-		string * result = new string();
-		result->append(json_example);
-		msg.change(ACCEPTED, result);
+		msg.change(ACCEPTED, json_example);
 		//Va a eliminar un usuario en el Shared
 		stringstream userId;
 		userId << id;
@@ -176,9 +152,7 @@ msg_t HandlerUsers::deleteUser(struct http_message * hm) {
 		msg.body = response.body;
 	} else {
 		LOG(WARNING)<<"Not success";
-		string * result = new string();
-		result->append("Not success. Bad request");
-		msg.change(BAD_REQUEST, result);
+		msg=this->badRequest("Not success");
 	}
 	return msg;
 }
@@ -206,9 +180,7 @@ msg_t HandlerUsers::handle(struct http_message *hm) {
 		msg = this->deleteUser(hm);
 		break;
 	default:
-		string * response = new string();
-		response->append("Method not allowed");
-		msg.change(METHOD_NOT_ALLOWED, response);
+		this->methodNotAllowed();
 		break;
 	}
 	return msg;

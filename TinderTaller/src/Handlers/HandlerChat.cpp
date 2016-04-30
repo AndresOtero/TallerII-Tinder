@@ -29,9 +29,7 @@ msg_t HandlerChat::handle(struct http_message *hm) {
 				msg=handlePost(hm);
 				break;
 			default:
-				string * response = new string();
-				response->append("Method not allowed");
-				msg.change(METHOD_NOT_ALLOWED, response);
+				msg=this->methodNotAllowed();
 				break;
 		}
 		return msg;
@@ -39,12 +37,9 @@ msg_t HandlerChat::handle(struct http_message *hm) {
 
 msg_t HandlerChat::handlePost(struct http_message *hm) {
 	/**	Recibo el post de un mensaje y devuelvo un accepted si se realizo correctamente**/
-
 	msg_t msg;
 	LOG(INFO) << "Mando un mensaje";
-	string * response = new string();
-	response->append("Posted maych");
-	msg.change(ACCEPTED, response);
+	msg.change(ACCEPTED, "Posted maych");
 	return msg;
 }
 

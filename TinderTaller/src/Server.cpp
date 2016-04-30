@@ -38,14 +38,13 @@ void Server::evHandler(struct mg_connection *nc, int ev, void *ev_data) {
 	switch (ev) {
 		case MG_EV_HTTP_REQUEST:
 				msg = server->handlerServ->handler(hm);
-				LOG(INFO)<<(*msg.body)<<","<<msg.status;
+				LOG(INFO)<<(msg.body)<<","<<msg.status;
 				mg_printf(nc, "HTTP/1.1 %d\r\n"
 						"Transfer-Encoding: chunked\r\n"
 						"\r\n", msg.status);
-				mg_printf_http_chunk(nc, "%s", msg.body->c_str());
+				mg_printf_http_chunk(nc, "%s", msg.body.c_str());
 				mg_send_http_chunk(nc, "", 0);
 
-				delete msg.body;
 				break;
 		default:
 			msg.status = BAD_REQUEST;

@@ -55,16 +55,17 @@ bool HandlerInterface::isHandler(struct http_message *hm) {
 }
  msg_t HandlerInterface::unathorized() {
 	 msg_t msg;
-	 string * result = new string();
-	 result->append(json_example);
-	 msg.change(UNAUTHORIZED, result);
+	 msg.change(UNAUTHORIZED, json_example);
 	 return msg;
 }
  msg_t HandlerInterface::badRequest(string strMsg) {
 	 msg_t msg;
-	 string * result = new string();
-	 result->append(strMsg);
-	 msg.change(BAD_REQUEST, result);
+	 msg.change(BAD_REQUEST, strMsg);
+	 return msg;
+}
+ msg_t HandlerInterface::methodNotAllowed() {
+	 msg_t msg;
+	 msg.change(BAD_REQUEST, "Method not allowed");
 	 return msg;
 }
 HandlerInterface::~HandlerInterface() {

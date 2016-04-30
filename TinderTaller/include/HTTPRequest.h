@@ -16,18 +16,15 @@ typedef enum StatusCode {
 
 typedef struct msg{
 	StatusCode status;
-	string * body = NULL;
+	string  body;
 	/**msg(StatusCode status,string body){
 		this->body=body;
 		this->status=status;
 	}**/
-	msg(StatusCode status,string * body){
+	msg(StatusCode status,string  body){
 		change(status,body);
 	}
-	void change(StatusCode status,string * body){
-		if (this->body != NULL){
-			delete this->body;
-		}
+	void change(StatusCode status,string  body){
 		this->body = body;
 		this->status = status;
 	}
