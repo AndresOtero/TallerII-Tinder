@@ -17,6 +17,7 @@ public:
 	virtual msg_t handleMsg(struct http_message *hm);
 	virtual ~HandlerUsers();
 private:
+	shared_ptr<SharedClient> sharedClient;
 	virtual msg_t handle(struct http_message *hm);
 	msg_t postUser(struct http_message * hm );
 	msg_t getUser(struct http_message * hm);

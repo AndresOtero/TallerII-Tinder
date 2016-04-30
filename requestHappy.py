@@ -13,6 +13,8 @@ dataUserPost = {
     "user": {
 		"name": "usuarioCaminoFeliz7",
     "alias": "camino feliz7",
+    "sex":"SexoPrueba",
+     "age":"45",
     "email": "usuarioFeliz7@usuario.com",
 		"interests": [{
                 "value": "Asado",
@@ -37,6 +39,8 @@ dataUserPut = {
 		"id": 5,
 		"name": "usuario3",
     "alias": "not a user-putCaminoFeliz:D2",
+	"sex":"SexoPrueba",
+     "age":"5",
     "email": "usuarioFeliz2@usuario.com",
 		"photo_profile": "",
 		"interests": [{
