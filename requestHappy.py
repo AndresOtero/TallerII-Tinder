@@ -77,6 +77,7 @@ print "get user"
 auth={}
 auth["Authorization"]=token
 response = requests.get(urlGetUser ,headers=auth,data=data_json)
+print response
 print "put user"
 response = requests.put(urlGetUser, headers=auth,data=dataUserPut_json)
 print response

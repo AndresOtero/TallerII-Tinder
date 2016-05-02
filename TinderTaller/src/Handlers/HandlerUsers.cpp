@@ -48,7 +48,6 @@ msg_t HandlerUsers::postUser(struct http_message * hm) {
 	Json::Value val = jsonParse.stringToValue(hm->body.p);
 	string user = jsonParse.getStringFromValue(val["user"], "name");
 	DBtuple tp(user,hm->body.p);
-
 	msg_t msg;
 	bool ok = DB->put(tp);
 	if (ok) {

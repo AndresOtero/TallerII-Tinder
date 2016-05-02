@@ -20,6 +20,8 @@ HandlerServer::HandlerServer(shared_ptr<DataBase> DB) {
 	vecHandler.push_back(shared_ptr<HandlerInterface>(new HandlerUsers(DB,tokenAuthentificator)));
 	vecHandler.push_back(shared_ptr<HandlerInterface>(new HandlerMatch(DB,tokenAuthentificator)));
 	vecHandler.push_back(shared_ptr<HandlerInterface>(new HandlerChat(DB,tokenAuthentificator)));
+	vecHandler.push_back(shared_ptr<HandlerInterface>(new HandlerToken(DB,tokenAuthentificator)));
+
 
 }
 msg_t  HandlerServer::handler(struct http_message *hm) {

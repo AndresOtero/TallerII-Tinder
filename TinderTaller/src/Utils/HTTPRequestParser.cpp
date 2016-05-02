@@ -30,13 +30,9 @@ string HTTPRequestParser::getTokenFromHeader(struct http_message *hm){
 		LOG(INFO)<<"HTTPParser: header incorrecto";
 		return "";
 	}
-	cout << "Autorizacion GATO: " << hdr->p << "\n";
 	string tokenUnparsed(hdr->p);
-	cout << "TOKEN UNPARSED: " << tokenUnparsed << "FIN\n";
 	size_t pos= tokenUnparsed.find_first_of("\r");
-	cout << "posicion: "<<pos;
 	string tokenParsed=tokenUnparsed.substr(0,pos);
-	cout <<"PARSED: "<< tokenParsed<<"FIN\n";
 	//for(int i=0;i<hdr->len;i++){
 		//cout<<hdr->p[i];
 	//}
@@ -76,6 +72,8 @@ PrefixType HTTPRequestParser::prefixType(struct http_message *hm) {
 	if (isPrefix(hm, matchString, FIRST_POSITION)){
 			return MATCH;
 		}
+	if (isPrefix(hm, tokenString, FIRST_POSITION))
+		return TOKEN;
 }
 
 bool isNumber(const std::string& s) {
@@ -113,6 +111,7 @@ MethodType HTTPRequestParser::methodType(struct http_message *hm) {
 		return GET;
 	if (isMethod(hm, deleteString))
 		return DELETE;
+
 	return INVALID_METHOD;
 }
 

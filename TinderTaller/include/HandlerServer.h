@@ -12,6 +12,7 @@
 #include "HandlerUsers.h"
 #include "HandlerMatch.h"
 #include "HandlerChat.h"
+#include "HandlerToken.h"
 #include "TokenAuthentificator.h"
 #ifndef SRC_HANDLERSERVER_H_
 #define SRC_HANDLERSERVER_H_

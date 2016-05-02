@@ -46,9 +46,11 @@ const string usersString="users";
 const string matchString="match";
 const string chatString="chat";
 const string photoString="photo";
+const string tokenString="token";
+
 
 typedef enum PrefixType {
-	USERS,MATCH,CHAT,
+	USERS,MATCH,CHAT,TOKEN
 } PrefixType;
 
 #endif /* INCLUDE_HTTPREQUEST_H_ */
