@@ -74,6 +74,8 @@ PrefixType HTTPRequestParser::prefixType(struct http_message *hm) {
 		}
 	if (isPrefix(hm, tokenString, FIRST_POSITION))
 		return TOKEN;
+	if (isPrefix(hm, interestsString, FIRST_POSITION))
+			return INTERESTS;
 }
 
 bool isNumber(const std::string& s) {

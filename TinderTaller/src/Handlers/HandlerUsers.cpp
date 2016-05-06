@@ -7,13 +7,12 @@
 #define TERCERA_POSITION 3
 #include "HandlerUsers.h"
 
-HandlerUsers::HandlerUsers(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificator> tokenAuthentificator){
+HandlerUsers::HandlerUsers(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificator> tokenAuthentificator,shared_ptr<SharedClient> sharedClient){
 	/**Creo el handler de users**/
 	this->DB=DB;
 	this->tokenAuthentificator=tokenAuthentificator;
 	this->prefix=USERS;
-	shared_ptr<SharedClient> sc(new SharedClient());
-	this->sharedClient=sc;
+	this->sharedClient=sharedClient;
 }
 
 msg_t HandlerUsers::getUser(struct http_message * hm) {
@@ -46,24 +45,33 @@ msg_t HandlerUsers::postUser(struct http_message * hm) {
 	/**Manejo el post de user, recibe un mensaje y una base de datos.Devuelve el msg correspondiente.Crea un usuario**/
 	/*Candidata a funcion*/
 	Json::Value val = jsonParse.stringToValue(hm->body.p);
-	string user = jsonParse.getStringFromValue(val["user"], "name");
-	DBtuple tp(user,hm->body.p);
+	string mail = jsonParse.getStringFromValue(val["user"], "email");
+	DBtuple key(mail+"_id");
 	msg_t msg;
-	bool ok = DB->put(tp);
-	if (ok) {
-		LOG(INFO)<<"Creo "<< user <<" como usuario";
-		string token=tokenAuthentificator->createJsonToken(user);
-		val["token"]=token;
-		string  result = jsonParse.valueToString(val);
-		//Va a dar de alta el usuario en el Shared
-		string user = "";
-		user.append(hm->body.p);
-		msg_t  response = sharedClient->setUser(user);
-		msg.change(CREATED, result);
-	} else {
-		LOG(WARNING)<<"Not success.Cant write Data base";
-		msg=this->badRequest("Not success");
+	bool ok = DB->get(key);
+	if(ok){
+		msg.change(BAD_REQUEST, "{\"Mensaje\":\"Usuario ya creado\"}");
+		return msg;
 	}
+	LOG(INFO)<<"Creo "<< mail <<" como usuario";
+	string token=tokenAuthentificator->createJsonToken(mail);
+	val["token"]=token;
+	string  result = jsonParse.valueToString(val);
+	//Va a dar de alta el usuario en el Shared
+	string user = "";
+	user.append(hm->body.p);
+	msg_t  response = sharedClient->setUser(user);
+	val = jsonParse.stringToValue(hm->body.p);
+	string id = jsonParse.getStringFromValue(val["user"], "id");
+	DBtuple userId(mail+"_id",id);
+	ok = DB->put(userId);
+	if (!ok){
+		msg.change(INTERNAL_ERROR, "{\"Mensaje\":\"Error en la creacion\"}");
+		return msg;
+	}
+	msg.change(CREATED, result);
+//		LOG(WARNING)<<"Not success.Cant write Data base";
+//		msg=this->badRequest("Not success");
 	return msg;
 }
 

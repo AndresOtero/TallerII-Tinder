@@ -13,7 +13,7 @@
 
 class HandlerUsers: public HandlerInterface {
 public:
-	HandlerUsers(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificator> tokenAuthentificator);
+	HandlerUsers(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificator> tokenAuthentificator,shared_ptr<SharedClient> sharedClient);
 	virtual msg_t handleMsg(struct http_message *hm);
 	virtual ~HandlerUsers();
 private:

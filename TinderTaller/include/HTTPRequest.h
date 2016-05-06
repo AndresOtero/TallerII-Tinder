@@ -47,10 +47,12 @@ const string matchString="match";
 const string chatString="chat";
 const string photoString="photo";
 const string tokenString="token";
+const string interestsString="interests";
+
 
 
 typedef enum PrefixType {
-	USERS,MATCH,CHAT,TOKEN
+	USERS,MATCH,CHAT,TOKEN,INTERESTS
 } PrefixType;
 
 #endif /* INCLUDE_HTTPREQUEST_H_ */
