@@ -15,7 +15,7 @@ HandlerUsers::HandlerUsers(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificat
 	this->sharedClient=sharedClient;
 }
 
-msg_t HandlerUsers::getUser(struct http_message * hm) {
+msg_t HandlerUsers::handleGet(struct http_message * hm) {
 	/**Manejo el get de user, recibe un mensaje y una base de datos. Devuelve el msg correspondiente**/
 	/**Json::Value val = jsonParse.stringToValue(hm->body.p);
 	if(jsonParse.isNullValue(val))return badRequest("Bad Json");
@@ -41,7 +41,7 @@ msg_t HandlerUsers::getUser(struct http_message * hm) {
 	return msg;
 }
 
-msg_t HandlerUsers::postUser(struct http_message * hm) {
+msg_t HandlerUsers::handlePost(struct http_message * hm) {
 	/**Manejo el post de user, recibe un mensaje y una base de datos.Devuelve el msg correspondiente.Crea un usuario**/
 	/*Candidata a funcion*/
 	Json::Value val = jsonParse.stringToValue(hm->body.p);
@@ -75,7 +75,7 @@ msg_t HandlerUsers::postUser(struct http_message * hm) {
 	return msg;
 }
 
-msg_t HandlerUsers::putUser(struct http_message * hm) {
+msg_t HandlerUsers::handlePut(struct http_message * hm) {
 	/**Manejo el put de user, recibe un mensaje y una base de datos.Devuelve el msg correspondiente.Modifica un usuario**/
 	vector < string > uriVector = httpReqParser.parsePrefix(hm);
 	string p = uriVector[TERCERA_POSITION];
@@ -139,7 +139,7 @@ msg_t HandlerUsers::putUserUpdatePhoto(struct http_message * hm) {
 	return msg;
 }
 
-msg_t HandlerUsers::deleteUser(struct http_message * hm) {
+msg_t HandlerUsers::handleDelete(struct http_message * hm) {
 	/**Manejo el delete de user, recibe un mensaje y una base de datos.Devuelve el msg correspondiente.Borro Usuario**/
 	Json::Value val = jsonParse.stringToValue(hm->body.p);
 	string a = jsonParse.getStringFromValue(val["user"], "name");
@@ -168,29 +168,6 @@ msg_t HandlerUsers::handleMsg(struct http_message *hm){
 		return unathorized();
 	}
 	return handle(hm);
-}
-msg_t HandlerUsers::handle(struct http_message *hm) {
-	/**Manejo los mensajes recibidos por el server con prefix de users.Recibe el mensaje y la base de datos. Devuelve la respuesta como un msg.**/
-	MethodType methodT = httpReqParser.methodType(hm);
-	msg_t msg;
-	switch (methodT) {
-	case POST:
-		msg = this->postUser(hm);
-		break;
-	case GET:
-		msg = this->getUser(hm);
-		break;
-	case PUT:
-		msg = this->putUser(hm);
-		break;
-	case DELETE:
-		msg = this->deleteUser(hm);
-		break;
-	default:
-		this->methodNotAllowed();
-		break;
-	}
-	return msg;
 }
 
 HandlerUsers::~HandlerUsers() {

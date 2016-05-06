@@ -17,9 +17,8 @@ public:
 
 private:
 	shared_ptr<SharedClient> sharedClient;
-	virtual msg_t handle(struct http_message *hm);
-	msg_t getInterest(struct http_message *hm);
-	msg_t postInterest(struct http_message *hm);
+	virtual msg_t handleGet(struct http_message *hm);
+	virtual msg_t handlePost(struct http_message *hm);
 
 
 };

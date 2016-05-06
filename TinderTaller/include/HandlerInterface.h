@@ -16,7 +16,7 @@ const string json_example = "{\"holis\" :\"andy\" }";
 
 class HandlerInterface {
 	public:
-		virtual ~HandlerInterface();
+		virtual ~HandlerInterface()=0;
 		virtual msg_t handleMsg(struct http_message *hm);
 		virtual bool isHandler(struct http_message *hm);
 		virtual bool validateToken(struct http_message *hm);
@@ -29,7 +29,12 @@ class HandlerInterface {
 		JsonParser jsonParse;
 		shared_ptr<DataBase> DB;
 		PrefixType prefix;
-		virtual msg_t handle(struct http_message *hm)=0;
+		virtual msg_t handle(struct http_message *hm);
+		virtual msg_t handlePost(struct http_message *hm);
+		virtual msg_t handleGet(struct http_message *hm);
+		virtual msg_t handlePut(struct http_message *hm);
+		virtual msg_t handleDelete(struct http_message *hm);
+
 		msg_t methodNotAllowed();
 
 };

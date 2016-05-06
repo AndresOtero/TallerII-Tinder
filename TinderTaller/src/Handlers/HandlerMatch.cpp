@@ -14,23 +14,6 @@ HandlerMatch::HandlerMatch(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificat
 	this->prefix=MATCH;
 }
 
-msg_t HandlerMatch::handle(struct http_message *hm) {
-	/**Manejo los mensajes recibidos por el server con prefix de users.Recibe el mensaje y la base de datos. Devuelve la respuesta como un msg.**/
-	MethodType methodT = httpReqParser.methodType(hm);
-	msg_t msg;
-	switch (methodT) {
-		case POST:
-			msg=handlePost(hm);
-			break;
-		case GET:
-			msg=handleGet(hm);
-			break;
-		default:
-			msg=this->methodNotAllowed();
-			break;
-	}
-	return msg;
-}
 
 msg_t HandlerMatch::handlePost(struct http_message *hm){
 	/**Recibo el post de un match y devuelvo un Accepted en caso de exito.**/

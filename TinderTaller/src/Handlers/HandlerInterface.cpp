@@ -22,6 +22,45 @@ bool HandlerInterface::isHandler(struct http_message *hm) {
 	return (httpReqParser.prefixType(hm)==prefix);
 }
 
+msg_t HandlerInterface::handlePost(struct http_message *hm){
+	return this->methodNotAllowed();
+}
+
+msg_t HandlerInterface::handleGet(struct http_message *hm){
+	return this->methodNotAllowed();
+}
+
+msg_t HandlerInterface::handlePut(struct http_message *hm){
+	return this->methodNotAllowed();
+}
+
+msg_t HandlerInterface::handleDelete(struct http_message *hm){
+	return this->methodNotAllowed();
+}
+
+msg_t HandlerInterface::handle(struct http_message *hm) {
+	/**Manejo los mensajes recibidos por el server con prefix de users.Recibe el mensaje y la base de datos. Devuelve la respuesta como un msg.**/
+	MethodType methodT = httpReqParser.methodType(hm);
+	msg_t msg;
+	switch (methodT) {
+	case POST:
+		msg = this->handlePost(hm);
+		break;
+	case GET:
+		msg = this->handleGet(hm);
+		break;
+	case PUT:
+		msg = this->handlePut(hm);
+		break;
+	case DELETE:
+		msg = this->handleDelete(hm);
+		break;
+	default:
+		msg=this->methodNotAllowed();
+		break;
+	}
+	return msg;
+}
  bool HandlerInterface::validateToken(struct http_message *hm) {
 	string token =httpReqParser.getTokenFromHeader(hm);
 	return tokenAuthentificator->validateJsonToken(token);

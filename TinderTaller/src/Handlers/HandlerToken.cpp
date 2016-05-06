@@ -13,20 +13,6 @@ HandlerToken::HandlerToken(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificat
 	this->tokenAuthentificator=tokenAuthentificator;
 	this->prefix=TOKEN;
 }
-msg_t HandlerToken::handle(struct http_message *hm) {
-	/**Manejo los mensajes recibidos por el server con prefix de match.Recibe el mensaje. Devuelve la respuesta como un msg.**/
-	MethodType methodT = httpReqParser.methodType(hm);
-	msg_t msg;
-	switch (methodT) {
-		case POST:
-			msg=handlePost(hm);
-			break;
-		default:
-			msg=this->methodNotAllowed();
-			break;
-	}
-	return msg;
-}
 
 msg_t HandlerToken::handlePost(struct http_message *hm) {
 	/**	Recibo el post de un mensaje y devuelvo un accepted si se realizo correctamente**/

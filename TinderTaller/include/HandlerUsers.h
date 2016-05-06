@@ -18,11 +18,10 @@ public:
 	virtual ~HandlerUsers();
 private:
 	shared_ptr<SharedClient> sharedClient;
-	virtual msg_t handle(struct http_message *hm);
-	msg_t postUser(struct http_message * hm );
-	msg_t getUser(struct http_message * hm);
-	msg_t putUser(struct http_message * hm);
-	msg_t deleteUser(struct http_message * hm);
+	virtual msg_t handlePost(struct http_message *hm);
+	virtual msg_t handleGet(struct http_message *hm);
+	virtual msg_t handlePut(struct http_message *hm);
+	virtual msg_t handleDelete(struct http_message *hm);
 	msg_t putUserUpdateProfile(struct http_message * hm);
 	msg_t putUserUpdatePhoto(struct http_message * hm);
 };

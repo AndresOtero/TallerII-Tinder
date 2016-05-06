@@ -14,9 +14,8 @@ class HandlerMatch: public HandlerInterface {
 		HandlerMatch(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificator> tokenAuthentificator);
 		virtual ~HandlerMatch();
 	private:
-		virtual msg_t handle(struct http_message *hm);
-		msg_t handlePost(struct http_message *hm);
-		msg_t handleGet(struct http_message *hm);
+		virtual msg_t handlePost(struct http_message *hm);
+		virtual msg_t handleGet(struct http_message *hm);
 };
 
 #endif /* SRC_HANDLERMATCH_H_ */
