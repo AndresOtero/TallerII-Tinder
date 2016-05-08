@@ -34,7 +34,14 @@ int JsonParser::getIntFromValue(Json::Value jsonValue, std::string key) {
 	/**Devuelvo el valor entero que esta registrado en el value de Json con la key**/
 	return jsonValue[key].asInt();
 }
-
+std::string JsonParser::getMail(std::string jsonStr){
+	Json::Value val = stringToValue(jsonStr);
+	return getStringFromValue(val["user"], "email");
+}
+std::string JsonParser::getId(std::string jsonStr){
+	Json::Value val = stringToValue(jsonStr);
+	return getStringFromValue(val["user"], "id");
+}
 std::string JsonParser::getStringFromValue(Json::Value jsonValue,
 		std::string key) {
 	/**Devuelvo un string que esta registrado en el value de Json con la key**/

@@ -38,7 +38,7 @@ void Server::evHandler(struct mg_connection *nc, int ev, void *ev_data) {
 	switch (ev) {
 		case MG_EV_HTTP_REQUEST:
 				msg = server->handlerServ->handler(hm);
-				LOG(INFO)<<(msg.body)<<","<<msg.status;
+				LOG(INFO)<<"Mensaje: "<<(msg.body)<<","<<msg.status;
 				mg_printf(nc, "HTTP/1.1 %d\r\n"
 						"Transfer-Encoding: chunked\r\n"
 						"\r\n", msg.status);

@@ -29,7 +29,7 @@ mkdir -p DBTest
 mkdir -p build
 cd build
 cmake ../
-make 
+make -j2
 #cd tests
 #./Test
 #cd ..

@@ -17,7 +17,9 @@ class JsonParser {
 		bool isNullValue(Json::Value val);
 		std::string  valueToString(Json::Value value);
 		Json::Value stringToValue(std::string jsonStr);
+		std::string getId(std::string jsonStr);
 		int getIntFromValue(Json::Value jsonValue,std::string key);
+		std::string getMail(std::string jsonStr);
 		std::string getStringFromValue(Json::Value jsonValue,std::string key);
 		virtual ~JsonParser();
 };

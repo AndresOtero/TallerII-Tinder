@@ -24,6 +24,7 @@ private:
 	virtual msg_t handleDelete(struct http_message *hm);
 	msg_t putUserUpdateProfile(struct http_message * hm);
 	msg_t putUserUpdatePhoto(struct http_message * hm);
+	bool userExists(struct http_message * hm);
 };
 
 #endif /* SRC_HANDLERUSERS_H_ */
