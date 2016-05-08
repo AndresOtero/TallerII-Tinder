@@ -11,11 +11,17 @@
 #include <string.h>
 
 typedef struct MemoryStruct MemoryStruct;
+typedef struct SendStruct SendStruct;
 
 struct MemoryStruct {
 	char *memory;
 	CURLcode status;
 	size_t size;
+};
+
+struct SendStruct {
+  const char *memory;
+  size_t size;
 };
 
 static size_t writeMemoryCallback(void *contents, size_t size, size_t nmemb, void *userp){

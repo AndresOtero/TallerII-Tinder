@@ -67,6 +67,11 @@ MemoryStruct ClientService::postClientService(const char * url, const char * dat
 	chunk.memory = (char *) malloc(1);  /* will be grown as needed by the realloc above */
 	chunk.size = 0;    /* no data at this point */
 
+	//Estructura donde se guardan los datos a enviar.
+	struct SendStruct pooh;
+	pooh.memory = data;
+	pooh.size = strlen(data);
+
 	/* get a curl handle */
 	curl = curl_easy_init();
 
@@ -88,7 +93,13 @@ MemoryStruct ClientService::postClientService(const char * url, const char * dat
       	/* we want to use our own read function */
       	curl_easy_setopt(curl, CURLOPT_READFUNCTION, readMemoryCallback);
       	/* pointer to pass to our read function */
-      	curl_easy_setopt(curl, CURLOPT_READDATA, (void *)&chunk);
+      	curl_easy_setopt(curl, CURLOPT_READDATA, (void *)&pooh);
+      	/* Set the expected POST size. If you want to POST large amounts of data,
+      		   consider CURLOPT_POSTFIELDSIZE_LARGE */
+		curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, (curl_off_t) pooh.size);
+		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeMemoryCallback);
+		/* we pass our 'chunk' struct to the callback function */
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *) &chunk);
 
       	/* Perform the request, res will get the return code */
       	res = curl_easy_perform(curl);
