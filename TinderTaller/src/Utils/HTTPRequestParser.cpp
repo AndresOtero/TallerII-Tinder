@@ -85,17 +85,11 @@ bool isNumber(const std::string& s) {
 					[](char c) {return !std::isdigit(c);}) == s.end();
 }
 
-int HTTPRequestParser::getId(struct http_message *hm) {
+string HTTPRequestParser::getId(struct http_message *hm) {
 	/**Recibe un mensaje y devuelve el segundo elemento del uri convertido a numero sino se puede devuelve -1.**/
 	std::vector < std::string > vec = parsePrefix(hm);
 	string id = vec[SECOND_POSITION];
-	if (isNumber(id)) {
-		IdOk=true;
-		return atoi(id.c_str());
-	}
-	IdOk=false;
-
-	return -1;
+	return id;
 }
 
 bool HTTPRequestParser::idOk() {

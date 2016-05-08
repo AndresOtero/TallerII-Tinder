@@ -26,14 +26,19 @@ msg_t HandlerUsers::handleGet(struct http_message * hm) {
 	DBtuple tp(a);
 	bool ok =DB->get(tp);**/
 	msg_t msg;
-	int id = httpReqParser.getId(hm);
+	string id = httpReqParser.getId(hm);
+
 	if (httpReqParser.idOk()) {
 		LOG(INFO)<<"Busco "<< id <<" como identificador";
-		msg.change(OK, json_example);
-		//Va a buscar el usuario en el Shared
-		stringstream userId;
-		userId << id;
-		msg = sharedClient->getUser(userId.str());
+		DBtuple userId(id+"_id");
+		bool ok=DB->get(userId);
+		if(ok){
+			msg = sharedClient->getUser(userId.value);
+		}
+		else{
+			LOG(WARNING)<<"Not success";
+			msg=this->badRequest("Id isnt correct");
+		}
 	} else {
 		LOG(WARNING)<<"Not success";
 		msg=this->badRequest("Id isnt correct");
@@ -93,24 +98,25 @@ msg_t HandlerUsers::handlePut(struct http_message * hm) {
 
 msg_t HandlerUsers::putUserUpdateProfile(struct http_message * hm) {
 	/**Manejo el put de user, recibe un mensaje y una base de datos.Devuelve el msg correspondiente.Modifica un usuario**/
-	Json::Value val = jsonParse.stringToValue(hm->body.p);
-	string a = jsonParse.getStringFromValue(val["user"], "name");
-	DBtuple tp(a,hm->body.p);
-	int id = httpReqParser.getId(hm);
 	msg_t msg;
-	bool ok = DB->put(tp);
-	if (ok && httpReqParser.idOk()) {
-		msg.change(ACCEPTED, json_example);
-		LOG(INFO)<<"Modifico "<< a <<" como usuario";
-		LOG(INFO)<<"Modifico "<< id <<" como id_usuario";
-		//Va a actualizar un usuario en el Shared
-		stringstream userId;
-		userId << id;
-		string user = "";
-		user.append(hm->body.p);
-		msg_t  response = sharedClient->updateUser(userId.str(), user);
-		msg.status = response.status;
-		msg.body = response.body;
+	string id = httpReqParser.getId(hm);
+	if (httpReqParser.idOk()) {
+		LOG(INFO)<<"Busco "<< id <<" como identificador";
+		DBtuple userId(id+"_id");
+		bool ok=DB->get(userId);
+		if(ok){
+			LOG(INFO)<<"Modifico "<< id <<" como usuario";
+			LOG(INFO)<<"Modifico "<< userId.value <<" como id_usuario";
+			//Va a actualizar un usuario en el Shared
+			string user = "";
+			user.append(hm->body.p);
+			msg_t  response = sharedClient->updateUser(userId.value, user);
+			msg.status = response.status;
+			msg.body = response.body;
+		}else {
+			LOG(WARNING)<<"Not success";
+			msg=this->badRequest("Not success");
+		}
 	} else {
 		LOG(WARNING)<<"Not success";
 		msg=this->badRequest("Not success");
@@ -120,23 +126,25 @@ msg_t HandlerUsers::putUserUpdateProfile(struct http_message * hm) {
 
 msg_t HandlerUsers::putUserUpdatePhoto(struct http_message * hm) {
 	/**Manejo el put de user, recibe un mensaje y una base de datos.Devuelve el msg correspondiente.Modifica un usuario**/
-	Json::Value val = jsonParse.stringToValue(hm->body.p);
-	string a = jsonParse.getStringFromValue(val["user"], "name");
-	DBtuple tp(a,hm->body.p);
-	int id = httpReqParser.getId(hm);
 	msg_t msg;
-	bool ok = DB->put(tp);
-	if (ok && httpReqParser.idOk()) {
-		LOG(INFO)<<"Modifico la foto de "<< a <<" como usuario";
-
-		msg.change(ACCEPTED, json_example);
-
-		//Va a actualizar la foto de un usuario en el Shared
-		stringstream userId;
-		userId << id;
-		string photo = "";
-		photo.append(hm->body.p);
-		msg = sharedClient->updateUserPhoto(userId.str(), photo);
+	string id = httpReqParser.getId(hm);
+	if (httpReqParser.idOk()) {
+		LOG(INFO)<<"Busco "<< id <<" como identificador";
+		DBtuple userId(id+"_id");
+		bool ok=DB->get(userId);
+		if(ok){
+			LOG(INFO)<<"Modifico "<< id <<" como usuario";
+			LOG(INFO)<<"Modifico "<< userId.value <<" como id_usuario";
+			//Va a actualizar un usuario en el Shared
+			string user = "";
+			user.append(hm->body.p);
+			string photo = "";
+			photo.append(hm->body.p);
+			msg = sharedClient->updateUserPhoto(userId.value, photo);
+		} else {
+			LOG(WARNING)<<"Not success";
+			msg=this->badRequest("Not success");
+		}
 	} else {
 		LOG(WARNING)<<"Not success";
 		msg=this->badRequest("Not success");
@@ -146,22 +154,22 @@ msg_t HandlerUsers::putUserUpdatePhoto(struct http_message * hm) {
 
 msg_t HandlerUsers::handleDelete(struct http_message * hm) {
 	/**Manejo el delete de user, recibe un mensaje y una base de datos.Devuelve el msg correspondiente.Borro Usuario**/
-	Json::Value val = jsonParse.stringToValue(hm->body.p);
-	string a = jsonParse.getStringFromValue(val["user"], "name");
-	DBtuple tp(a,hm->body.p);
-	int id = httpReqParser.getId(hm);
 	msg_t msg;
-	bool ok = DB->delete_(tp);
-	if (ok && httpReqParser.idOk()) {
-		LOG(INFO)<<"Elimino "<< a <<" como usuario";
-		LOG(INFO)<<"Elimino "<< id <<" como id_usuario";
-		msg.change(ACCEPTED, json_example);
-		//Va a eliminar un usuario en el Shared
-		stringstream userId;
-		userId << id;
-		msg_t  response = sharedClient->deleteUser(userId.str());
-		msg.status = response.status;
-		msg.body = response.body;
+	string id = httpReqParser.getId(hm);
+	if (httpReqParser.idOk()) {
+		LOG(INFO)<<"Busco "<< id <<" como identificador";
+		DBtuple userId(id+"_id");
+		bool ok=DB->get(userId);
+		if(ok){
+			LOG(INFO)<<"Elimino "<< id <<" como usuario";
+			//Va a eliminar un usuario en el Shared
+			msg_t  response = sharedClient->deleteUser(userId.value);
+			msg.status = response.status;
+			msg.body = response.body;
+		}else{
+			LOG(WARNING)<<"Not success";
+			msg=this->badRequest("Not success");
+		}
 	} else {
 		LOG(WARNING)<<"Not success";
 		msg=this->badRequest("Not success");

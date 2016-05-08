@@ -22,13 +22,10 @@ TEST(HTTPRequestParser,parseUriToVector) {
 TEST(HTTPRequestParser,getId) {
 	HTTPRequestParser httpParser;
 	http_message* hm = new http_message;
-	hm->uri.p = "/users/1000/";
-	EXPECT_TRUE(1000 == httpParser.getId(hm));
+	hm->uri.p = "/users/andy@mail.com/";
+	EXPECT_TRUE("andy@mail.com" == httpParser.getId(hm));
 	EXPECT_TRUE(httpParser.idOk());
 
-	hm->uri.p = "/users/mil/";
-	EXPECT_TRUE(-1 == httpParser.getId(hm));
-	EXPECT_FALSE(httpParser.idOk());
 
 	delete hm;
 }
