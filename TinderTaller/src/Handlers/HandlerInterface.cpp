@@ -67,7 +67,7 @@ msg_t HandlerInterface::handle(struct http_message *hm) {
 }
  bool HandlerInterface::deleteToken(struct http_message *hm) {
 	string token =httpReqParser.getTokenFromHeader(hm);
-	return tokenAuthentificator->deleteJsonTokenUser( token);
+	return tokenAuthentificator->deleteJsonTokenUser(token);
 }
  msg_t HandlerInterface::unathorized() {
 	 msg_t msg;

@@ -33,6 +33,7 @@ msg_t HandlerUsers::handleGet(struct http_message * hm) {
 		DBtuple userId(id+"_id");
 		bool ok=DB->get(userId);
 		if(ok){
+			LOG(INFO)<<"Id:  "<< userId.value;
 			msg = sharedClient->getUser(userId.value);
 		}
 		else{
@@ -56,8 +57,10 @@ msg_t HandlerUsers::handlePost(struct http_message * hm) {
 	/**Manejo el post de user, recibe un mensaje y una base de datos.Devuelve el msg correspondiente.Crea un usuario**/
 	/*Candidata a funcion*/
 	msg_t msg;
-	string user (hm->body.p);
-	bool ok;
+	Json::Value val = jsonParse.stringToValue(hm->body.p);
+	string pass=jsonParse.removePassword(val);
+	LOG(INFO)<<"Pass: "<<pass<<"\n";
+	string user=jsonParse.valueToString(val);
 	if(userExists(hm)){
 		msg.change(BAD_REQUEST, "{\"Mensaje\":\"Usuario ya creado\"}");
 		return msg;
@@ -68,7 +71,6 @@ msg_t HandlerUsers::handlePost(struct http_message * hm) {
 	LOG(INFO)<<"Respuesta: "<<(response.body)<<","<<response.status<<"\n";
 	if (response.status==CREATED){
 		string id = jsonParse.getId(response.body);
-		Json::Value val = jsonParse.stringToValue(hm->body.p);
 		string mail = jsonParse.getMail(hm->body.p);
 		LOG(INFO)<<"Creo "<< mail <<" como usuario";
 		string token=tokenAuthentificator->createJsonToken(mail);
@@ -76,8 +78,10 @@ msg_t HandlerUsers::handlePost(struct http_message * hm) {
 		string  result = jsonParse.valueToString(val);
 		LOG(INFO)<<"Result "<< result ;
 		DBtuple userId(mail+"_id",id);
-		ok = DB->put(userId);
-		if (!ok){
+		bool okPutId = DB->put(userId);
+		DBtuple userPass(mail+"_pass",pass);
+		bool okPutPass = DB->put(userPass);
+		if (!okPutId && !okPutPass){
 			msg.change(INTERNAL_ERROR, "{\"Mensaje\":\"Error en la creacion\"}");
 			return msg;
 		}
@@ -104,16 +108,24 @@ msg_t HandlerUsers::putUserUpdateProfile(struct http_message * hm) {
 	/**Manejo el put de user, recibe un mensaje y una base de datos.Devuelve el msg correspondiente.Modifica un usuario**/
 	msg_t msg;
 	string id = httpReqParser.getId(hm);
+	Json::Value val = jsonParse.stringToValue(hm->body.p);
+	string pass=jsonParse.removePassword(val);
+	LOG(INFO)<<"Pass: "<<pass<<"\n";
+	string user=jsonParse.valueToString(val);
 	if (httpReqParser.idOk()) {
 		LOG(INFO)<<"Busco "<< id <<" como identificador";
 		DBtuple userId(id+"_id");
-		bool ok=DB->get(userId);
-		if(ok){
+		bool okGet=DB->get(userId);
+		DBtuple userPass(id+"_pass",pass);
+		bool okPutPass = DB->put(userPass);
+		//bool okDelete =this->deleteToken(hm);
+		if(okGet){
 			LOG(INFO)<<"Modifico "<< id <<" como usuario";
 			LOG(INFO)<<"Modifico "<< userId.value <<" como id_usuario";
+			//string token=tokenAuthentificator->createJsonToken(mail);
+			//val["token"]=token;
+			//string  result = jsonParse.valueToString(val);
 			//Va a actualizar un usuario en el Shared
-			string user = "";
-			user.append(hm->body.p);
 			msg_t  response = sharedClient->updateUser(userId.value, user);
 			msg.status = response.status;
 			msg.body = response.body;
@@ -131,6 +143,7 @@ msg_t HandlerUsers::putUserUpdateProfile(struct http_message * hm) {
 msg_t HandlerUsers::putUserUpdatePhoto(struct http_message * hm) {
 	/**Manejo el put de user, recibe un mensaje y una base de datos.Devuelve el msg correspondiente.Modifica un usuario**/
 	msg_t msg;
+	LOG(INFO)<<"Modificar Foto";
 	string id = httpReqParser.getId(hm);
 	if (httpReqParser.idOk()) {
 		LOG(INFO)<<"Busco "<< id <<" como identificador";
@@ -163,9 +176,12 @@ msg_t HandlerUsers::handleDelete(struct http_message * hm) {
 	if (httpReqParser.idOk()) {
 		LOG(INFO)<<"Busco "<< id <<" como identificador";
 		DBtuple userId(id+"_id");
+		bool okGetId = DB->get(userId);
+		DBtuple userPass(id+"_pass");
+		bool okDeletePass = DB->delete_(userPass);
 		bool okDeleteUser=DB->delete_(userId);
 		bool okDeleteToken=this->deleteToken(hm);
-		if(okDeleteUser&&okDeleteToken){
+		if(okDeleteUser&&okDeleteToken&&okDeletePass&&okGetId){
 			LOG(INFO)<<"Elimino "<< id <<" como usuario";
 			//Va a eliminar un usuario en el Shared
 			msg_t  response = sharedClient->deleteUser(userId.value);

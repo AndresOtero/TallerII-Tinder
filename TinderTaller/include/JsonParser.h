@@ -21,6 +21,7 @@ class JsonParser {
 		std::string getId(std::string jsonStr);
 		int getIntFromValue(Json::Value jsonValue,std::string key);
 		std::string getMail(std::string jsonStr);
+		std::string getPassword(std::string jsonStr);
 		std::string getStringFromValue(Json::Value jsonValue,std::string key);
 		virtual ~JsonParser();
 };

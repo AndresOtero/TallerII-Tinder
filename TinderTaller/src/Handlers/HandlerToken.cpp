@@ -18,13 +18,21 @@ msg_t HandlerToken::handlePost(struct http_message *hm) {
 	/**	Recibo el post de un mensaje y devuelvo un accepted si se realizo correctamente**/
 	msg_t msg;
 	Json::Value val = jsonParse.stringToValue(hm->body.p);
-	string user = jsonParse.getStringFromValue(val["user"], "name");
-	//Chequear usuario
-	string token=tokenAuthentificator->createJsonToken(user);
-	val["token"]=token;
-	string  result = jsonParse.valueToString(val);
-	LOG(INFO) << "Mando un mensaje";
-	msg.change(CREATED, result);
+	string mail = jsonParse.getMail(hm->body.p);
+	string pass = jsonParse.getPassword(hm->body.p);
+	DBtuple tpPass(mail+"_pass");
+	bool okPass=DB->get(tpPass);
+	bool okDelete=this->deleteToken(hm);
+	if (okPass&&(pass==tpPass.value)&&okDelete){
+		DBtuple passwordSave(mail+"_pass",pass);
+		DB->put(passwordSave);
+		string token=tokenAuthentificator->createJsonToken(mail);
+		val["token"]=token;
+		string  result = jsonParse.valueToString(val);
+		LOG(INFO) << "Mando un mensaje";
+		msg.change(CREATED, result);
+	}
+	msg=this->unathorized();
 	return msg;
 }
 

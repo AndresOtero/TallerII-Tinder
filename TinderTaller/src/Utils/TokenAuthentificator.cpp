@@ -101,12 +101,9 @@ bool TokenAuthentificator::validateJsonTokenSignature(string jsonToken){
 	string signatureDBToken=getSingature(dbToken);
 	cout<< "db  "<<signatureDBToken<<"\n";
 	cout<< "db len "<<signatureDBToken.length()<<"\n";
-
 	string signatureToken=getSingature(jsonToken);
 	cout<< "to  "<<signatureToken<<"\n";
 	cout<< "to len "<<signatureToken.length()<<"\n";
-
-
 	if(getSingature(jsonToken)!=getSingature(dbToken)){
 		LOG(INFO)<<"No esta bien el signature del token";
 		return false;
