@@ -35,7 +35,6 @@ private:
 	string createJsonTokenSignature(string encodedHeader, string encodedPayload);
 	string getPayloadDecoded(string jsonToken);
 	string getSingature(string jsonToken);
-	string getUserName(string jsonToken);
 	string getTokenTime(string jsonToken);
 	bool validateJsonTokenTime(string jsonToken);
 	bool validateJsonTokenUser(string jsonToken);
@@ -44,6 +43,8 @@ public:
 	TokenAuthentificator(shared_ptr<DataBase> DB);
 	std::string createJsonToken(std::string user,std::string time);
 	std::string createJsonToken(std::string user);
+	string getUserName(string jsonToken);
+	bool deleteJsonTokenUser(string jsonToken);
 
 	bool validateJsonToken(std::string token);
 

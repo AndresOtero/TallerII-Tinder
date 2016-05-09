@@ -62,27 +62,31 @@ msg_t HandlerUsers::handlePost(struct http_message * hm) {
 		msg.change(BAD_REQUEST, "{\"Mensaje\":\"Usuario ya creado\"}");
 		return msg;
 	}
-	Json::Value val = jsonParse.stringToValue(hm->body.p);
-	string mail = jsonParse.getMail(hm->body.p);
-	LOG(INFO)<<"Creo "<< mail <<" como usuario";
-	string token=tokenAuthentificator->createJsonToken(mail);
-	val["token"]=token;
-	string  result = jsonParse.valueToString(val);
 	//Va a dar de alta el usuario en el Shared
 	LOG(INFO)<<"Mensaje: "<<user<<"\n";
 	msg_t  response = sharedClient->setUser(user);
 	LOG(INFO)<<"Respuesta: "<<(response.body)<<","<<response.status<<"\n";
 	if (response.status==CREATED){
 		string id = jsonParse.getId(response.body);
+		Json::Value val = jsonParse.stringToValue(hm->body.p);
+		string mail = jsonParse.getMail(hm->body.p);
+		LOG(INFO)<<"Creo "<< mail <<" como usuario";
+		string token=tokenAuthentificator->createJsonToken(mail);
+		val["token"]=token;
+		string  result = jsonParse.valueToString(val);
+		LOG(INFO)<<"Result "<< result ;
 		DBtuple userId(mail+"_id",id);
 		ok = DB->put(userId);
 		if (!ok){
 			msg.change(INTERNAL_ERROR, "{\"Mensaje\":\"Error en la creacion\"}");
 			return msg;
 		}
+		LOG(INFO)<<"Token: "<<token<<"\n";
 		msg.change(response.status, result);
+	}else{
+		msg=this->badRequest("");
 	}
-	return response;
+	return msg;
 }
 
 msg_t HandlerUsers::handlePut(struct http_message * hm) {
@@ -159,8 +163,9 @@ msg_t HandlerUsers::handleDelete(struct http_message * hm) {
 	if (httpReqParser.idOk()) {
 		LOG(INFO)<<"Busco "<< id <<" como identificador";
 		DBtuple userId(id+"_id");
-		bool ok=DB->get(userId);
-		if(ok){
+		bool okDeleteUser=DB->delete_(userId);
+		bool okDeleteToken=this->deleteToken(hm);
+		if(okDeleteUser&&okDeleteToken){
 			LOG(INFO)<<"Elimino "<< id <<" como usuario";
 			//Va a eliminar un usuario en el Shared
 			msg_t  response = sharedClient->deleteUser(userId.value);

@@ -19,7 +19,9 @@ msg_t HandlerInterest::handleGet(struct http_message *hm){
 	return this->sharedClient->getInterests();
 }
 msg_t HandlerInterest::handlePost(struct http_message *hm){
+	cout <<"char: "<<hm->body.p<<"\n";
 	string body(hm->body.p);
+	cout <<"String: " <<body<<"\n";
 	return this->sharedClient->setInterests(body);
 }
 

@@ -89,6 +89,7 @@ string HTTPRequestParser::getId(struct http_message *hm) {
 	/**Recibe un mensaje y devuelve el segundo elemento del uri convertido a numero sino se puede devuelve -1.**/
 	std::vector < std::string > vec = parsePrefix(hm);
 	string id = vec[SECOND_POSITION];
+	IdOk=true;
 	return id;
 }
 

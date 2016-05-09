@@ -15,6 +15,7 @@ class JsonParser {
 	public:
 		JsonParser();
 		bool isNullValue(Json::Value val);
+		std::string removePassword(Json::Value value );
 		std::string  valueToString(Json::Value value);
 		Json::Value stringToValue(std::string jsonStr);
 		std::string getId(std::string jsonStr);

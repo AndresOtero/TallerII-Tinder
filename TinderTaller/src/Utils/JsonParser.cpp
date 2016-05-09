@@ -38,6 +38,10 @@ std::string JsonParser::getMail(std::string jsonStr){
 	Json::Value val = stringToValue(jsonStr);
 	return getStringFromValue(val["user"], "email");
 }
+std::string JsonParser::removePassword(Json::Value val ){
+	Json::Value pass=val["user"].removeMember("password");
+	return pass.asString();
+}
 std::string JsonParser::getId(std::string jsonStr){
 	Json::Value val = stringToValue(jsonStr);
 	return getStringFromValue(val["user"], "id");

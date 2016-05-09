@@ -20,6 +20,7 @@ class HandlerInterface {
 		virtual msg_t handleMsg(struct http_message *hm);
 		virtual bool isHandler(struct http_message *hm);
 		virtual bool validateToken(struct http_message *hm);
+		virtual bool deleteToken(struct http_message *hm);
 		virtual msg_t unathorized();
 		virtual msg_t badRequest(string strMsg);
 
