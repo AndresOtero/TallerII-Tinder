@@ -13,6 +13,12 @@ HandlerToken::HandlerToken(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificat
 	this->tokenAuthentificator=tokenAuthentificator;
 	this->prefix=TOKEN;
 }
+msg_t HandlerToken::handleMsg(struct http_message *hm){
+	if((httpReqParser.methodType(hm)!=POST)&&(!validateToken(hm))){
+		return unathorized();
+	}
+	return handle(hm);
+}
 
 msg_t HandlerToken::handlePost(struct http_message *hm) {
 	/**	Recibo el post de un mensaje y devuelvo un accepted si se realizo correctamente**/
@@ -31,8 +37,10 @@ msg_t HandlerToken::handlePost(struct http_message *hm) {
 		string  result = jsonParse.valueToString(val);
 		LOG(INFO) << "Mando un mensaje";
 		msg.change(CREATED, result);
+
+	}else{
+		msg=this->unathorized();
 	}
-	msg=this->unathorized();
 	return msg;
 }
 

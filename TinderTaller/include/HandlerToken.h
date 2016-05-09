@@ -12,6 +12,7 @@
 class HandlerToken: public HandlerInterface {
 public:
 	HandlerToken(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificator> tokenAuthentificator);
+	virtual msg_t handleMsg(struct http_message *hm);
 	virtual ~HandlerToken();
 private:
 	virtual msg_t handlePost(struct http_message *hm);
