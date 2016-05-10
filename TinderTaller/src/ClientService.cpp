@@ -147,9 +147,9 @@ MemoryStruct ClientService::putClientService(const char * url, const char * data
 	    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data);
 	      /* Now specify we want to POST data */
 	    curl_easy_setopt(curl, CURLOPT_POST, 1L);
-	    curl_easy_setopt(curl, CURLOPT_READFUNCTION, readMemoryCallback);
+	    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeMemoryCallback);
 	    /* pointer to pass to our read function */
-	    curl_easy_setopt(curl, CURLOPT_READDATA, (void *)&chunk);
+	    curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *)&chunk);
 
 	    /* Perform the request, res will get the return code */
 	    res = curl_easy_perform(curl);
