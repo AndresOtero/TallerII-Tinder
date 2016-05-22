@@ -193,10 +193,9 @@ MemoryStruct ClientService::deleteClientService(const char * url){
 		 data. */
 		curl_easy_setopt(curl, CURLOPT_URL, url);
 		curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "DELETE");
-		/* we want to use our own read function */
-		curl_easy_setopt(curl, CURLOPT_READFUNCTION, readMemoryCallback);
+		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeMemoryCallback);
 		/* pointer to pass to our read function */
-		curl_easy_setopt(curl, CURLOPT_READDATA, (void *)&chunk);
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *)&chunk);
 
 		/* Perform the request, res will get the return code */
 		res = curl_easy_perform(curl);

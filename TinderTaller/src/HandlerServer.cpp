@@ -28,8 +28,7 @@ HandlerServer::HandlerServer(shared_ptr<DataBase> DB) {
 }
 msg_t  HandlerServer::handler(struct http_message *hm) {
 	/**Recibe el mensaje de htttp y devuelve el msg que el server debe responder.**/
-	LOG(INFO) << "Entro al handler";
-	PrefixType prefixT=httpReqParser.prefixType(hm);
+	LOG(INFO) << "Entro al handler";	
 	for(shared_ptr<HandlerInterface> hi : vecHandler){
 		if(hi->isHandler(hm)){
 			return hi->handleMsg(hm);
