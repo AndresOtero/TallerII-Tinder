@@ -24,6 +24,7 @@ class JsonParser {
 		std::string getPassword(std::string jsonStr);
 		std::string getStringFromValue(Json::Value jsonValue,std::string key);
 		virtual ~JsonParser();
+		std::string removeMember(Json::Value val, std::string valRemove);
 };
 
 #endif /* SRC_JSONPARSER_H_ */

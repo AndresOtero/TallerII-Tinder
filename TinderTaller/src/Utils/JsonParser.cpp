@@ -60,3 +60,7 @@ JsonParser::~JsonParser() {
 	/**Destruyo el parser de Json**/
 }
 
+std::string JsonParser::removeMember(Json::Value val, std::string valRemove){
+	Json::Value rdo = val.removeMember(valRemove);
+	return rdo.asString();
+}
