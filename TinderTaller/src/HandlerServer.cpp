@@ -6,6 +6,7 @@
  */
 
 #include "HandlerServer.h"
+#include <queue>
 
 msg_t HandlerServer::badRequest(){
 	/**Devuelvo el msg  que no fue un buen request.**/
@@ -26,6 +27,7 @@ HandlerServer::HandlerServer(shared_ptr<DataBase> DB) {
 
 
 }
+
 msg_t  HandlerServer::handler(struct http_message *hm) {
 	/**Recibe el mensaje de htttp y devuelve el msg que el server debe responder.**/
 	LOG(INFO) << "Entro al handler";	

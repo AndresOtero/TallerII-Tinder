@@ -7,13 +7,14 @@
 #include "json/json.h"
 #include <iostream>
 #include "easylogging++.h"
-
+#include <queue>
 #ifndef SRC_JSONPARSER_H_
 #define SRC_JSONPARSER_H_
 
 class JsonParser {
 	public:
 		JsonParser();
+		std::string parseBody(std::string body);
 		bool isNullValue(Json::Value val);
 		std::string removePassword(Json::Value value );
 		std::string  valueToString(Json::Value value);

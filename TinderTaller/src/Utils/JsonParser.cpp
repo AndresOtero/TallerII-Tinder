@@ -13,9 +13,27 @@ JsonParser::JsonParser() {
 bool JsonParser::isNullValue(Json::Value val) {
 	return val.isNull();
 }
-
+std::string JsonParser::parseBody(std::string body) {
+	std::queue <char> brackets;
+	int i;
+	for (i =0;i<body.size();i++){
+		if(body[i]=='{'){
+			brackets.push('{');
+		}
+		if(body[i]=='}'){
+			brackets.pop();
+		}
+		if(brackets.empty()){
+			break;
+		}
+	}
+	std::string sub=body.substr(0,i);
+	size_t size=body.size();
+	return sub;
+}
 Json::Value JsonParser::stringToValue(std::string jsonStr) {
 	/**Recibo un string y lo devuelvo con Value de Json.**/
+	jsonStr=this->parseBody(jsonStr);
 	Json::Value root;
 	Json::Reader reader;
 	bool parsingSuccessful = reader.parse(jsonStr.c_str(), root); //parse process
