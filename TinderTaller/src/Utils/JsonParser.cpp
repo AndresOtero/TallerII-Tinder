@@ -27,7 +27,7 @@ std::string JsonParser::parseBody(std::string body) {
 			break;
 		}
 	}
-	std::string sub=body.substr(0,i);
+	std::string sub=body.substr(0,i+1);
 	size_t size=body.size();
 	return sub;
 }
@@ -64,6 +64,10 @@ std::string JsonParser::removePassword(Json::Value val ){
 	Json::Value pass=val["user"].removeMember("password");
 	return pass.asString();
 }
+std::string JsonParser::removeGcmId(Json::Value val ){
+	Json::Value pass=val["user"].removeMember("gcm_registration_id");
+	return pass.asString();
+}
 std::string JsonParser::getId(std::string jsonStr){
 	Json::Value val = stringToValue(jsonStr);
 	return getStringFromValue(val["user"], "id");
@@ -73,12 +77,26 @@ std::string JsonParser::getStringFromValue(Json::Value jsonValue,
 	/**Devuelvo un string que esta registrado en el value de Json con la key**/
 	return jsonValue[key].asString();
 }
-
-JsonParser::~JsonParser() {
-	/**Destruyo el parser de Json**/
-}
-
 std::string JsonParser::removeMember(Json::Value val, std::string valRemove){
 	Json::Value rdo = val.removeMember(valRemove);
 	return rdo.asString();
 }
+Json::Value JsonParser::replaceNewUserInOldUser(Json::Value newVal,Json::Value oldVal){
+	Json::Value oldUser=oldVal["user"];
+	//oldUser.removeMember("id");
+	Json::Value newUser=newVal["user"];
+	for( Json::ValueIterator itr = newUser.begin() ; itr != newUser.end() ; itr++ ){
+		if(oldUser.isMember(itr.key().asString())){
+			LOG(INFO)<< itr.key().asString();
+			LOG(INFO)<< (*itr).toStyledString();
+			oldUser[itr.key().asCString()]=(*itr);
+		}
+	}
+	oldVal["user"]=oldUser;
+	oldVal["metadata"]=newVal["metadata"];
+	return oldVal;
+}
+JsonParser::~JsonParser() {
+	/**Destruyo el parser de Json**/
+}
+

@@ -6,6 +6,8 @@
  */
 
 #include "HandlerServer.h"
+
+
 #include <queue>
 
 msg_t HandlerServer::badRequest(){
@@ -23,8 +25,7 @@ HandlerServer::HandlerServer(shared_ptr<DataBase> DB) {
 	vecHandler.push_back(shared_ptr<HandlerInterface>(new HandlerInterest(DB,tokenAuthentificator,sharedClient)));
 	vecHandler.push_back(shared_ptr<HandlerInterface>(new HandlerMatch(DB,tokenAuthentificator)));
 	vecHandler.push_back(shared_ptr<HandlerInterface>(new HandlerChat(DB,tokenAuthentificator)));
-	vecHandler.push_back(shared_ptr<HandlerInterface>(new HandlerToken(DB,tokenAuthentificator)));
-
+	vecHandler.push_back(shared_ptr<HandlerInterface>(new HandlerToken(DB,tokenAuthentificator,sharedClient)));
 
 }
 

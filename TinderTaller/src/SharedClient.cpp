@@ -73,7 +73,6 @@ msg_t  SharedClient::getUser(string userId){
 	} else {
 		response.status = StatusCode::OK;
 	}
-
 	LOG(INFO)<< "FIN de obtener un usuario en particular (getUser)";
 	return response;
 }
@@ -96,7 +95,7 @@ msg_t  SharedClient::updateUser(string userId, string & user){
 	} else {
 		response.status = StatusCode::OK;
 	}
-
+	LOG(DEBUG)<<"Mensaje de vuelta:" <<response.body;
 	LOG(INFO)<< "FIN de actualizar un usuario en particular (updateUser)";
 	return response;
 }

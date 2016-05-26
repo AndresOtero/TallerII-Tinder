@@ -14,9 +14,11 @@
 class JsonParser {
 	public:
 		JsonParser();
+		Json::Value replaceNewUserInOldUser(Json::Value newVal, Json::Value  oldVal);
 		std::string parseBody(std::string body);
 		bool isNullValue(Json::Value val);
 		std::string removePassword(Json::Value value );
+		std::string removeGcmId(Json::Value val );
 		std::string  valueToString(Json::Value value);
 		Json::Value stringToValue(std::string jsonStr);
 		std::string getId(std::string jsonStr);

@@ -4,6 +4,9 @@
  *  Created on: 15 de abr. de 2016
  *      Author: andres
  */
+
+#ifndef SRC_HANDLERSERVER_H_
+#define SRC_HANDLERSERVER_H_
 #include "mongoose.h"
 #include <iostream>
 #include "DataBase.h"
@@ -15,8 +18,6 @@
 #include "HandlerToken.h"
 #include "HandlerInterest.h"
 #include "TokenAuthentificator.h"
-#ifndef SRC_HANDLERSERVER_H_
-#define SRC_HANDLERSERVER_H_
 class HandlerServer {
 	public:
 		HandlerServer(shared_ptr<DataBase> DB);

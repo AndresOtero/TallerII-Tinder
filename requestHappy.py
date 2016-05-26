@@ -16,31 +16,33 @@ foto = "photo"
 ubicacion = {'latitude':-34.610510, 'longitude':-58.386391}
 user= "Roberto"+str(rdm)
 mail = user+'@gmail.com'
-user = {'name':user,'password': "hashed",'interests':intereses,'location':ubicacion,'alias':'Roberto','age':45,'sex':'H','photo_profile':foto,'email':mail}
+user = {'gcm_registration_id':"aaaaaaaaaa",'name':user,'password': "hashed",'interests':intereses,'location':ubicacion,'alias':'Roberto','age':45,'sex':'H','photo_profile':foto,'email':mail}
 headers = {'content-type': 'application/json'}
-metadata = {'version':"0.1","count":1}
+metadata = {'version':"0.1"}
 token={'user':{'email': mail,'password': "hashed" } }
 r = {}
 r['user'] = user
 r['metadata'] = metadata
 photo = {'photo':foto2}
 photo['metadata'] = metadata
-
-intereses2 =  {'value':'Chico Serna','category':'Deporte'}
+textoInteres='Chico Serna'+ str(rdm)
+intereses2 =  {'value':textoInteres,'category':'Deporte'}
 interesNuevo = {}
-interesNuevo["interest"] = intereses2
-interesNuevo["metadata"] = metadata
+interesNuevo['interest'] = intereses2
+interesNuevo['metadata'] = {'version':"0.1",'count': 1}
 
 
-urlGetUsers = 'http://localhost:8000/users/'
-urlGetUser = 'http://localhost:8000/users/'+mail+'/'
-urlDeleteUser = 'http://localhost:8000/users/'+mail +'/'
-urlPutPhoto = 'http://localhost:8000/users/'+mail+'/photo/'
+urlGetUsers = 'http://192.168.0.200:8080/users/'
+urlGetUser = 'http://192.168.0.200:8080/users/'+mail+'/'
+urlDeleteUser = 'http://192.168.0.200:8080/users/'+mail +'/'
+urlPutPhoto = 'http://192.168.0.200:8080/users/'+mail+'/photo/'
 
-dataUserPut_json = json.dumps(r)
-r["user"]["age"]=47
-r["user"]["sex"]='M'
 dataUserPost_json = json.dumps(r)
+r={}
+userPut = { 'age':47,'sex':'M' ,'gcm_registration_id':"aaaaaaaaaa"	}
+r['user']=userPut
+r['metadata'] = {'version':"0.1"}
+dataUserPut_json = json.dumps(r)
 photo_json = json.dumps(photo)
 dataInterestPost_json=json.dumps(interesNuevo)
 token_json=json.dumps(token)
@@ -59,24 +61,29 @@ response = requests.get(urlGetUser ,headers=auth)
 print response
 print response.json()
 print "put user"
+print dataUserPut_json
 response = requests.put(urlGetUser, headers=auth,data=dataUserPut_json)
 print response
+print "get user"
+response = requests.get(urlGetUser ,headers=auth)
+print response
+print response.json()
 #print response.json()
 print "Arreglar put"
 #print response.json()
 print "photo"
-print "put"
+print "put"	
 response = requests.put(urlPutPhoto, headers=auth, data=photo_json)
 print response
 print "\nTOKEN"
-url='http://localhost:8000/token/'
+url='http://192.168.0.200:8080/token/'
 response = requests.post(url,data=token_json)
 print response
 print response.json()
 token= response.json()["token"]
 print token
 print "Debe fallar"
-url='http://localhost:8000/match/'
+url='http://192.168.0.200:8080/match/'
 response = requests.post(url,headers=auth, data=dataUserPut_json)
 print response
 #data_json=response
@@ -87,7 +94,7 @@ response = requests.post(url,headers=auth, data=dataUserPut_json)
 print response
 
 print "\n MATCH"
-url='http://localhost:8000/match/'
+url='http://192.168.0.200:8080/match/'
 print url
 print "post"
 response = requests.post(url,headers=auth, data=dataUserPut_json)
@@ -96,12 +103,12 @@ print "get"
 response = requests.get(url, headers=auth,data=dataUserPut_json)
 print response
 print "\n CHAT"
-url='http://localhost:8000/chat/'
+url='http://192.168.0.200:8080/chat/'
 print url
 print "post"
 response = requests.post(url, headers=auth,data=dataUserPut_json)
 print response
-url='http://localhost:8000/interests/'
+url='http://192.168.0.200:8080/interests/'
 print url
 print "get"
 response = requests.get(url, headers=auth)
@@ -111,6 +118,16 @@ print "post"
 print dataInterestPost_json
 response = requests.post(url, headers=auth,data=dataInterestPost_json)
 print response
-print "delete user"
-response = requests.delete(urlDeleteUser, headers=auth)
+print "\n SINGIN"
+url='http://192.168.0.200:8080/token/singin/'
+print url
+print "post"
+print token_json
+response = requests.post(url, headers=auth,data=token_json)
 print response
+print response.json()
+#response = requests.post('http://tander.herokuapp.com/interests', headers={'content-type':'application/json'},data=dataInterestPost_json)
+
+#print "delete user"
+#response = requests.delete(urlDeleteUser, headers=auth)
+#print response
