@@ -17,6 +17,7 @@ public:
 private:
 	shared_ptr<SharedClient> sharedClient;
 	virtual msg_t handlePost(struct http_message *hm);
+	virtual msg_t handleDelete(struct http_message *hm);
 };
 
 #endif /* SRC_HANDLERS_HANDLERTOKEN_H_ */

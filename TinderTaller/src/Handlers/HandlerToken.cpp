@@ -35,8 +35,6 @@ msg_t HandlerToken::handlePost(struct http_message *hm) {
 	bool okId=DB->get(tpId);
 	bool okDelete=this->deleteToken(hm);
 	if (okPass&&(pass==tpPass.value)&&okDelete&&okId){
-		DBtuple passwordSave(mail+"_pass",pass);
-		DB->put(passwordSave);
 		string token=tokenAuthentificator->createJsonToken(mail);
 		if(httpReqParser.parsePrefix(hm)[2]=="singin"){
 			msg_t msgGet = sharedClient->getUser(tpId.value);
@@ -53,7 +51,16 @@ msg_t HandlerToken::handlePost(struct http_message *hm) {
 	}
 	return msg;
 }
-
+msg_t HandlerToken::handleDelete(struct http_message *hm) {
+	/**	Recibo el post de un mensaje y devuelvo un accepted si se realizo correctamente**/
+	msg_t msg;
+	if(this->deleteToken(hm)){
+		msg.status=OK;
+	}else{
+		msg.status=BAD_REQUEST;
+	}
+	return msg;
+}
 HandlerToken::~HandlerToken() {
 	// TODO Auto-generated destructor stub
 }

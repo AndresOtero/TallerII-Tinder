@@ -10,7 +10,7 @@
 shared_ptr<Server> Server::serverInstance = NULL; //Singleton Patron
 bool Server::set = false; //Singleton Patron
 
-static const char *s_http_port = "8080";
+static const char *s_http_port = "192.168.0.200:8080";
 static int s_sig_num = 0;
 static void *s_db_handle = NULL;
 

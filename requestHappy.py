@@ -87,9 +87,25 @@ url='http://192.168.0.200:8080/match/'
 response = requests.post(url,headers=auth, data=dataUserPut_json)
 print response
 #data_json=response
-auth={}
+auth={}	
 auth["Authorization"]=token
 print "Exito"
+response = requests.post(url,headers=auth, data=dataUserPut_json)
+print response
+print "Borrar"
+url='http://192.168.0.200:8080/token/'
+response = requests.delete(url,headers=auth)
+print response
+print "Debe fallar"
+url='http://192.168.0.200:8080/match/'
+response = requests.post(url,headers=auth, data=dataUserPut_json)
+print response
+print 
+url='http://192.168.0.200:8080/token/'
+response = requests.post(url,data=token_json)
+auth["Authorization"]= response.json()["token"]
+print "Exito"
+url='http://192.168.0.200:8080/match/'
 response = requests.post(url,headers=auth, data=dataUserPut_json)
 print response
 
@@ -119,6 +135,10 @@ print dataInterestPost_json
 response = requests.post(url, headers=auth,data=dataInterestPost_json)
 print response
 print "\n SINGIN"
+print "Borrar"
+url='http://192.168.0.200:8080/token/'
+response = requests.delete(url,headers=auth)
+print response
 url='http://192.168.0.200:8080/token/singin/'
 print url
 print "post"
@@ -127,7 +147,7 @@ response = requests.post(url, headers=auth,data=token_json)
 print response
 print response.json()
 #response = requests.post('http://tander.herokuapp.com/interests', headers={'content-type':'application/json'},data=dataInterestPost_json)
-
-#print "delete user"
-#response = requests.delete(urlDeleteUser, headers=auth)
-#print response
+auth["Authorization"]= response.json()["token"]
+print "delete user"
+response = requests.delete(urlDeleteUser, headers=auth)
+print response
