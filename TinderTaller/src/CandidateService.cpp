@@ -81,7 +81,7 @@ vector<User> CandidateService::getUsersLeastVoted(vector<User> candidates){
 		return candidates;
 	}
 
-	sort(candidates.begin(), candidates.end(), less_than_qualityMatch);
+	//sort(candidates.begin(), candidates.end(), less_than_qualityMatch);
 
 	vector<User> candidatesOk;
 	vector<User>::const_reverse_iterator sit (candidates.rbegin()), send(candidates.rend());
