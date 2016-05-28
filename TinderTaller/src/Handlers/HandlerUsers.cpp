@@ -84,7 +84,10 @@ msg_t HandlerUsers::handlePost(struct http_message * hm) {
 		bool okPutPass = DB->put(userPass);
 		DBtuple userGcmId(mail+"_gcmId",gcm_registration_id);
 		bool okPutGcmId = DB->put(userGcmId);
-		if (!okPutId && !okPutPass && !okPutGcmId){
+		Json::Value empty=Json::Value(Json::nullValue);
+		DBtuple userChats(mail+"_chats",jsonParse.valueToString(empty));
+		bool okPutChats = DB->put(userChats);
+		if (!okPutId || !okPutPass || !okPutGcmId || !okPutChats){
 			msg.change(INTERNAL_ERROR, "{\"Mensaje\":\"Error en la creacion\"}");
 			return msg;
 		}

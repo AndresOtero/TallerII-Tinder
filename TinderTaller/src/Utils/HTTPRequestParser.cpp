@@ -81,7 +81,7 @@ PrefixType HTTPRequestParser::prefixType(struct http_message *hm) {
 
 }
 
-bool isNumber(const std::string& s) {
+bool HTTPRequestParser::isNumber(const std::string& s) {
 	/* Devuelve true si es un numero, fasle si no lo es.***/
 	return !s.empty()
 			&& std::find_if(s.begin(), s.end(),

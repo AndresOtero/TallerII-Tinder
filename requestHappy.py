@@ -15,8 +15,9 @@ foto2 = "data:image/jpg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFB
 foto = "photo"
 ubicacion = {'latitude':-34.610510, 'longitude':-58.386391}
 user= "Roberto"+str(rdm)
+#user="Fede"
 mail = user+'@gmail.com'
-user = {'gcm_registration_id':"aaaaaaaaaa",'name':user,'password': "hashed",'interests':intereses,'location':ubicacion,'alias':'Roberto','age':45,'sex':'H','photo_profile':foto,'email':mail}
+user = {'gcm_registration_id':"aaaaaaaaaa",'name':user,'password': "hashed",'interests':intereses,'location':ubicacion,'alias':user,'age':45,'sex':'H','photo_profile':foto,'email':mail}
 headers = {'content-type': 'application/json'}
 metadata = {'version':"0.1"}
 token={'user':{'email': mail,'password': "hashed" } }
@@ -51,6 +52,7 @@ print "post user - token"
 response = requests.post(urlGetUsers,data=dataUserPost_json)
 print response
 print response.json()
+#exit(0)
 token= response.json()["token"]
 print token
 #data_json=response

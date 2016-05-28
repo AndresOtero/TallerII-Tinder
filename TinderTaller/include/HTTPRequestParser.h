@@ -20,6 +20,7 @@ public:
 	vector<string> parsePrefix(struct http_message *hm);
 	string getTokenFromHeader(struct http_message *hm);
 	string getId(struct http_message *hm);
+	bool isNumber(const std::string& s);
 	bool idOk();
 	virtual ~HTTPRequestParser();
 private:

@@ -69,6 +69,12 @@ msg_t HandlerInterface::handle(struct http_message *hm) {
 	string token =httpReqParser.getTokenFromHeader(hm);
 	return tokenAuthentificator->deleteJsonTokenUser(token);
 }
+ string HandlerInterface::getUser(struct http_message *hm){
+		string token = httpReqParser.getTokenFromHeader(hm);
+		string user=tokenAuthentificator->getUserName(token);
+		return user;
+ }
+
  msg_t HandlerInterface::unathorized() {
 	 msg_t msg;
 	 msg.change(UNAUTHORIZED, json_example);

@@ -96,6 +96,14 @@ Json::Value JsonParser::replaceNewUserInOldUser(Json::Value newVal,Json::Value o
 	oldVal["metadata"]=newVal["metadata"];
 	return oldVal;
 }
+std::vector<std::string> JsonParser::getKeyVectorFromValue(Json::Value value){
+	std::vector<std::string> keyVector;
+	for( Json::ValueIterator itr = value.begin() ; itr != value.end() ; itr++ ){
+		keyVector.push_back(itr.key().asString());
+	}
+	return keyVector;
+}
+
 JsonParser::~JsonParser() {
 	/**Destruyo el parser de Json**/
 }

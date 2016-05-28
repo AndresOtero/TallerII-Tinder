@@ -35,6 +35,7 @@ class HandlerInterface {
 		virtual msg_t handleGet(struct http_message *hm);
 		virtual msg_t handlePut(struct http_message *hm);
 		virtual msg_t handleDelete(struct http_message *hm);
+		string getUser(struct http_message *hm);
 
 		msg_t methodNotAllowed();
 
