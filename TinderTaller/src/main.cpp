@@ -14,7 +14,7 @@ INITIALIZE_EASYLOGGINGPP
 #include "../include/DataBase.h"
 
 int main(int argc, char* argv[]) {
-	shared_ptr<DataBase> db(new DataBase("./DBServer/", true, false));
+	shared_ptr<DataBase> db(new DataBase("./DBServer/", true, true));
 	shared_ptr<Server> server = Server::getServer();
 	server->setServerDB(db);
 
