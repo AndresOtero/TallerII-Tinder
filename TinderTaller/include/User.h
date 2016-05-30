@@ -10,6 +10,7 @@
 
 #include <string>
 #include <vector>
+#include "Interest.h"
 using namespace std;
 
 class User {
@@ -24,7 +25,12 @@ private:
 	vector<string> idUserMatchs;
 	double latitude;
 	double longitude;
-
+	string name;
+	string alias;
+	string sex;
+	int birthday;
+	string urlPhotoProfile;
+	vector<Interest> interests;
 public:
 	User();
 	virtual ~User();
@@ -48,6 +54,19 @@ public:
 	void setLatitude(double latitude);
 	double getLongitude();
 	void setLongitude(double longitude);
+	bool operator<(User & user);
+	void setName(string name);
+	string getName();
+	void setAlias(string alias);
+	string getAlias();
+	void setSex(string sex);
+	string getSex();
+	void setBirthday(int birthday);
+	int getBirthday();
+	void setUrlPhotoProfile(string urlPhotoProfile);
+	string getUrlPhotoProfile();
+	void setInterests(vector<Interest> interests);
+	vector<Interest> getInterests();
 };
 
 #endif /* ENTITIES_USER_H_ */

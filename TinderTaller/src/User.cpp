@@ -95,3 +95,55 @@ string User::getGcmRegistrationId(){
 void User::setGcmRegistrationId(string gcmRegistrationId){
 	this->gcmRegistrationId = gcmRegistrationId;
 }
+
+bool User::operator<(User & user){
+	return (this->getIdUserMatchs().size() < user.getIdUserMatchs().size());
+}
+
+void User::setName(string name){
+	this->name = name;
+}
+
+string User::getName(){
+	return this->name;
+}
+
+void User::setAlias(string alias){
+	this->alias = alias;
+}
+
+string User::getAlias(){
+	return this->alias;
+}
+
+void User::setSex(string sex){
+	this->sex = sex;
+}
+
+string User::getSex(){
+	return this->sex;
+}
+
+void User::setBirthday(int birthday){
+	this->birthday = birthday;
+}
+
+int User::getBirthday(){
+	return this->birthday;
+}
+
+void User::setUrlPhotoProfile(string urlPhotoProfile){
+	this->urlPhotoProfile = urlPhotoProfile;
+}
+
+string User::getUrlPhotoProfile(){
+	return this->urlPhotoProfile;
+}
+
+void User::setInterests(vector<Interest> interests){
+	this->interests = interests;
+}
+
+vector<Interest> User::getInterests(){
+	return this->interests;
+}

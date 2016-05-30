@@ -5,6 +5,7 @@
  *      Author: andres
  */
 #include "HandlerInterface.h"
+#include "CandidateService.h"
 #ifndef SRC_HANDLERMATCH_H_
 #define SRC_HANDLERMATCH_H_
 
@@ -16,6 +17,7 @@ class HandlerMatch: public HandlerInterface {
 	private:
 		virtual msg_t handlePost(struct http_message *hm);
 		virtual msg_t handleGet(struct http_message *hm);
+		shared_ptr<CandidateService> candidateService;
 };
 
 #endif /* SRC_HANDLERMATCH_H_ */

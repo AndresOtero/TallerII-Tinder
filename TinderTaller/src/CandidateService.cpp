@@ -7,9 +7,9 @@
 
 #include "CandidateService.h"
 
-CandidateService::CandidateService() {
-	// TODO Auto-generated constructor stub
-
+CandidateService::CandidateService(shared_ptr<DataBase> DB) {
+	shared_ptr<UserDao> userDaoAux(new UserDao(DB));
+	userDao = userDaoAux;
 }
 
 CandidateService::~CandidateService() {
@@ -21,7 +21,7 @@ search_candidate_t CandidateService::searchCandidate(string idUser){
 	vector<User> candidates;
 
 	//Obtengo el usuario asociado a este id
-	User user = userDao.getUser(idUser);
+	User user = userDao->getUser(idUser);
 
 	//Verifico limite diario
 	if (user.getQuantitySearchDaily() >= MAX_SEARCH_CANDIDATE){
@@ -32,10 +32,10 @@ search_candidate_t CandidateService::searchCandidate(string idUser){
 	}
 
 	//Actualizo limite diario
-	user = userDao.increaseQuantitySearchDaily(user);
+	user = userDao->increaseQuantitySearchDaily(user);
 
 	//Obtengo todos los usuarios cargados localmente
-	candidates = userDao.getUsers();
+	candidates = userDao->getCandidatesForIdUser(idUser);
 
 	//Me quedo con el XX% menos votados
 	candidates = getUsersLeastVoted(candidates);
@@ -54,17 +54,6 @@ search_candidate_t CandidateService::searchCandidate(string idUser){
 	return search_candidate;
 }
 
-/*struct less_than_qualityMatch {
-	bool operator() (const User & user1, const User & user2){
-		return (user1.getQuantityMatchs() < user2.getQuantityMatchs());
-	}
-};*/
-
-
-bool less_than_qualityMatch (User & user1, User & user2){
-	return (user1.getIdUserMatchs().size() < user2.getIdUserMatchs().size());
-}
-
 vector<User> CandidateService::getUsersLeastVoted(vector<User> candidates){
 	/*
 	 * Me quedo con el XX% menos votados
@@ -81,7 +70,7 @@ vector<User> CandidateService::getUsersLeastVoted(vector<User> candidates){
 		return candidates;
 	}
 
-	//sort(candidates.begin(), candidates.end(), less_than_qualityMatch);
+	sort(candidates.begin(), candidates.end());
 
 	vector<User> candidatesOk;
 	vector<User>::const_reverse_iterator sit (candidates.rbegin()), send(candidates.rend());
@@ -158,18 +147,15 @@ vector<User> CandidateService::getUsersCommonInterests(User user, vector<User> c
 	vector<User> candidatesOk;
 	vector<User>::const_iterator vit(candidates.begin()), vend(candidates.end());
 
-	msg_t msgUser = sharedClient.getUser(user.getIdShared());
-	vector<Interest> userInterests = jsonUtils.getInterestsJsonToObject(msgUser.body);//TODO FALTA CONTROLAR EL STATUS DEL REQUEST
-
 	//Recorro los candidatos
 	for(; vit != vend; ++vit){
 		User candidate = *vit;
-		msg_t msgCandidate = sharedClient.getUser(candidate.getIdShared());
-		vector<Interest> candidateInterests = jsonUtils.getInterestsJsonToObject(msgCandidate.body);//TODO FALTA CONTROLAR EL STATUS DEL REQUEST
+
+		vector<Interest> candidateInterests = candidate.getInterests();
 		bool commonInterests = false;
 
 		//Voy a recorrer los intereses del usuario
-		vector<Interest>::const_iterator vUserInterestIt(userInterests.begin()) , vUserInterestEnd(userInterests.end());
+		vector<Interest>::const_iterator vUserInterestIt(user.getInterests().begin()) , vUserInterestEnd(user.getInterests().end());
 		for(; vUserInterestIt != vUserInterestEnd; ++vUserInterestIt){
 			Interest userInterest = *vUserInterestIt;
 
@@ -198,4 +184,9 @@ vector<User> CandidateService::getUsersCommonInterests(User user, vector<User> c
 	}
 
 	return candidatesOk;
+}
+
+StatusCodeMatch CandidateService::match(string idUser, string idUserMatch){
+	this->userDao->putMatch(idUser, idUserMatch);
+	return StatusCodeMatch::OK_UPDATE_MATCH;
 }
