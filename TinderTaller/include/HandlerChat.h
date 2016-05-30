@@ -29,7 +29,7 @@ class HandlerChat: public HandlerInterface {
 		bool saveNewMessage(string chatId,string  remitente,string message);
 		bool saveNewChat(string chatId,string  remitente,string destinatario);
 		string getChatHeader(string user,string chat);
-		string readChat(string chat,string user,string messageId);
+		string readChat(string chat,string user,string messageId,string conversationId);
 
 };
 

@@ -172,11 +172,17 @@ msg_t HandlerChat::handleGetAll(struct http_message *hm){
 	msg.body=jsonParse.valueToString(chats);
 	return msg;
 }
-string HandlerChat::readChat(string chatString,string user,string messageId){
+string HandlerChat::readChat(string chatString,string user,string messageId,string conversationId){
 	Json::Value chat=jsonParse.stringToValue(chatString);
 	Json::Value lastsMessages;
+	int lastMessageRead;
+	int lastMessageId=chat["message_id"].asInt();
 	if(chat["User1"].asString()==user){
+		lastMessageRead=chat["LastMessage2"].asInt();
 		chat["LastMessage1"]=0;
+	}else{
+		lastMessageRead=chat["LastMessage1"].asInt();
+		chat["LastMessage2"]=0;
 	}
 	Json::Value messages=chat["Messages"];
 	int messageIdSearch=atoi(messageId.c_str());
@@ -185,15 +191,23 @@ string HandlerChat::readChat(string chatString,string user,string messageId){
 		int currentMessageId=atoi(itr.key().asString().c_str());
 		int min=messageIdSearch-CANT_MESSAGES;
 		if((currentMessageId<=messageIdSearch)&&(currentMessageId>=(min))){
-			lastsMessages[itr.key().asString()]=(*itr);
+			Json::Value Message=*itr;
+			if(currentMessageId>=(lastMessageId-lastMessageRead)){
+				Message["status"]="D";
+			}else{
+				Message["status"]="R";
+			}
+			lastsMessages[itr.key().asString()]=Message;
 		}
 	}
-	int lastMessageId=messageIdSearch-CANT_MESSAGES;
-	if(lastMessageId<0){
-		lastMessageId=0;
+	int bottomMessageId=messageIdSearch-CANT_MESSAGES;
+	if(bottomMessageId<0){
+		bottomMessageId=0;
 	}
-	lastsMessages["LastMessageId"]=lastMessageId;
+	lastsMessages["LastMessageId"]=bottomMessageId;
 	string lastsMessagesString=this->jsonParse.valueToString(lastsMessages);
+	chatString=this->jsonParse.valueToString(chat);
+	DBtuple putChat("chat_"+conversationId,chatString);
 	return lastsMessagesString;
 }
 msg_t HandlerChat::handleGetChat(struct http_message *hm){
@@ -212,7 +226,7 @@ msg_t HandlerChat::handleGetChat(struct http_message *hm){
 			msg.status=StatusCode::BAD_REQUEST;
 		}else{
 			msg.status=StatusCode::OK;
-			msg.body=this->readChat(getChat.value,user,message_id);
+			msg.body=this->readChat(getChat.value,user,message_id,conversation_id);
 		}
 	}else{
 		msg.status=StatusCode::UNAUTHORIZED;

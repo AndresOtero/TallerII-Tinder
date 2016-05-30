@@ -99,4 +99,11 @@ print "Get mensajes Ely 1 desde 15 a 5"
 response = requests.get(urlChat1_15 ,headers=auth["Ely"])
 print response
 print response.json()
-
+print "Get mensajes Fede 1 desde 10 a 0"
+response = requests.get(urlChat1 ,headers=auth["Fede"])
+print response
+print response.json()
+print "Get mensajes Ely 1 desde 10 a 0"
+response = requests.get(urlChat1 ,headers=auth["Fede"])
+print response
+print response.json()
