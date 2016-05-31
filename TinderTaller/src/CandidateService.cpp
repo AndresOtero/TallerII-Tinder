@@ -67,8 +67,10 @@ vector<User> CandidateService::getUsersLeastVoted(vector<User> candidates){
 	cout<< "Cantidad de candidatos:" << candidates.size() << endl;
 	cout<< "Porcentaje:" << PERCENTAGE_LEAST_VOTED << endl;
 	cout<< "Cantidad * Porcentaje:" << (candidates.size() * PERCENTAGE_LEAST_VOTED)  << endl;
-	cout<< "(Cantidad * Porcentaje) / 100:" << ((candidates.size() * PERCENTAGE_LEAST_VOTED) / 100)  << endl;
-	int quantity = round((candidates.size() * PERCENTAGE_LEAST_VOTED) / 100);
+
+	double div = (double)((candidates.size() * PERCENTAGE_LEAST_VOTED)/ 100);
+	cout<< "(Cantidad * Porcentaje) / 100:" << div  << endl;
+	int quantity = round(div);
 
 	if (quantity == 0){
 		return candidates;
@@ -77,7 +79,7 @@ vector<User> CandidateService::getUsersLeastVoted(vector<User> candidates){
 	sort(candidates.begin(), candidates.end());
 
 	vector<User> candidatesOk;
-	for (size_t i = candidates.size(); i >=0; i--){
+	for (int i = (candidates.size() - 1); i >=0; i--){
 		if (quantity > 0){
 			quantity --;
 		} else {

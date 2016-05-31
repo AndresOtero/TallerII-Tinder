@@ -48,13 +48,13 @@ public:
 	void setQuantitySearchDaily(int quantitySearchDaily);
 	string getDateLastUpdateSearch();
 	void setDateLastUpdateSearch(string dateLastUpdateSearch);
-	vector<string> getIdUserMatchs();
+	vector<string> getIdUserMatchs() const;
 	void setIdUserMatchs(vector<string> idUserMatchs);
 	double getLatitude();
 	void setLatitude(double latitude);
 	double getLongitude();
 	void setLongitude(double longitude);
-	bool operator<(User & user);
+	bool operator<(const User user) const;
 	void setName(string name);
 	string getName();
 	void setAlias(string alias);

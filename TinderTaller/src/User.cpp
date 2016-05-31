@@ -56,7 +56,7 @@ void User::setDateLastUpdateSearch(string dateLastUpdateSearch){
 	this->dateLastUpdateSearch = dateLastUpdateSearch;
 }
 
-vector<string> User::getIdUserMatchs(){
+vector<string> User::getIdUserMatchs() const{
 	return this->idUserMatchs;
 }
 
@@ -96,7 +96,7 @@ void User::setGcmRegistrationId(string gcmRegistrationId){
 	this->gcmRegistrationId = gcmRegistrationId;
 }
 
-bool User::operator<(User & user){
+bool User::operator< (const User user) const {
 	return (this->getIdUserMatchs().size() < user.getIdUserMatchs().size());
 }
 
