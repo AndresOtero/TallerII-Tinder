@@ -21,7 +21,13 @@ User UserDao::getUser(string idUser){
 
 	string userInJsonShared = sharedClient.getUser(key.value).body;//TODO FALTA CONTROLAR EL STATUS DEL REQUEST
 
-	return buildUser(idUser, userInJsonShared);
+	Json::Value responseJson = jsonParser.stringToValue(userInJsonShared);
+
+	cout<<"Usuario 1:" << jsonParser.valueToString(responseJson["user"]) << endl;
+
+	string user = jsonParser.valueToString(responseJson["user"]);
+
+	return buildUser(idUser, user);
 }
 
 User UserDao::buildUser(string idUser, string userInJsonShared){
@@ -83,25 +89,23 @@ User UserDao::buildUser(string idUser, string userInJsonShared){
 	vector<string> idUserMatchs = jsonParser.getKeyVectorFromValue(idsJson["idUserMatchs"]);
 	user.setIdUserMatchs(idUserMatchs);
 
-	cout<<"Usuario:" << userInJsonShared << endl;
-
 	//Obtengo el usuario del Shared
 	Json::Value responseJson = jsonParser.stringToValue(userInJsonShared);
-	user.setName(jsonParser.getStringFromValue(responseJson["user"], "name"));
-	user.setAlias(jsonParser.getStringFromValue(responseJson["user"], "alias"));
-	user.setSex(jsonParser.getStringFromValue(responseJson["user"], "sex"));
-	user.setUrlPhotoProfile(jsonParser.getStringFromValue(responseJson["user"], "photo_profile"));
-	int age = atoi(jsonParser.getStringFromValue(responseJson["user"], "age").c_str());
+	user.setName(jsonParser.getStringFromValue(responseJson, "name"));
+	user.setAlias(jsonParser.getStringFromValue(responseJson, "alias"));
+	user.setSex(jsonParser.getStringFromValue(responseJson, "sex"));
+	user.setUrlPhotoProfile(jsonParser.getStringFromValue(responseJson, "photo_profile"));
+	int age = atoi(jsonParser.getStringFromValue(responseJson, "age").c_str());
 	user.setBirthday(age);
 
-	Json::Value interestsJson = (responseJson["user"])["interests"];
+	Json::Value interestsJson = responseJson["interests"];
 	cout << "Es un vector?:" << interestsJson.isArray() << endl;
 
 	vector<Interest> interests = jsonParser.getInterest(interestsJson);
 	user.setInterests(interests);
-	string latitude = jsonParser.getStringFromValue((responseJson["user"])["location"], "latitude");
+	string latitude = jsonParser.getStringFromValue(responseJson["location"], "latitude");
 	user.setLatitude(atof(latitude.c_str()));
-	string longitude = jsonParser.getStringFromValue((responseJson["user"])["location"], "longitude");
+	string longitude = jsonParser.getStringFromValue(responseJson["location"], "longitude");
 	user.setLongitude(atof(longitude.c_str()));
 
 	return user;
@@ -115,13 +119,9 @@ vector<User> UserDao::getUsers(){
 	vector<string> usersJson = jsonParser.getVectorFromValue(usersInJsonShared["users"]);
 
 	for( string userJson : usersJson ){
-		Json::Value responseJson;
-		responseJson["user"] = userJson;
-		string userWithRoot = jsonParser.valueToString(responseJson);
-		cout << "User:" << userWithRoot << "\n";
 		Json::Value valueUser = jsonParser.stringToValue(userJson);
 		string idEmail = jsonParser.getStringFromValue(valueUser, "email");
-		User user = buildUser(idEmail, userWithRoot);
+		User user = buildUser(idEmail, userJson);
 
 		users.push_back(user);
 	}

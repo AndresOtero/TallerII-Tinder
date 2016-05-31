@@ -19,7 +19,7 @@
 #include "DataBase.h"
 
 #define MAX_SEARCH_CANDIDATE  10  //TODO esto hay que sacarlo a una properties
-#define PERCENTAGE_LEAST_VOTED 1 //TODO esto hay que sacarlo a una properties
+#define PERCENTAGE_LEAST_VOTED 10 //TODO esto hay que sacarlo a una properties
 #define MAX_LATITUDE 100 //TODO esto hay que sacarlo a una properties
 #define MAX_LONGITUDE 500  //TODO esto hay que sacarlo a una properties
 

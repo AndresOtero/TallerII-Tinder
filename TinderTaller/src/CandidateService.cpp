@@ -64,6 +64,10 @@ vector<User> CandidateService::getUsersLeastVoted(vector<User> candidates){
 	 * 		Por lo tanto, se van a dejar afuera los 2 usuarios con mas matchs.
 	 */
 
+	cout<< "Cantidad de candidatos:" << candidates.size() << endl;
+	cout<< "Porcentaje:" << PERCENTAGE_LEAST_VOTED << endl;
+	cout<< "Cantidad * Porcentaje:" << (candidates.size() * PERCENTAGE_LEAST_VOTED)  << endl;
+	cout<< "(Cantidad * Porcentaje) / 100:" << ((candidates.size() * PERCENTAGE_LEAST_VOTED) / 100)  << endl;
 	int quantity = round((candidates.size() * PERCENTAGE_LEAST_VOTED) / 100);
 
 	if (quantity == 0){
@@ -73,14 +77,12 @@ vector<User> CandidateService::getUsersLeastVoted(vector<User> candidates){
 	sort(candidates.begin(), candidates.end());
 
 	vector<User> candidatesOk;
-	vector<User>::const_reverse_iterator sit (candidates.rbegin()), send(candidates.rend());
-
-	for (; sit != send; ++sit){
+	for (size_t i = candidates.size(); i >=0; i--){
 		if (quantity > 0){
 			quantity --;
 		} else {
 			//Me quedo con los candidatos con menos matchs
-			candidatesOk.push_back(*sit);
+			candidatesOk.push_back(candidates[i]);
 		}
 	}
 
