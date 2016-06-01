@@ -24,7 +24,8 @@ msg_t HandlerMatch::handlePost(struct http_message *hm){
 	LOG(INFO) << "Se agrega un nuevo match (HandlerMatch - handlePost).";
 
 	string idEmail = getUser(hm);
-	string idEmailMatch = httpReqParser.getId(hm);
+	Json::Value val = jsonParse.stringToValue(hm->body.p);
+	string idEmailMatch = val["email"].asString();
 
 	LOG(INFO)<<"Busco "<< idEmail << " y " << idEmailMatch <<" como identificadores";
 	DBtuple userId(idEmail+"_id");
@@ -35,14 +36,30 @@ msg_t HandlerMatch::handlePost(struct http_message *hm){
 		StatusCodeMatch rdo = this->candidateService->match(idEmail, idEmailMatch);
 		if (rdo == StatusCodeMatch::OK_UPDATE_MATCH){
 			//TODO ACA HAY Q INFORMAR AL ANDROID - GOOGLE CLIENT
-			msg.change(ACCEPTED, "Posted maych");
-		} else {
+			msg.change(ACCEPTED, "{\"Mensaje\":\"Se produjo Match con el candidato seleccionado.\"}");
+		} else if(rdo == StatusCodeMatch::ERROR_UPDATE_MATCH) {
 			LOG(WARNING)<<"Error informando match";
-			msg=this->badRequest("Error informando match");
+			msg=this->badRequest("{\"Mensaje\":\"Error informando match.\"}");
+		} else if(rdo == StatusCodeMatch::OK_UPDATE_CANDIDATE_MATCH){
+			msg.change(ACCEPTED, "{\"Mensaje\":\"Se almaceno correctamente el candidato a match seleccionado.\"}");
+		} else {
+			LOG(WARNING)<<"Error informando candidato a match";
+			msg=this->badRequest("{\"Mensaje\":\"Error informando candidato a match.\"}");
 		}
 	} else {
 		LOG(WARNING)<<"Not success";
-	    msg=this->badRequest("Id incorrecto");
+		string error = "{\"Mensaje\":\"Id incorrecto: ";
+		if(!ok && okMatch){
+			error.append(idEmail);
+		} else if(ok && !okMatch){
+			error.append(idEmailMatch);
+		} else {
+			error.append(idEmail);
+			error.append(" y ");
+			error.append(idEmailMatch);
+		}
+		error.append("\"}");
+	    msg=this->badRequest(error);
 	}
 
 	return msg;
@@ -63,7 +80,7 @@ msg_t HandlerMatch::handleGet(struct http_message *hm){
 		search_candidate_t searchCandidate = this->candidateService->searchCandidate(idEmail);
 		if(searchCandidate.status == StatusCodeMatch::ERROR_LIMIT_DAILY){
 			LOG(WARNING)<<"Excede limite diario de busqueda de candidatos.";
-			msg=this->badRequest("Excede limite diario de busqueda de candidatos.");
+			msg=this->badRequest("{\"Mensaje\":\"Excede limite diario de busqueda de candidatos.\"}");
 		} else {
 			string candidatesJson = jsonParse.getCandidatesJson(searchCandidate.candidates);
 			LOG(DEBUG) << "Candidatos a match: " << candidatesJson << endl;
@@ -72,7 +89,7 @@ msg_t HandlerMatch::handleGet(struct http_message *hm){
 	}
 	else{
 		LOG(WARNING)<<"Not success";
-		msg=this->badRequest("Id incorrecto");
+		msg=this->badRequest("{\"Mensaje\":\"Id incorrecto.\"}");
 	}
 
 	return msg;

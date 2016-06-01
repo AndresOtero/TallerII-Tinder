@@ -35,9 +35,9 @@ public:
 	User getUser(string idUser);
 	vector<User> getUsers();
 	User increaseQuantitySearchDaily(User user);
-	User putMatch(User user, string idUserMatch);
 	vector<User> getCandidatesForIdUser(string idUser);
-	void putMatch(string idUser, string idUserMatch);
+	bool putMatch(User user, User userToMatch);
+	bool putCandidateMatch(User user, User userToMatch);
 };
 
 #endif /* DAOS_USERDAO_H_ */

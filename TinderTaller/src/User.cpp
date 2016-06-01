@@ -147,3 +147,11 @@ void User::setInterests(vector<Interest> interests){
 vector<Interest> User::getInterests(){
 	return this->interests;
 }
+
+void User::setIdUserCandidatesMatchs(vector<string> idUserCandidatesMatchs){
+	this->idUserCandidatesMatchs = idUserCandidatesMatchs;
+}
+
+vector<string> User::getIdUserCandidatesMatchs(){
+	return this->idUserCandidatesMatchs;
+}

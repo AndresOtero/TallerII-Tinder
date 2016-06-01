@@ -19,15 +19,15 @@
 #include "DataBase.h"
 #include "easylogging++.h"
 
-#define MAX_SEARCH_CANDIDATE  10  //TODO esto hay que sacarlo a una properties
+#define MAX_SEARCH_CANDIDATE  5  //TODO esto hay que sacarlo a una properties
 #define PERCENTAGE_LEAST_VOTED 10 //TODO esto hay que sacarlo a una properties
-#define MAX_LATITUDE 100 //TODO esto hay que sacarlo a una properties
-#define MAX_LONGITUDE 500  //TODO esto hay que sacarlo a una properties
+#define MAX_LATITUDE 10 //TODO esto hay que sacarlo a una properties
+#define MAX_LONGITUDE 50  //TODO esto hay que sacarlo a una properties
 
 using namespace std;
 
 typedef enum StatusCodeMatch {
-	OK_SEARCH = 200, OK_UPDATE_MATCH = 201, ERROR_LIMIT_DAILY = 202
+	OK_SEARCH = 200, OK_UPDATE_MATCH = 201, ERROR_LIMIT_DAILY = 202, ERROR_UPDATE_MATCH = 203, OK_UPDATE_CANDIDATE_MATCH = 204, ERROR_UPDATE_CANDIDATE_MATCH = 205
 } StatusCodeMatch;
 
 typedef struct search {

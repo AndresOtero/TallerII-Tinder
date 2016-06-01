@@ -77,8 +77,15 @@ User UserDao::buildUser(string idUser, string userInJsonShared){
 	DBtuple keyIdUserMatchs(idUser + "_idUserMatchs");
 	this->dataBase->get(keyIdUserMatchs);
 	Json::Value idsJson = jsonParser.stringToValue(keyIdUserMatchs.value);
-	vector<string> idUserMatchs = jsonParser.getKeyVectorFromValue(idsJson["idUserMatchs"]);
+	vector<string> idUserMatchs = jsonParser.getVectorFromValue(idsJson["idUserMatchs"]);
 	user.setIdUserMatchs(idUserMatchs);
+
+	//IdUserMatchs - Ids de los usuarios con los cuales se espera tener match (candidatos seleccionados)
+	DBtuple keyIdUserCandidatesMatchs(idUser + "_idUserCandidatesMatchs");
+	this->dataBase->get(keyIdUserCandidatesMatchs);
+	Json::Value idsCandidatesJson = jsonParser.stringToValue(keyIdUserCandidatesMatchs.value);
+	vector<string> idUserCandidatesMatchs = jsonParser.getVectorFromValue(idsCandidatesJson["idUserCandidatesMatchs"]);
+	user.setIdUserCandidatesMatchs(idUserCandidatesMatchs);
 
 	//Obtengo el usuario del Shared
 	Json::Value responseJson = jsonParser.stringToValue(userInJsonShared);
@@ -136,55 +143,68 @@ User UserDao::increaseQuantitySearchDaily(User user){
 	return user;
 }
 
-User UserDao::putMatch(User user, string idUserMatch){
-	DBtuple key(user.getId()+ "_idUserMatchs");
-	this->dataBase->get(key);
-	Json::Value idsJson = jsonParser.stringToValue(key.value);
-	vector<string> idUserMatchs;
-	string matchsJson;
-	if(!idsJson.empty()){
-		idUserMatchs = jsonParser.getKeyVectorFromValue(idsJson);
-
-	}
-	idUserMatchs.push_back(idUserMatch);
-	user.setIdUserMatchs(idUserMatchs);
-
+bool UserDao::putMatch(User user, User userToMatch){
+	//Actualizo los matchs del usuario que invoco la peticion
 	Json::Value root;
 	Json::Value data;
-
+	vector<string> idUserMatchs = user.getIdUserMatchs();
+	idUserMatchs.push_back(userToMatch.getId());
 	for(string id : idUserMatchs){
 		data.append(id);
 	}
-
 	root["idUserMatchs"] = data;
-	key.value = jsonParser.valueToString(root);
-	this->dataBase->put(key);
+	DBtuple keyIdUserMatchs(user.getId() + "_idUserMatchs");
+	keyIdUserMatchs.value = jsonParser.valueToString(root);
+	bool userMatchOk = this->dataBase->put(keyIdUserMatchs);
 
-	return user;
+	//Actualizo los matchs del candidato
+	Json::Value rootCandidate;
+	Json::Value dataCandidate;
+	vector<string> idUserToMatchs = userToMatch.getIdUserMatchs();
+	idUserToMatchs.push_back(user.getId());
+	for(string id : idUserToMatchs){
+		dataCandidate.append(id);
+	}
+
+	rootCandidate["idUserMatchs"] = dataCandidate;
+	DBtuple keyIdUserToMatchs(userToMatch.getId() + "_idUserMatchs");
+	keyIdUserToMatchs.value = jsonParser.valueToString(rootCandidate);
+	bool userToMatchOk = this->dataBase->put(keyIdUserToMatchs);
+
+	//Saco el usuario desde el candidato
+	Json::Value rootUserCandidate;
+	Json::Value dataUserCandidate;
+	for(string id : userToMatch.getIdUserCandidatesMatchs()){
+		if(user.getId().compare(id) != 0){
+			dataUserCandidate.append(id);
+		}
+	}
+	rootUserCandidate["idUserCandidatesMatchs"] = dataUserCandidate;
+	DBtuple keyIdUserCandidateMatchs(userToMatch.getId() + "_idUserCandidatesMatchs");
+	keyIdUserCandidateMatchs.value = jsonParser.valueToString(rootUserCandidate);
+	bool userToMatchCandidateOk = this->dataBase->put(keyIdUserCandidateMatchs);
+
+	if(userMatchOk && userToMatchOk && userToMatchCandidateOk){
+		return true;
+	}
+
+	return false;
 }
 
-void UserDao::putMatch(string idUser, string idUserMatch){
-	DBtuple key(idUser + "_idUserMatchs");
-	this->dataBase->get(key);
-	Json::Value idsJson = jsonParser.stringToValue(key.value);
-	vector<string> idUserMatchs;
-	string matchsJson;
-	if(!idsJson.empty()){
-		idUserMatchs = jsonParser.getKeyVectorFromValue(idsJson);
-
-	}
-	idUserMatchs.push_back(idUserMatch);
-
+bool UserDao::putCandidateMatch(User user, User userToMatch){
+	//Actualizo los candidatos a matchs del usuario que invoco la peticion
 	Json::Value root;
 	Json::Value data;
-
-	for(string id : idUserMatchs){
+	vector<string> idUserCandidatesMatchs = user.getIdUserCandidatesMatchs();
+	idUserCandidatesMatchs.push_back(userToMatch.getId());
+	for(string id : idUserCandidatesMatchs){
 		data.append(id);
 	}
+	root["idUserCandidatesMatchs"] = data;
+	DBtuple keyIdUserCandidatesMatchs(user.getId() + "_idUserCandidatesMatchs");
+	keyIdUserCandidatesMatchs.value = jsonParser.valueToString(root);
 
-	root["idUserMatchs"] = data;
-	key.value = jsonParser.valueToString(root);
-	this->dataBase->put(key);
+	return this->dataBase->put(keyIdUserCandidatesMatchs);
 }
 
 vector<User> UserDao::getCandidatesForIdUser(string idUser){

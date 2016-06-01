@@ -31,6 +31,7 @@ private:
 	int birthday;
 	string urlPhotoProfile;
 	vector<Interest> interests;
+	vector<string> idUserCandidatesMatchs;
 public:
 	User();
 	virtual ~User();
@@ -67,6 +68,8 @@ public:
 	string getUrlPhotoProfile();
 	void setInterests(vector<Interest> interests);
 	vector<Interest> getInterests();
+	void setIdUserCandidatesMatchs(vector<string> idUserCandidatesMatchs);
+	vector<string> getIdUserCandidatesMatchs();
 };
 
 #endif /* ENTITIES_USER_H_ */

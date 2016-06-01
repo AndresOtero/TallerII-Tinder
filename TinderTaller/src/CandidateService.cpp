@@ -104,12 +104,12 @@ vector<User> CandidateService::getUsersLeastVoted(vector<User> candidates){
 	 * candidatos ok, que serian los que mas matchs tienen.
 	 */
 	vector<User> candidatesExclude;
-	for (int i = (candidatesExclude.size() - 1); i >=0; i--){
-		if (quantity > 0){
-			quantity --;
-			candidatesExclude.push_back(candidatesExclude[i]);
-			LOG(DEBUG) << "Candidato que debo excluir por ser muy popular (CandidateService - getUsersLeastVoted): " << candidatesExclude[i].getId();
-		}
+	int i = (candidatesWithMatch.size() - 1);
+	while (i >=0 && quantity > 0){
+		quantity --;
+		candidatesExclude.push_back(candidatesWithMatch[i]);
+		LOG(DEBUG) << "Candidato que debo excluir por ser muy popular (CandidateService - getUsersLeastVoted): " << candidatesWithMatch[i].getId();
+		i--;
 	}
 
 	/*
@@ -143,6 +143,12 @@ vector<User> CandidateService::getUsersNotMatch(User user, vector<User> candidat
 	 * Saco los que tuvieron un match en comun.
 	 */
 	LOG(DEBUG) << "Se van a sacar los candidatos con los que ya tuvo match (CandidateService - getUsersNotMatch).";
+
+	if(user.getIdUserMatchs().empty()){
+		LOG(DEBUG) << "Cantidad de candidatos con los que no tuvo match (CandidateService - getUsersNotMatch): 0";
+		return candidates;
+	}
+
 	vector<User> candidatesOk;
 
 	for(int i = 0; i < candidates.size(); i++){
@@ -243,9 +249,37 @@ vector<User> CandidateService::getUsersCommonInterests(User user, vector<User> c
 }
 
 StatusCodeMatch CandidateService::match(string idUser, string idUserMatch){
-	LOG(INFO) << "Actualizo listado de matchs (CandidateService - match).";
-	LOG(DEBUG) << "Match entre el usuario " << idUser << " y el usuario " << idUserMatch;
+	LOG(INFO) << "Busco match entre el usuario " << idUser << " y el usuario " << idUserMatch << " (CandidateService - match).";
 
-	this->userDao->putMatch(idUser, idUserMatch);
-	return StatusCodeMatch::OK_UPDATE_MATCH;
+	User user = this->userDao->getUser(idUser);
+	User candidate = this->userDao->getUser(idUserMatch);
+
+	//Recorro los candidatos a match del candidato en busca de coincidencia
+	bool find = false;
+	int i = 0;
+	while(i < candidate.getIdUserCandidatesMatchs().size() && !find){
+		string idUserCandidateMatch = candidate.getIdUserCandidatesMatchs()[i];
+		if(user.getId().compare(idUserCandidateMatch) == 0){
+			find = true;
+		}
+		i++;
+	}
+
+	if(find){
+		LOG(INFO) << "Hubo match entre los usuarios.";
+		bool putOk = this->userDao->putMatch(user, candidate);
+		if (putOk){
+			return StatusCodeMatch::OK_UPDATE_MATCH;
+		}
+
+		return StatusCodeMatch::ERROR_UPDATE_MATCH;
+	} else {
+		LOG(INFO) << "No hubo match entre los usuarios. Guardo el candidato.";
+		bool putOk = this->userDao->putCandidateMatch(user, candidate);
+		if (putOk){
+			return StatusCodeMatch::OK_UPDATE_CANDIDATE_MATCH;
+		}
+
+		return StatusCodeMatch::ERROR_UPDATE_CANDIDATE_MATCH;
+	}
 }
