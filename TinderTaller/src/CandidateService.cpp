@@ -32,7 +32,7 @@ search_candidate_t CandidateService::searchCandidate(string idUser){
 		return search_candidate;
 	}
 
-	//Actualizo limite diario
+	//Actualizo cantidad diaria
 	user = userDao->increaseQuantitySearchDaily(user);
 
 	//Obtengo todos los usuarios cargados localmente
@@ -108,6 +108,7 @@ vector<User> CandidateService::getUsersLeastVoted(vector<User> candidates){
 		if (quantity > 0){
 			quantity --;
 			candidatesExclude.push_back(candidatesExclude[i]);
+			LOG(DEBUG) << "Candidato que debo excluir por ser muy popular (CandidateService - getUsersLeastVoted): " << candidatesExclude[i].getId();
 		}
 	}
 
@@ -153,6 +154,7 @@ vector<User> CandidateService::getUsersNotMatch(User user, vector<User> candidat
 				string idUserMatch = candidate.getIdUserMatchs()[iMatch];
 				if (idUserMatch.compare(user.getId().c_str()) == 0){
 					match = true;
+					LOG(DEBUG) << "Candidato que se saca por tener ya un match con el usuario(CandidateService - getUsersNotMatch): " << idUserMatch;
 				}
 				iMatch++;
 			}
@@ -179,14 +181,17 @@ vector<User> CandidateService::getUsersNear(User user, vector<User> candidates){
 
 		double distanceLatitude = fabs(fabs(user.getLatitude()) - fabs(candidate.getLatitude()));
 		if (distanceLatitude > MAX_LATITUDE){
+			LOG(DEBUG) << "Este candidato se descarta por estar muy lejos (CandidateService - getUsersNear): " << candidate.getId();
 			continue;
 		}
 
 		double distanceLongitude = fabs(fabs(user.getLongitude()) - fabs(candidate.getLongitude()));
 		if (distanceLongitude > MAX_LONGITUDE){
+			LOG(DEBUG) << "Este candidato se descarta por estar muy lejos (CandidateService - getUsersNear): " << candidate.getId();
 			continue;
 		}
 
+		LOG(DEBUG) << "Este candidato esta cerca asi que se mantiene (CandidateService - getUsersNear): " << candidate.getId();
 		candidatesOk.push_back(candidate);
 	}
 
@@ -228,6 +233,7 @@ vector<User> CandidateService::getUsersCommonInterests(User user, vector<User> c
 		}
 
 		if (commonInterests){
+			LOG(DEBUG) << "Cantidad con el que se tiene algun interes en comun (CandidateService - getUsersCommonInterests): " << candidate.getId();
 			candidatesOk.push_back(candidate);
 		}
 	}
@@ -238,6 +244,8 @@ vector<User> CandidateService::getUsersCommonInterests(User user, vector<User> c
 
 StatusCodeMatch CandidateService::match(string idUser, string idUserMatch){
 	LOG(INFO) << "Actualizo listado de matchs (CandidateService - match).";
+	LOG(DEBUG) << "Match entre el usuario " << idUser << " y el usuario " << idUserMatch;
+
 	this->userDao->putMatch(idUser, idUserMatch);
 	return StatusCodeMatch::OK_UPDATE_MATCH;
 }

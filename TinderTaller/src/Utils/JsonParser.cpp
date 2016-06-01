@@ -133,7 +133,7 @@ std::string JsonParser::getCandidatesJson(vector<User> users){
 	Json::Value usersValue;
 
 	if(users.empty()){
-		root["users"] = "[]";
+		root["users"] = "";
 		return valueToString(root);
 	}
 
