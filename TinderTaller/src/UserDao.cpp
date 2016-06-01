@@ -20,11 +20,7 @@ User UserDao::getUser(string idUser){
 	this->dataBase->get(key);
 
 	string userInJsonShared = sharedClient.getUser(key.value).body;//TODO FALTA CONTROLAR EL STATUS DEL REQUEST
-
 	Json::Value responseJson = jsonParser.stringToValue(userInJsonShared);
-
-	cout<<"Usuario 1:" << jsonParser.valueToString(responseJson["user"]) << endl;
-
 	string user = jsonParser.valueToString(responseJson["user"]);
 
 	return buildUser(idUser, user);
@@ -34,11 +30,6 @@ User UserDao::buildUser(string idUser, string userInJsonShared){
 	User user;
 	user.setId(idUser);
 	user.setEmail(idUser);
-
-	//Id en el Shared
-	DBtuple key(idUser + "_id");
-	this->dataBase->get(key);
-	user.setIdShared(key.value);
 
 	//Gcm para el android
 	DBtuple keyGcm(idUser + "_gcmId");
@@ -91,6 +82,7 @@ User UserDao::buildUser(string idUser, string userInJsonShared){
 
 	//Obtengo el usuario del Shared
 	Json::Value responseJson = jsonParser.stringToValue(userInJsonShared);
+	user.setIdShared(jsonParser.getStringFromValue(responseJson, "id"));
 	user.setName(jsonParser.getStringFromValue(responseJson, "name"));
 	user.setAlias(jsonParser.getStringFromValue(responseJson, "alias"));
 	user.setSex(jsonParser.getStringFromValue(responseJson, "sex"));
@@ -99,8 +91,6 @@ User UserDao::buildUser(string idUser, string userInJsonShared){
 	user.setBirthday(age);
 
 	Json::Value interestsJson = responseJson["interests"];
-	cout << "Es un vector?:" << interestsJson.isArray() << endl;
-
 	vector<Interest> interests = jsonParser.getInterest(interestsJson);
 	user.setInterests(interests);
 	string latitude = jsonParser.getStringFromValue(responseJson["location"], "latitude");
@@ -172,7 +162,6 @@ User UserDao::putMatch(User user, string idUserMatch){
 
 	return user;
 }
-
 
 void UserDao::putMatch(string idUser, string idUserMatch){
 	DBtuple key(idUser + "_idUserMatchs");

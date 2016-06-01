@@ -17,6 +17,7 @@
 #include "UserDao.h"
 #include "SharedClient.h"
 #include "DataBase.h"
+#include "easylogging++.h"
 
 #define MAX_SEARCH_CANDIDATE  10  //TODO esto hay que sacarlo a una properties
 #define PERCENTAGE_LEAST_VOTED 10 //TODO esto hay que sacarlo a una properties

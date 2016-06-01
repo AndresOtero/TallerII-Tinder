@@ -124,7 +124,19 @@ vector<Interest> JsonParser::getInterest(Json::Value value){
 
 std::string JsonParser::getCandidatesJson(vector<User> users){
 	Json::Value root;
+
+	Json::Value metadataValue;
+	metadataValue["version"] = "0.1";//TODO ESTO DEBERIA DE ESTAR EN UNA PROPERTIES
+	metadataValue["count"] = (int)users.size();
+	root["metadata"] = metadataValue;
+
 	Json::Value usersValue;
+
+	if(users.empty()){
+		root["users"] = "[]";
+		return valueToString(root);
+	}
+
 	for (User user : users){
 		Json::Value userValue;
 		userValue["id"] = user.getIdShared();
@@ -153,14 +165,9 @@ std::string JsonParser::getCandidatesJson(vector<User> users){
 		usersValue.append(userValue);
 	}
 
-	Json::Value metadataValue;
-	metadataValue["version"] = "0.1";//TODO ESTO DEBERIA DE ESTAR EN UNA PROPERTIES
-	metadataValue["count"] = (int)users.size();
-
 	root["users"] = usersValue;
-	root["metadata"] = metadataValue;
 
-	return valueToString(root);;
+	return valueToString(root);
 }
 
 vector<string> JsonParser::getVectorFromValue(Json::Value value){

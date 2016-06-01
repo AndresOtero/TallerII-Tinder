@@ -18,11 +18,10 @@ HandlerMatch::HandlerMatch(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificat
 	this->candidateService = candidateServiceAux;
 }
 
-
 msg_t HandlerMatch::handlePost(struct http_message *hm){
 	/**Recibo el post de un match y devuelvo un Accepted en caso de exito.**/
 	msg_t msg;
-	LOG(INFO) << "Busco candidatos a match";
+	LOG(INFO) << "Se agrega un nuevo match (HandlerMatch - handlePost).";
 
 	string idEmail = getUser(hm);
 	string idEmailMatch = httpReqParser.getId(hm);
@@ -52,7 +51,7 @@ msg_t HandlerMatch::handlePost(struct http_message *hm){
 msg_t HandlerMatch::handleGet(struct http_message *hm){
 	/**Recibo el get de los candidatos a match y devuelvo un Ok en caso de exito.**/
 	msg_t msg;
-	LOG(INFO) << "Busco candidatos a match";
+	LOG(INFO) << "Busco candidatos a match (HandlerMatch - handleGet).";
 
 	string idEmail = getUser(hm);
 
@@ -66,7 +65,9 @@ msg_t HandlerMatch::handleGet(struct http_message *hm){
 			LOG(WARNING)<<"Excede limite diario de busqueda de candidatos.";
 			msg=this->badRequest("Excede limite diario de busqueda de candidatos.");
 		} else {
-			msg.change(OK,jsonParse.getCandidatesJson(searchCandidate.candidates));
+			string candidatesJson = jsonParse.getCandidatesJson(searchCandidate.candidates);
+			LOG(DEBUG) << "Candidatos a match: " << candidatesJson << endl;
+			msg.change(OK, candidatesJson);
 		}
 	}
 	else{
