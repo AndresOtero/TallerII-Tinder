@@ -84,10 +84,6 @@ print response
 print response.json()
 token= response.json()["token"]
 print token
-print "Debe fallar"
-url='http://localhost:8080/match/'
-response = requests.post(url,headers=auth, data=dataUserPut_json)
-print response
 #data_json=response
 auth={}	
 auth["Authorization"]=token
@@ -98,28 +94,11 @@ print "Borrar"
 url='http://localhost:8080/token/'
 response = requests.delete(url,headers=auth)
 print response
-print "Debe fallar"
-url='http://localhost:8080/match/'
-response = requests.post(url,headers=auth, data=dataUserPut_json)
-print response
 print 
 url='http://localhost:8080/token/'
 response = requests.post(url,data=token_json)
 auth["Authorization"]= response.json()["token"]
-print "Exito"
-url='http://localhost:8080/match/'
-response = requests.post(url,headers=auth, data=dataUserPut_json)
-print response
 
-print "\n MATCH"
-url='http://localhost:8080/match/'
-print url
-print "post"
-response = requests.post(url,headers=auth, data=dataUserPut_json)
-print response
-print "get"
-response = requests.get(url, headers=auth,data=dataUserPut_json)
-print response
 print "\n CHAT"
 url='http://localhost:8080/chat/'
 print url
