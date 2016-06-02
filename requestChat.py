@@ -15,7 +15,7 @@ def crear_usuarios():
 		foto = "photo"
 		ubicacion = {'latitude':-34.610510, 'longitude':-58.386391}
 		user = {'gcm_registration_id':"aaaaaaaaaa",'name':user,'password': "hashed",'interests':intereses,'location':ubicacion,'alias':user,'age':45,'sex':'H','photo_profile':foto,'email':mail}
-		urlGetUsers = 'http://192.168.0.200:8080/users/'
+		urlGetUsers = 'http://localhost:8080/users/'
 		metadata = {'version':"0.1"}
 		r['user'] = user
 		r['metadata'] = metadata
@@ -40,11 +40,11 @@ nuevo_mensaje={'To':'Ely@gmail.com','message':'Chau'}
 nuevo_mensaje_json=json.dumps(nuevo_mensaje)
 respuesta={'To':'Fede@gmail.com','message':'respuesta'}
 respuesta_json=json.dumps(respuesta)
-urlToken='http://192.168.0.200:8080/token/singin/'
-urlChat='http://192.168.0.200:8080/chat/'
-urlChat0='http://192.168.0.200:8080/chat/0-0/'
-urlChat1='http://192.168.0.200:8080/chat/1-10/'
-urlChat1_15='http://192.168.0.200:8080/chat/1-15/'
+urlToken='http://localhost:8080/token/singin/'
+urlChat='http://localhost:8080/chat/'
+urlChat0='http://localhost:8080/chat/0-0/'
+urlChat1='http://localhost:8080/chat/1-10/'
+urlChat1_15='http://localhost:8080/chat/1-15/'
 
 
 

@@ -33,10 +33,10 @@ interesNuevo['interest'] = intereses2
 interesNuevo['metadata'] = {'version':"0.1",'count': 1}
 
 
-urlGetUsers = 'http://192.168.0.200:8080/users/'
-urlGetUser = 'http://192.168.0.200:8080/users/'+mail+'/'
-urlDeleteUser = 'http://192.168.0.200:8080/users/'+mail +'/'
-urlPutPhoto = 'http://192.168.0.200:8080/users/'+mail+'/photo/'
+urlGetUsers = 'http://localhost:8080/users/'
+urlGetUser = 'http://localhost:8080/users/'+mail+'/'
+urlDeleteUser = 'http://localhost:8080/users/'+mail +'/'
+urlPutPhoto = 'http://localhost:8080/users/'+mail+'/photo/'
 
 dataUserPost_json = json.dumps(r)
 r={}
@@ -78,14 +78,14 @@ print "put"
 response = requests.put(urlPutPhoto, headers=auth, data=photo_json)
 print response
 print "\nTOKEN"
-url='http://192.168.0.200:8080/token/'
+url='http://localhost:8080/token/'
 response = requests.post(url,data=token_json)
 print response
 print response.json()
 token= response.json()["token"]
 print token
 print "Debe fallar"
-url='http://192.168.0.200:8080/match/'
+url='http://localhost:8080/match/'
 response = requests.post(url,headers=auth, data=dataUserPut_json)
 print response
 #data_json=response
@@ -95,24 +95,24 @@ print "Exito"
 response = requests.post(url,headers=auth, data=dataUserPut_json)
 print response
 print "Borrar"
-url='http://192.168.0.200:8080/token/'
+url='http://localhost:8080/token/'
 response = requests.delete(url,headers=auth)
 print response
 print "Debe fallar"
-url='http://192.168.0.200:8080/match/'
+url='http://localhost:8080/match/'
 response = requests.post(url,headers=auth, data=dataUserPut_json)
 print response
 print 
-url='http://192.168.0.200:8080/token/'
+url='http://localhost:8080/token/'
 response = requests.post(url,data=token_json)
 auth["Authorization"]= response.json()["token"]
 print "Exito"
-url='http://192.168.0.200:8080/match/'
+url='http://localhost:8080/match/'
 response = requests.post(url,headers=auth, data=dataUserPut_json)
 print response
 
 print "\n MATCH"
-url='http://192.168.0.200:8080/match/'
+url='http://localhost:8080/match/'
 print url
 print "post"
 response = requests.post(url,headers=auth, data=dataUserPut_json)
@@ -121,12 +121,12 @@ print "get"
 response = requests.get(url, headers=auth,data=dataUserPut_json)
 print response
 print "\n CHAT"
-url='http://192.168.0.200:8080/chat/'
+url='http://localhost:8080/chat/'
 print url
 print "post"
 response = requests.post(url, headers=auth,data=dataUserPut_json)
 print response
-url='http://192.168.0.200:8080/interests/'
+url='http://localhost:8080/interests/'
 print url
 print "get"
 response = requests.get(url, headers=auth)
@@ -138,10 +138,10 @@ response = requests.post(url, headers=auth,data=dataInterestPost_json)
 print response
 print "\n SINGIN"
 print "Borrar"
-url='http://192.168.0.200:8080/token/'
+url='http://localhost:8080/token/'
 response = requests.delete(url,headers=auth)
 print response
-url='http://192.168.0.200:8080/token/singin/'
+url='http://localhost:8080/token/singin/'
 print url
 print "post"
 print token_json
