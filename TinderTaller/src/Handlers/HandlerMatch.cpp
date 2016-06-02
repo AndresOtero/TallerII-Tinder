@@ -42,6 +42,9 @@ msg_t HandlerMatch::handlePost(struct http_message *hm){
 			msg=this->badRequest("{\"Mensaje\":\"Error informando match.\"}");
 		} else if(rdo == StatusCodeMatch::OK_UPDATE_CANDIDATE_MATCH){
 			msg.change(ACCEPTED, "{\"Mensaje\":\"Se almaceno correctamente el candidato a match seleccionado.\"}");
+		} else if(rdo == StatusCodeMatch::ERROR_MATCH_DUPLICATE){
+			LOG(WARNING)<<"Error match ya informado.";
+			msg=this->badRequest("{\"Mensaje\":\"Error match ya informado.\"}");
 		} else {
 			LOG(WARNING)<<"Error informando candidato a match";
 			msg=this->badRequest("{\"Mensaje\":\"Error informando candidato a match.\"}");

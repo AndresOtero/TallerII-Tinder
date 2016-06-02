@@ -29,6 +29,7 @@ private:
 	JsonParser jsonParser;
 	SharedClient sharedClient;
 	User buildUser(string idUser, string userInJsonShared);
+	string cleanString(string idUserCandidateMatch);
 public:
 	UserDao(shared_ptr<DataBase> dataBase);
 	virtual ~UserDao();

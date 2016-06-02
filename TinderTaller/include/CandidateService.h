@@ -27,7 +27,8 @@
 using namespace std;
 
 typedef enum StatusCodeMatch {
-	OK_SEARCH = 200, OK_UPDATE_MATCH = 201, ERROR_LIMIT_DAILY = 202, ERROR_UPDATE_MATCH = 203, OK_UPDATE_CANDIDATE_MATCH = 204, ERROR_UPDATE_CANDIDATE_MATCH = 205
+	OK_SEARCH = 200, OK_UPDATE_MATCH = 201, ERROR_LIMIT_DAILY = 202, ERROR_UPDATE_MATCH = 203, OK_UPDATE_CANDIDATE_MATCH = 204, ERROR_UPDATE_CANDIDATE_MATCH = 205,
+	ERROR_MATCH_DUPLICATE = 206
 } StatusCodeMatch;
 
 typedef struct search {
@@ -54,6 +55,7 @@ private:
 	vector<User> getUsersNotMatch(User user, vector<User> candidates);
 	vector<User> getUsersNear(User user, vector<User> candidates);
 	vector<User> getUsersCommonInterests(User user, vector<User> candidates);
+	string cleanString(string idUserCandidateMatch);
 public:
 	CandidateService(shared_ptr<DataBase> DB);
 	virtual ~CandidateService();

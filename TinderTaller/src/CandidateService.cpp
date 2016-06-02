@@ -74,10 +74,9 @@ vector<User> CandidateService::getUsersLeastVoted(vector<User> candidates){
 	double denominate = 100;
 
 	double div = (double)((quantityCandidates * percentage)/ denominate);
-	cout<< "(Cantidad * Porcentaje) / 100:" << div  << endl;
 	int quantity = round(div);
 
-	cout<< "quantity - para sacar:" << quantity  << endl;
+	LOG(DEBUG) << "Cantidad a sacar con mayor cantidad de matchs (CandidateService - getUsersLeastVoted):" << quantity;
 
 	if (quantity == 0){
 		LOG(DEBUG) << "Cantidad de candidatos con menos matchs que quedaron (CandidateService - getUsersLeastVoted): " << candidates.size();
@@ -158,6 +157,7 @@ vector<User> CandidateService::getUsersNotMatch(User user, vector<User> candidat
 			int iMatch = 0;
 			while (iMatch < candidate.getIdUserMatchs().size() && !match){
 				string idUserMatch = candidate.getIdUserMatchs()[iMatch];
+				idUserMatch = cleanString(idUserMatch);
 				if (idUserMatch.compare(user.getId().c_str()) == 0){
 					match = true;
 					LOG(DEBUG) << "Candidato que se saca por tener ya un match con el usuario(CandidateService - getUsersNotMatch): " << idUserMatch;
@@ -259,10 +259,28 @@ StatusCodeMatch CandidateService::match(string idUser, string idUserMatch){
 	int i = 0;
 	while(i < candidate.getIdUserCandidatesMatchs().size() && !find){
 		string idUserCandidateMatch = candidate.getIdUserCandidatesMatchs()[i];
+		idUserCandidateMatch = cleanString(idUserCandidateMatch);
 		if(user.getId().compare(idUserCandidateMatch) == 0){
 			find = true;
 		}
 		i++;
+	}
+
+	if(!find){
+		//Recorro que ya no sea un match
+		i = 0;
+		while(i < candidate.getIdUserMatchs().size() && !find){
+			string idUserMatch = candidate.getIdUserMatchs()[i];
+			idUserMatch = cleanString(idUserMatch);
+			if(user.getId().compare(idUserMatch) == 0){
+				find = true;
+			}
+			i++;
+		}
+
+		if (find){
+			return StatusCodeMatch::ERROR_MATCH_DUPLICATE;
+		}
 	}
 
 	if(find){
@@ -282,4 +300,20 @@ StatusCodeMatch CandidateService::match(string idUser, string idUserMatch){
 
 		return StatusCodeMatch::ERROR_UPDATE_CANDIDATE_MATCH;
 	}
+}
+
+string CandidateService::cleanString(string idUserCandidateMatch){
+	/*
+	 * Ejemplo de como viene:
+	 * Name : idUserCandidateMatch
+	 * Details:"\"RobertoM50.758326710562@gmail.com\"\n"
+	 *
+	 * Deberia de quedar:
+	 * Details:"RobertoM50.758326710562@gmail.com"
+	 */
+
+	int length = idUserCandidateMatch.size() - 3;
+	string idOk = idUserCandidateMatch.substr(1, length);
+
+	return idOk;
 }

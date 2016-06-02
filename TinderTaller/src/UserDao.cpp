@@ -143,6 +143,22 @@ User UserDao::increaseQuantitySearchDaily(User user){
 	return user;
 }
 
+string UserDao::cleanString(string idUserCandidateMatch){
+	/*
+	 * Ejemplo de como viene:
+	 * Name : idUserCandidateMatch
+	 * Details:"\"RobertoM50.758326710562@gmail.com\"\n"
+	 *
+	 * Deberia de quedar:
+	 * Details:"RobertoM50.758326710562@gmail.com"
+	 */
+
+	int length = idUserCandidateMatch.size() - 3;
+	string idOk = idUserCandidateMatch.substr(1, length);
+
+	return idOk;
+}
+
 bool UserDao::putMatch(User user, User userToMatch){
 	//Actualizo los matchs del usuario que invoco la peticion
 	Json::Value root;
@@ -175,7 +191,8 @@ bool UserDao::putMatch(User user, User userToMatch){
 	Json::Value rootUserCandidate;
 	Json::Value dataUserCandidate;
 	for(string id : userToMatch.getIdUserCandidatesMatchs()){
-		if(user.getId().compare(id) != 0){
+		id = cleanString(id);
+		if(user.getId().compare(id.c_str()) != 0){
 			dataUserCandidate.append(id);
 		}
 	}
