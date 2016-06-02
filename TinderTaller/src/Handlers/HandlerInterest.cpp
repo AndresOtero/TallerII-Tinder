@@ -16,9 +16,11 @@ HandlerInterest::HandlerInterest(shared_ptr<DataBase> DB,shared_ptr<TokenAuthent
 }
 
 msg_t HandlerInterest::handleGet(struct http_message *hm){
+	/**Busco todos los intereses del usuario**/
 	return this->sharedClient->getInterests();
 }
 msg_t HandlerInterest::handlePost(struct http_message *hm){
+	/**Creo un nuevo interes**/
 	string body=jsonParse.parseBody(hm->body.p);
 	return this->sharedClient->setInterests(body);
 }

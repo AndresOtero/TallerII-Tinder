@@ -48,6 +48,7 @@ msg_t HandlerUsers::handleGet(struct http_message * hm) {
 }
 
 bool HandlerUsers::userExists(struct http_message * hm){
+	/**Devuelve si el usuario del mensaje existe o no **/
 	string mail = jsonParse.getMail(hm->body.p);
 	DBtuple key(mail+"_id");
 	return DB->get(key);
@@ -216,6 +217,7 @@ msg_t HandlerUsers::handleDelete(struct http_message * hm) {
 	return msg;
 }
 msg_t HandlerUsers::handleMsg(struct http_message *hm){
+	/**Valida el token del mensaje excepto que sea un POST**/
 	if((httpReqParser.methodType(hm)!=POST)&&(!validateToken(hm))){
 		return unathorized();
 	}

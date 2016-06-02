@@ -11,9 +11,11 @@ JsonParser::JsonParser() {
 	/**Creo el parser de Json**/
 }
 bool JsonParser::isNullValue(Json::Value val) {
+	/**Devuelve true si el value es null**/
 	return val.isNull();
 }
 std::string JsonParser::parseBody(std::string body) {
+	/**Funcion sucia para parsear el body**/
 	std::queue <char> brackets;
 	int i;
 	for (i =0;i<body.size();i++){
@@ -45,6 +47,7 @@ Json::Value JsonParser::stringToValue(std::string jsonStr) {
 	return root;
 }
 std::string  JsonParser::valueToString(Json::Value value){
+	/****/
 	Json::FastWriter fastWriter;
 	return fastWriter.write(value);
 }

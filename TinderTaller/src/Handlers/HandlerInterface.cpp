@@ -12,6 +12,7 @@
  }
  **/
 msg_t HandlerInterface::handleMsg(struct http_message *hm){
+	/**Valida el token y luego manda el mensaje al handler**/
 	if(!validateToken(hm)){
 		return unathorized();
 	}
@@ -23,18 +24,22 @@ bool HandlerInterface::isHandler(struct http_message *hm) {
 }
 
 msg_t HandlerInterface::handlePost(struct http_message *hm){
+	/**Metodo que maneja el handle del post por definicion no esta permitido **/
 	return this->methodNotAllowed();
 }
 
 msg_t HandlerInterface::handleGet(struct http_message *hm){
+	/**Metodo que maneja el handle del get por definicion no esta permitido **/
 	return this->methodNotAllowed();
 }
 
 msg_t HandlerInterface::handlePut(struct http_message *hm){
+	/**Metodo que maneja el handle del put por definicion no esta permitido **/
 	return this->methodNotAllowed();
 }
 
 msg_t HandlerInterface::handleDelete(struct http_message *hm){
+	/**Metodo que maneja el handle delete por definicion no esta permitido **/
 	return this->methodNotAllowed();
 }
 
@@ -62,30 +67,36 @@ msg_t HandlerInterface::handle(struct http_message *hm) {
 	return msg;
 }
  bool HandlerInterface::validateToken(struct http_message *hm) {
+	 /**Valida el token del mensaje**/
 	string token =httpReqParser.getTokenFromHeader(hm);
 	return tokenAuthentificator->validateJsonToken(token);
 }
  bool HandlerInterface::deleteToken(struct http_message *hm) {
+	 /**Borra el token del mensaje**/
 	string token =httpReqParser.getTokenFromHeader(hm);
 	return tokenAuthentificator->deleteJsonTokenUser(token);
 }
  string HandlerInterface::getUser(struct http_message *hm){
+	 /**Devuelve el usuario que manda el mensaje**/
 		string token = httpReqParser.getTokenFromHeader(hm);
 		string user=tokenAuthentificator->getUserName(token);
 		return user;
  }
 
  msg_t HandlerInterface::unathorized() {
+	 /**Devuelve un mensaje con status no autorizado**/
 	 msg_t msg;
 	 msg.change(UNAUTHORIZED, json_example);
 	 return msg;
 }
  msg_t HandlerInterface::badRequest(string strMsg) {
+	 /**Devuelve un mensaje con status bad request**/
 	 msg_t msg;
 	 msg.change(BAD_REQUEST, strMsg);
 	 return msg;
 }
  msg_t HandlerInterface::methodNotAllowed() {
+	 /**Devuelve un mensaje con status de metodo no permitido**/
 	 msg_t msg;
 	 msg.change(BAD_REQUEST, "Method not allowed");
 	 return msg;

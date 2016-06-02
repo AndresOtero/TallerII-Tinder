@@ -21,6 +21,7 @@ HandlerChat::HandlerChat(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificator
 }
 
 bool HandlerChat::saveNewMessage(string chatId,string  remitente,string message) {
+	/**Recibe el mensaje el remitente y el chat id y lo guarda en Base de datos.**/
 	DBtuple getChat("chat_"+chatId);
 	DB->get(getChat);
 	Json::Value newMessage;
@@ -49,6 +50,7 @@ bool HandlerChat::saveNewMessage(string chatId,string  remitente,string message)
 }
 
 bool HandlerChat::saveNewChat(string chatId,string  remitente,string destinatario) {
+	/**Recibe el remitente , el chat id y el destinatario y guarda el chat en Base de datos.**/
 	DBtuple putChat("chat_"+chatId);
 	Json::Value newChat;
 	newChat["User1"]=remitente;
@@ -64,7 +66,7 @@ bool HandlerChat::saveNewChat(string chatId,string  remitente,string destinatari
 }
 
 msg_t HandlerChat::handlePost(struct http_message *hm) {
-	/**	Recibo el post de un mensaje y devuelvo un accepted si se realizo correctamente**/
+	/**	Recibo el post de un mensaje y devuelvo un Ok si se realizo correctamente**/
 	msg_t msg;
 	LOG(INFO) << "Obteniendo los datos para guardar el mensaje del chat.";
 	Json::Value bodyValue=jsonParse.stringToValue(hm->body.p);
@@ -85,6 +87,7 @@ msg_t HandlerChat::handlePost(struct http_message *hm) {
 }
 
 bool  HandlerChat::saveUserChatId(string user,string otherUser,string id){
+	/**Guarde el chat id de una nueva conversacion en la lista de chats del usuario**/
 	DBtuple getUserChatsId(user+"_chats");
 	DB->get(getUserChatsId);
 	Json::Value jsonUserChatsId=jsonParse.stringToValue(getUserChatsId.value);
@@ -95,6 +98,7 @@ bool  HandlerChat::saveUserChatId(string user,string otherUser,string id){
 }
 
 string HandlerChat::getChatId(string remitente,string destinatario){
+	/**Busca el chat id de la conversacion sino existe lo crea.**/
 	Json::Value chatsId=getChatsIdValueFromDestinatario(destinatario);
 	string id="";
 	for( Json::ValueIterator itr = chatsId.begin() ; itr != chatsId.end() ; itr++ ){
@@ -116,6 +120,7 @@ string HandlerChat::getChatId(string remitente,string destinatario){
 }
 
 Json::Value HandlerChat::getChatsIdValueFromDestinatario(string destinatario){
+	/**Busco la lista de chatsid del destinatario**/
 	DBtuple getChatsIds(destinatario+"_chats");
 	DB->get(getChatsIds);
 	Json::Value chats;
@@ -124,23 +129,28 @@ Json::Value HandlerChat::getChatsIdValueFromDestinatario(string destinatario){
 }
 
 Json::Value HandlerChat::getChatsIdValue(struct http_message *hm){
+	/**Busca la lista de chatsid del destinatario dado el hm**/
 	string user=this->getUser(hm);
 	return this->getChatsIdValueFromDestinatario(user);
 }
 
 vector<string> HandlerChat::getChatsId(struct http_message *hm){
+	/**Busca la lista de chatsid del destinatario dado el hm y devuelvo la lista de strings con los chatsId**/
 	Json::Value chatsIds=this->getChatsIdValue(hm);
 	vector<string> chatsIdVector=jsonParse.getKeyVectorFromValue(chatsIds);
 	return chatsIdVector;
 }
 
 vector<string> HandlerChat::getChatsIdFromDestinatario(string destinatario){
+	/**Busca la lista de chatsid del destinatario dado el hm y devuelvo la lista de strings con los chatsId**/
 	Json::Value chatsIds=this->getChatsIdValueFromDestinatario(destinatario);
 	vector<string> chatsIdVector=jsonParse.getKeyVectorFromValue(chatsIds);
 	return chatsIdVector;
 }
 
 string HandlerChat::getChatHeader(string user,string chatString){
+	/**Busca el chat header, devuelvo el header con el ultimo mensaje, con el ultimo mensajeId mandado ,
+	 * con la cantidad de mensajes sin leer y con el otro usario en la conversacion. **/
 	Json::Value chat=jsonParse.stringToValue(chatString);
 	Json::Value header;
 	if(chat["User1"].asString()==user){
@@ -157,6 +167,7 @@ string HandlerChat::getChatHeader(string user,string chatString){
 	return headerString;
 }
 msg_t HandlerChat::handleGetAll(struct http_message *hm){
+	/**Busca los headers de todos los mensajes de los usuarios.**/
 	msg_t msg;
 	Json::Value chats;
 	string  user=this->getUser(hm);
@@ -173,6 +184,8 @@ msg_t HandlerChat::handleGetAll(struct http_message *hm){
 	return msg;
 }
 string HandlerChat::readChat(string chatString,string user,string messageId,string conversationId){
+	/**Leo la CANT_MENSAJES desde mensajeId del chat desde la vista del usuario.Actualiza los estados con los
+	 * ultimos mensajes leidos en la conversacion.**/
 	Json::Value chat=jsonParse.stringToValue(chatString);
 	Json::Value lastsMessages;
 	int lastMessageRead;
@@ -211,6 +224,7 @@ string HandlerChat::readChat(string chatString,string user,string messageId,stri
 	return lastsMessagesString;
 }
 msg_t HandlerChat::handleGetChat(struct http_message *hm){
+	/**Maneja el get de un chat particular.**/
 	msg_t msg;
 	string ids=httpReqParser.getId(hm);
 	string conversation_id=ids.substr(0, ids.find("-"));
@@ -236,7 +250,7 @@ msg_t HandlerChat::handleGetChat(struct http_message *hm){
 }
 
 msg_t HandlerChat::handleGet(struct http_message *hm) {
-	/**	Recibo el post de un mensaje y devuelvo un accepted si se realizo correctamente**/
+	/**	Recibo el get de un mensaje y devuelvo un accepted si se realizo correctamente**/
 	msg_t msg;
 	LOG(INFO) << "Obteniendo los datos para devolver el mensaje.";
 	string id=httpReqParser.getId(hm);

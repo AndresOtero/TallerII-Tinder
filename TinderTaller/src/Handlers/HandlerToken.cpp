@@ -15,6 +15,7 @@ HandlerToken::HandlerToken(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificat
 	this->sharedClient= sharedClient;
 }
 msg_t HandlerToken::handleMsg(struct http_message *hm){
+	/**Valida el token del mensaje excepto que sea un POST**/
 	if((httpReqParser.methodType(hm)!=POST)&&(!validateToken(hm))){
 		return unathorized();
 	}
@@ -23,7 +24,6 @@ msg_t HandlerToken::handleMsg(struct http_message *hm){
 
 msg_t HandlerToken::handlePost(struct http_message *hm) {
 	/**	Recibo el post de un mensaje y devuelvo un accepted si se realizo correctamente**/
-
 	msg_t msg;
 	Json::Value val = jsonParse.stringToValue(hm->body.p);
 	string mail = jsonParse.getMail(hm->body.p);
