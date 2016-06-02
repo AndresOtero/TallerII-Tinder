@@ -7,9 +7,9 @@
 
 #include "CandidateService.h"
 
-CandidateService::CandidateService() {
-	// TODO Auto-generated constructor stub
-
+CandidateService::CandidateService(shared_ptr<DataBase> DB) {
+	shared_ptr<UserDao> userDaoAux(new UserDao(DB));
+	userDao = userDaoAux;
 }
 
 CandidateService::~CandidateService() {
@@ -17,11 +17,12 @@ CandidateService::~CandidateService() {
 }
 
 search_candidate_t CandidateService::searchCandidate(string idUser){
+	LOG(INFO) << "Comienzo a buscar candidatos a match (CandidateService - searchCandidate).";
 	search_candidate_t search_candidate;
 	vector<User> candidates;
 
 	//Obtengo el usuario asociado a este id
-	User user = userDao.getUser(idUser);
+	User user = userDao->getUser(idUser);
 
 	//Verifico limite diario
 	if (user.getQuantitySearchDaily() >= MAX_SEARCH_CANDIDATE){
@@ -31,11 +32,13 @@ search_candidate_t CandidateService::searchCandidate(string idUser){
 		return search_candidate;
 	}
 
-	//Actualizo limite diario
-	user = userDao.increaseQuantitySearchDaily(user);
+	//Actualizo cantidad diaria
+	user = userDao->increaseQuantitySearchDaily(user);
 
 	//Obtengo todos los usuarios cargados localmente
-	candidates = userDao.getUsers();
+	candidates = userDao->getCandidatesForIdUser(idUser);
+
+	LOG(DEBUG) << "Cantidad de candidatos inicial (CandidateService - searchCandidate): " << candidates.size();
 
 	//Me quedo con el XX% menos votados
 	candidates = getUsersLeastVoted(candidates);
@@ -51,50 +54,87 @@ search_candidate_t CandidateService::searchCandidate(string idUser){
 
 	search_candidate.change(OK_SEARCH, candidates);
 
+	LOG(INFO) << "Fin de busqueda de candidatos a match (CandidateService - searchCandidate).";
 	return search_candidate;
-}
-
-/*struct less_than_qualityMatch {
-	bool operator() (const User & user1, const User & user2){
-		return (user1.getQuantityMatchs() < user2.getQuantityMatchs());
-	}
-};*/
-
-
-bool less_than_qualityMatch (User & user1, User & user2){
-	return (user1.getIdUserMatchs().size() < user2.getIdUserMatchs().size());
 }
 
 vector<User> CandidateService::getUsersLeastVoted(vector<User> candidates){
 	/*
 	 * Me quedo con el XX% menos votados
 	 * Ejemplo:
-	 * 		Tengo 200 usuarios
+	 * 		Tengo 200 usuarios que tienen algun match hecho
 	 * 		Porcentaje de mas votados a descartar = 1%
 	 * 		Entonces se tiene que 200 * 1% = 2 usuarios
 	 * 		Por lo tanto, se van a dejar afuera los 2 usuarios con mas matchs.
 	 */
+	LOG(DEBUG) << "Se van a sacar los candidatos con mayor cantidad de matchs (CandidateService - getUsersLeastVoted).";
 
-	int quantity = round((candidates.size() * PERCENTAGE_LEAST_VOTED) / 100);
+	double quantityCandidates = candidates.size();
+	double percentage = PERCENTAGE_LEAST_VOTED;
+	double denominate = 100;
+
+	double div = (double)((quantityCandidates * percentage)/ denominate);
+	cout<< "(Cantidad * Porcentaje) / 100:" << div  << endl;
+	int quantity = round(div);
+
+	cout<< "quantity - para sacar:" << quantity  << endl;
 
 	if (quantity == 0){
+		LOG(DEBUG) << "Cantidad de candidatos con menos matchs que quedaron (CandidateService - getUsersLeastVoted): " << candidates.size();
 		return candidates;
 	}
 
-	//sort(candidates.begin(), candidates.end(), less_than_qualityMatch);
-
-	vector<User> candidatesOk;
-	vector<User>::const_reverse_iterator sit (candidates.rbegin()), send(candidates.rend());
-
-	for (; sit != send; ++sit){
-		if (quantity > 0){
-			quantity --;
-		} else {
-			//Me quedo con los candidatos con menos matchs
-			candidatesOk.push_back(*sit);
+	//Verifico los usuarios que tienen algun match
+	vector<User> candidatesWithMatch;
+	for(User candidate : candidates){
+		if (!candidate.getIdUserMatchs().empty()){
+			candidatesWithMatch.push_back(candidate);
 		}
 	}
 
+	if (candidatesWithMatch.empty()){
+		LOG(DEBUG) << "Cantidad de candidatos con menos matchs que quedaron (CandidateService - getUsersLeastVoted): " << candidates.size();
+		return candidates;
+	}
+
+	sort(candidatesWithMatch.begin(), candidatesWithMatch.end());
+
+	/*
+	 * Me quedo con los candidatos que deberia de eliminar de la lista de
+	 * candidatos ok, que serian los que mas matchs tienen.
+	 */
+	vector<User> candidatesExclude;
+	int i = (candidatesWithMatch.size() - 1);
+	while (i >=0 && quantity > 0){
+		quantity --;
+		candidatesExclude.push_back(candidatesWithMatch[i]);
+		LOG(DEBUG) << "Candidato que debo excluir por ser muy popular (CandidateService - getUsersLeastVoted): " << candidatesWithMatch[i].getId();
+		i--;
+	}
+
+	/*
+	 * Limpio la lista de candidatos: me quedo efectivamente con los que menos matchs tienen.
+	 */
+	vector<User> candidatesOk;
+	for (int i = 0; i < candidates.size(); i++){
+		User candidate = candidates[i];
+		int iExcl = 0;
+		bool find = false;
+		while (iExcl < candidatesExclude.size() && !find){
+			User candidateExcl = candidatesExclude[iExcl];
+			if(candidateExcl.getId().compare(candidate.getId().c_str()) == 0){
+				find = true;
+			}
+			iExcl++;
+		}
+
+		if(!find){
+			//Me quedo con los candidatos con menos matchs
+			candidatesOk.push_back(candidate);
+		}
+	}
+
+	LOG(DEBUG) << "Cantidad de candidatos con menos matchs que quedaron (CandidateService - getUsersLeastVoted): " << candidatesOk.size();
 	return candidatesOk;
 }
 
@@ -102,17 +142,27 @@ vector<User> CandidateService::getUsersNotMatch(User user, vector<User> candidat
 	/*
 	 * Saco los que tuvieron un match en comun.
 	 */
+	LOG(DEBUG) << "Se van a sacar los candidatos con los que ya tuvo match (CandidateService - getUsersNotMatch).";
+
+	if(user.getIdUserMatchs().empty()){
+		LOG(DEBUG) << "Cantidad de candidatos con los que no tuvo match (CandidateService - getUsersNotMatch): 0";
+		return candidates;
+	}
+
 	vector<User> candidatesOk;
 
 	for(int i = 0; i < candidates.size(); i++){
 		User candidate = candidates[i];
-		vector<string>::const_iterator vMatchIt(candidate.getIdUserMatchs().begin()), vMatchEnd(candidate.getIdUserMatchs().end());
 		bool match = false;
-		for (; vMatchIt != vMatchEnd; ++vMatchIt){
-			string idUserMatch = *vMatchIt;
-			if (idUserMatch.compare(user.getId().c_str()) == 0){
-				match = true;
-				break;
+		if (!candidate.getIdUserMatchs().empty()){
+			int iMatch = 0;
+			while (iMatch < candidate.getIdUserMatchs().size() && !match){
+				string idUserMatch = candidate.getIdUserMatchs()[iMatch];
+				if (idUserMatch.compare(user.getId().c_str()) == 0){
+					match = true;
+					LOG(DEBUG) << "Candidato que se saca por tener ya un match con el usuario(CandidateService - getUsersNotMatch): " << idUserMatch;
+				}
+				iMatch++;
 			}
 		}
 
@@ -121,6 +171,7 @@ vector<User> CandidateService::getUsersNotMatch(User user, vector<User> candidat
 		}
 	}
 
+	LOG(DEBUG) << "Cantidad de candidatos con los que no tuvo match (CandidateService - getUsersNotMatch):" << candidatesOk.size();
 	return candidatesOk;
 }
 
@@ -128,26 +179,29 @@ vector<User> CandidateService::getUsersNear(User user, vector<User> candidates){
 	/*
 	 * Filtro por cercania. Me quedo con los que estan mas cerca.
 	 */
-
+	LOG(DEBUG) << "Se van a dejar los candidatos que se encuentren mas cerca (CandidateService - getUsersNear).";
 	vector<User> candidatesOk;
-	vector<User>::const_iterator vit(candidates.begin()), vend(candidates.end());
 
-	for(; vit != vend; ++vit){
-		User candidate = *vit;
+	for(int iCand = 0; iCand < candidates.size(); iCand++){
+		User candidate = candidates[iCand];
 
 		double distanceLatitude = fabs(fabs(user.getLatitude()) - fabs(candidate.getLatitude()));
 		if (distanceLatitude > MAX_LATITUDE){
+			LOG(DEBUG) << "Este candidato se descarta por estar muy lejos (CandidateService - getUsersNear): " << candidate.getId();
 			continue;
 		}
 
 		double distanceLongitude = fabs(fabs(user.getLongitude()) - fabs(candidate.getLongitude()));
 		if (distanceLongitude > MAX_LONGITUDE){
+			LOG(DEBUG) << "Este candidato se descarta por estar muy lejos (CandidateService - getUsersNear): " << candidate.getId();
 			continue;
 		}
 
+		LOG(DEBUG) << "Este candidato esta cerca asi que se mantiene (CandidateService - getUsersNear): " << candidate.getId();
 		candidatesOk.push_back(candidate);
 	}
 
+	LOG(DEBUG) << "Cantidad de candidatos mas cerca (CandidateService - getUsersNear): " << candidatesOk.size();
 	return candidatesOk;
 }
 
@@ -155,29 +209,21 @@ vector<User> CandidateService::getUsersCommonInterests(User user, vector<User> c
 	/*
 	 * Me quedo con los que tengan algun interes en comun.
 	 */
+	LOG(DEBUG) << "Se van a dejar los candidatos con los que tenga algun interes en comun (CandidateService - getUsersCommonInterests).";
 	vector<User> candidatesOk;
-	vector<User>::const_iterator vit(candidates.begin()), vend(candidates.end());
-
-	msg_t msgUser = sharedClient.getUser(user.getIdShared());
-	vector<Interest> userInterests = jsonUtils.getInterestsJsonToObject(msgUser.body);//TODO FALTA CONTROLAR EL STATUS DEL REQUEST
 
 	//Recorro los candidatos
-	for(; vit != vend; ++vit){
-		User candidate = *vit;
-		msg_t msgCandidate = sharedClient.getUser(candidate.getIdShared());
-		vector<Interest> candidateInterests = jsonUtils.getInterestsJsonToObject(msgCandidate.body);//TODO FALTA CONTROLAR EL STATUS DEL REQUEST
+	for(int icand = 0; icand < candidates.size(); icand++){
+		User candidate = candidates[icand];
 		bool commonInterests = false;
 
 		//Voy a recorrer los intereses del usuario
-		vector<Interest>::const_iterator vUserInterestIt(userInterests.begin()) , vUserInterestEnd(userInterests.end());
-		for(; vUserInterestIt != vUserInterestEnd; ++vUserInterestIt){
-			Interest userInterest = *vUserInterestIt;
+		for(int iUseInt = 0; iUseInt < user.getInterests().size(); iUseInt ++){
+			Interest userInterest = user.getInterests()[iUseInt];
 
 			//Voy a recorrer los intereses del candidato en busca de coincidencias
-			vector<Interest>::const_iterator vCandidateInterestIt(candidateInterests.begin()) ,
-					vCandidateInterestEnd(candidateInterests.end());
-			for(; vCandidateInterestIt != vCandidateInterestEnd; ++vCandidateInterestIt){
-				Interest candidateInterest = *vCandidateInterestIt;
+			for(int iCandInt = 0; iCandInt < candidate.getInterests().size(); iCandInt ++){
+				Interest candidateInterest = candidate.getInterests()[iCandInt];
 
 				if (userInterest.getCategory().compare(candidateInterest.getCategory().c_str()) == 0
 						&& userInterest.getValue().compare(candidateInterest.getValue().c_str()) == 0){
@@ -193,9 +239,47 @@ vector<User> CandidateService::getUsersCommonInterests(User user, vector<User> c
 		}
 
 		if (commonInterests){
+			LOG(DEBUG) << "Cantidad con el que se tiene algun interes en comun (CandidateService - getUsersCommonInterests): " << candidate.getId();
 			candidatesOk.push_back(candidate);
 		}
 	}
 
+	LOG(DEBUG) << "Cantidad de candidatos con los que tiene algun interes en comun (CandidateService - getUsersCommonInterests): " << candidatesOk.size();
 	return candidatesOk;
+}
+
+StatusCodeMatch CandidateService::match(string idUser, string idUserMatch){
+	LOG(INFO) << "Busco match entre el usuario " << idUser << " y el usuario " << idUserMatch << " (CandidateService - match).";
+
+	User user = this->userDao->getUser(idUser);
+	User candidate = this->userDao->getUser(idUserMatch);
+
+	//Recorro los candidatos a match del candidato en busca de coincidencia
+	bool find = false;
+	int i = 0;
+	while(i < candidate.getIdUserCandidatesMatchs().size() && !find){
+		string idUserCandidateMatch = candidate.getIdUserCandidatesMatchs()[i];
+		if(user.getId().compare(idUserCandidateMatch) == 0){
+			find = true;
+		}
+		i++;
+	}
+
+	if(find){
+		LOG(INFO) << "Hubo match entre los usuarios.";
+		bool putOk = this->userDao->putMatch(user, candidate);
+		if (putOk){
+			return StatusCodeMatch::OK_UPDATE_MATCH;
+		}
+
+		return StatusCodeMatch::ERROR_UPDATE_MATCH;
+	} else {
+		LOG(INFO) << "No hubo match entre los usuarios. Guardo el candidato.";
+		bool putOk = this->userDao->putCandidateMatch(user, candidate);
+		if (putOk){
+			return StatusCodeMatch::OK_UPDATE_CANDIDATE_MATCH;
+		}
+
+		return StatusCodeMatch::ERROR_UPDATE_CANDIDATE_MATCH;
+	}
 }

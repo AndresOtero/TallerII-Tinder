@@ -8,8 +8,14 @@
 #include <iostream>
 #include "easylogging++.h"
 #include <queue>
+#include "Interest.h"
+#include <vector>
+#include <string>
+#include "User.h"
 #ifndef SRC_JSONPARSER_H_
 #define SRC_JSONPARSER_H_
+
+using namespace std;
 
 class JsonParser {
 	public:
@@ -29,6 +35,9 @@ class JsonParser {
 		std::vector<std::string> getKeyVectorFromValue(Json::Value value);
 		virtual ~JsonParser();
 		std::string removeMember(Json::Value val, std::string valRemove);
+		vector<Interest> getInterest(Json::Value value);
+		std::string getCandidatesJson(vector<User> users);
+		vector<string> getVectorFromValue(Json::Value value);
 };
 
 #endif /* SRC_JSONPARSER_H_ */

@@ -111,3 +111,75 @@ JsonParser::~JsonParser() {
 	/**Destruyo el parser de Json**/
 }
 
+vector<Interest> JsonParser::getInterest(Json::Value value){
+	vector<Interest> interests;
+	for( Json::ValueIterator itr = value.begin() ; itr != value.end() ; itr++ ){
+		Json::Value & interestJson = *itr;
+		Interest interest;
+		interest.setCategory(interestJson["category"].asString());
+		interest.setValue(interestJson["value"].asString());
+
+		interests.push_back(interest);
+	}
+
+	return interests;
+}
+
+std::string JsonParser::getCandidatesJson(vector<User> users){
+	Json::Value root;
+
+	Json::Value metadataValue;
+	metadataValue["version"] = "0.1";//TODO ESTO DEBERIA DE ESTAR EN UNA PROPERTIES
+	metadataValue["count"] = (int)users.size();
+	root["metadata"] = metadataValue;
+
+	Json::Value usersValue;
+
+	if(users.empty()){
+		root["users"] = "";
+		return valueToString(root);
+	}
+
+	for (User user : users){
+		Json::Value userValue;
+		userValue["id"] = user.getIdShared();
+		userValue["name"] = user.getName();
+		userValue["alias"] = user.getAlias();
+		userValue["email"] = user.getEmail();
+		userValue["sex"] = user.getSex();
+		userValue["age"] = user.getBirthday();
+		userValue["photo_profile"] = user.getUrlPhotoProfile();
+
+		Json::Value interestsValue;
+		for (Interest interest : user.getInterests()){
+			Json::Value interestValue;
+			interestValue["category"] = interest.getCategory();
+			interestValue["value"] = interest.getValue();
+
+			interestsValue.append(interestValue);
+		}
+		userValue["interests"] = interestsValue;
+
+		Json::Value locationValue;
+		locationValue["latitude"] = user.getLatitude();
+		locationValue["longitude"] = user.getLongitude();
+		userValue["location"] = locationValue;
+
+		usersValue.append(userValue);
+	}
+
+	root["users"] = usersValue;
+
+	return valueToString(root);
+}
+
+vector<string> JsonParser::getVectorFromValue(Json::Value value){
+	vector<string> data;
+	for( Json::ValueIterator itr = value.begin() ; itr != value.end() ; itr++ ){
+		Json::Value & dataJson = *itr;
+
+		data.push_back(valueToString(dataJson));
+	}
+
+	return data;
+}

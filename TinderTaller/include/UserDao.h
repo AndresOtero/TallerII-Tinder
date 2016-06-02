@@ -11,9 +11,11 @@
 #include <string>
 #include <vector>
 #include "DataBase.h"
-#include "JsonUtils.h"
 #include "TimeUtils.h"
 #include "User.h"
+#include "JsonParser.h"
+#include "SharedClient.h"
+#include "Interest.h"
 
 #define DIFERENCE_TIME  24
 using namespace std;
@@ -22,16 +24,20 @@ class UserDao {
 private:
 	//shared_ptr<DataBase> dataBase(new DataBase("./DBServer/", true, false));
 	//shared_ptr<DataBase> dataBase;
-	DataBase * dataBase;
-	JsonUtils jsonUtils;
+	shared_ptr<DataBase> dataBase;
 	TimeUtils timeUtils;
+	JsonParser jsonParser;
+	SharedClient sharedClient;
+	User buildUser(string idUser, string userInJsonShared);
 public:
-	UserDao();
+	UserDao(shared_ptr<DataBase> dataBase);
 	virtual ~UserDao();
 	User getUser(string idUser);
 	vector<User> getUsers();
 	User increaseQuantitySearchDaily(User user);
-	User increaseQuantityMatchs(User user, string idUserMatch);
+	vector<User> getCandidatesForIdUser(string idUser);
+	bool putMatch(User user, User userToMatch);
+	bool putCandidateMatch(User user, User userToMatch);
 };
 
 #endif /* DAOS_USERDAO_H_ */

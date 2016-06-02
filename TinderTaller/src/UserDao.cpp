@@ -7,128 +7,123 @@
 
 #include "UserDao.h"
 
-UserDao::UserDao() {
-	// TODO Auto-generated constructor stub
-	//this->dataBase(new DataBase("./DBServer/", true, false));
-	this->dataBase = new DataBase("./DBServer/", true, false);
+UserDao::UserDao(shared_ptr<DataBase> dataBase) {
+	this->dataBase = dataBase;
 }
 
 UserDao::~UserDao() {
-	// TODO Auto-generated destructor stub
-
-	delete this->dataBase;
-}
-
-User getUserMock(){
-	//TODO ESTO BORRARLO CUANDO ESTE TODO OK
-	User user;
-	user.setId("email1@gmail.com_1");
-	user.setIdShared("1");
-	user.setEmail("email1@gmail.com");
-	user.setPassword("1234");
-	user.setGcmRegistrationId("1asadsdasdasd");
-	user.setQuantitySearchDaily(1);
-	user.setDateLastUpdateSearch("20160502");
-
-	vector<string> idUserMatchs;
-	idUserMatchs.push_back("email2@gmail.com_2");
-	idUserMatchs.push_back("email3@gmail.com_3");
-	idUserMatchs.push_back("email4@gmail.com_4");
-	idUserMatchs.push_back("email5@gmail.com_5");
-
-	user.setIdUserMatchs(idUserMatchs);
-	user.setLatitude(1);
-	user.setLongitude(3);
-
-	return user;
 }
 
 User UserDao::getUser(string idUser){
-	// TODO MOCK - BORRARLO desde aca!
-	if (true){
-		return getUserMock();
-	}
-	// TODO MOCK - BORRARLO hasta aca!
-
-	DBtuple key(idUser);
+	//Id en el Shared
+	DBtuple key(idUser + "_id");
 	this->dataBase->get(key);
 
-	User user = jsonUtils.getUserJsonToObject(idUser, key.value);
+	string userInJsonShared = sharedClient.getUser(key.value).body;//TODO FALTA CONTROLAR EL STATUS DEL REQUEST
+	Json::Value responseJson = jsonParser.stringToValue(userInJsonShared);
+	string user = jsonParser.valueToString(responseJson["user"]);
 
-	if (!user.getDateLastUpdateSearch().empty()){
+	return buildUser(idUser, user);
+}
+
+User UserDao::buildUser(string idUser, string userInJsonShared){
+	User user;
+	user.setId(idUser);
+	user.setEmail(idUser);
+
+	//Gcm para el android
+	DBtuple keyGcm(idUser + "_gcmId");
+	this->dataBase->get(keyGcm);
+	user.setGcmRegistrationId(keyGcm.value);
+
+	//Password en el Shared
+	DBtuple keyPass(idUser + "_pass");
+	this->dataBase->get(keyPass);
+	user.setPassword(keyPass.value);
+
+	//QuantitySearchDaily - Cantidad de busquedas diarias
+	DBtuple keyQuantitySearchDaily(idUser + "_quantitySearchDaily");
+	this->dataBase->get(keyQuantitySearchDaily);
+	int quantity = 0;
+	if (!keyQuantitySearchDaily.value.empty()){
+		quantity = atoi(keyQuantitySearchDaily.value.c_str());
+	}
+	user.setQuantitySearchDaily(quantity);
+
+	//DateLastUpdateSearch - Fecha de la ultima busqueda realizada
+	user.setDateLastUpdateSearch("");
+	DBtuple keyDateLastUpdateSearch(idUser + "_dateLastUpdateSearch");
+	this->dataBase->get(keyDateLastUpdateSearch);
+
+	if (!keyDateLastUpdateSearch.value.empty()){
 		//Verifico si tengo que actualizar la cantidad de busquedas de candidatos diarias.
 		double dif = timeUtils.stringtoTimeDifferencefromNow(user.getDateLastUpdateSearch());
 		//TODO PREGUNTARLE A ANDY SI VIENE EN HORAS, MIN O SEGUNDOS O LO Q SEA
 		if (dif > DIFERENCE_TIME){
 			user.setQuantitySearchDaily(0);
-			user.setDateLastUpdateSearch("");
+			keyQuantitySearchDaily.value = "0";
+			this->dataBase->put(keyQuantitySearchDaily);
 
-			key.value = jsonUtils.getUserObjectToJson(user);
-			this->dataBase->put(key);
+			user.setDateLastUpdateSearch("");
+			keyDateLastUpdateSearch.value = user.getDateLastUpdateSearch();
+			this->dataBase->put(keyDateLastUpdateSearch);
+		} else {
+			//Cargo lo que haya
+			user.setDateLastUpdateSearch(keyDateLastUpdateSearch.value);
 		}
 	}
+
+	//IdUserMatchs - Ids de los usuarios con los cuales hubo match
+	DBtuple keyIdUserMatchs(idUser + "_idUserMatchs");
+	this->dataBase->get(keyIdUserMatchs);
+	Json::Value idsJson = jsonParser.stringToValue(keyIdUserMatchs.value);
+	vector<string> idUserMatchs = jsonParser.getVectorFromValue(idsJson["idUserMatchs"]);
+	user.setIdUserMatchs(idUserMatchs);
+
+	//IdUserMatchs - Ids de los usuarios con los cuales se espera tener match (candidatos seleccionados)
+	DBtuple keyIdUserCandidatesMatchs(idUser + "_idUserCandidatesMatchs");
+	this->dataBase->get(keyIdUserCandidatesMatchs);
+	Json::Value idsCandidatesJson = jsonParser.stringToValue(keyIdUserCandidatesMatchs.value);
+	vector<string> idUserCandidatesMatchs = jsonParser.getVectorFromValue(idsCandidatesJson["idUserCandidatesMatchs"]);
+	user.setIdUserCandidatesMatchs(idUserCandidatesMatchs);
+
+	//Obtengo el usuario del Shared
+	Json::Value responseJson = jsonParser.stringToValue(userInJsonShared);
+	user.setIdShared(jsonParser.getStringFromValue(responseJson, "id"));
+	user.setName(jsonParser.getStringFromValue(responseJson, "name"));
+	user.setAlias(jsonParser.getStringFromValue(responseJson, "alias"));
+	user.setSex(jsonParser.getStringFromValue(responseJson, "sex"));
+	user.setUrlPhotoProfile(jsonParser.getStringFromValue(responseJson, "photo_profile"));
+	int age = atoi(jsonParser.getStringFromValue(responseJson, "age").c_str());
+	user.setBirthday(age);
+
+	Json::Value interestsJson = responseJson["interests"];
+	vector<Interest> interests = jsonParser.getInterest(interestsJson);
+	user.setInterests(interests);
+	string latitude = jsonParser.getStringFromValue(responseJson["location"], "latitude");
+	user.setLatitude(atof(latitude.c_str()));
+	string longitude = jsonParser.getStringFromValue(responseJson["location"], "longitude");
+	user.setLongitude(atof(longitude.c_str()));
 
 	return user;
 }
 
-vector<User> getUsersMock(){
-	//TODO ESTO BORRARLO CUANDO ESTE TODO OK
+vector<User> UserDao::getUsers(){
 	vector<User> users;
-	User user2;
-	user2.setId("email2@gmail.com_2");
-	user2.setIdShared("2");
-	user2.setEmail("email2@gmail.com");
-	user2.setPassword("1234");
-	user2.setGcmRegistrationId("2asadsdasdasd");
-	user2.setQuantitySearchDaily(2);
-	user2.setDateLastUpdateSearch("20160502");
+	string responseInJsonShared = sharedClient.getUsers().body;//TODO FALTA CONTROLAR EL STATUS DEL REQUEST
+	Json::Value usersInJsonShared = jsonParser.stringToValue(responseInJsonShared);
 
-	vector<string> idUserMatchs;
-	user2.setIdUserMatchs(idUserMatchs);
+	vector<string> usersJson = jsonParser.getVectorFromValue(usersInJsonShared["users"]);
 
-	user2.setLatitude(20);
-	user2.setLongitude(3);
+	for( string userJson : usersJson ){
+		Json::Value valueUser = jsonParser.stringToValue(userJson);
+		string idEmail = jsonParser.getStringFromValue(valueUser, "email");
+		User user = buildUser(idEmail, userJson);
 
-	users.push_back(user2);
-
-	User user3;
-	user3.setId("email3@gmail.com_3");
-	user3.setIdShared("3");
-	user3.setEmail("email3@gmail.com");
-	user3.setPassword("1234");
-	user3.setGcmRegistrationId("3asadsdasdasd");
-	user3.setQuantitySearchDaily(10);
-	user3.setDateLastUpdateSearch("20160502");
-
-	vector<string> idUserMatchs3;
-	idUserMatchs3.push_back("email1@gmail.com_1");
-	idUserMatchs3.push_back("email4@gmail.com_4");
-	idUserMatchs3.push_back("email5@gmail.com_5");
-	user3.setIdUserMatchs(idUserMatchs3);
-
-	user3.setLatitude(5);
-	user3.setLongitude(6);
-
-	users.push_back(user3);
+		users.push_back(user);
+	}
 
 	return users;
-}
-
-
-vector<User> UserDao::getUsers(){
-	// TODO MOCK - BORRARLO desde aca!
-	if (true){
-		return getUsersMock();
-	}
-	// TODO MOCK - BORRARLO hasta aca!
-
-
-	DBtuple key("users");
-	this->dataBase->get(key);
-
-	//TODO VER SI TENGO Q ACTUALIZAR LA CANTIDAD DE BUSQUEDAS DIARIAS TB O NO. CREO Q NO HACE FALTA
-
-	return jsonUtils.getUsersJsonToObject(key.value);
 }
 
 User UserDao::increaseQuantitySearchDaily(User user){
@@ -137,33 +132,94 @@ User UserDao::increaseQuantitySearchDaily(User user){
 	user.setQuantitySearchDaily(quantitySearchDaily);
 	user.setDateLastUpdateSearch(timeUtils.timeToString());
 
-	// TODO MOCK - BORRARLO desde aca!
-	if (true){
-		return user;
-	}
-	// TODO MOCK - BORRARLO hasta aca!
+	stringstream numeroCadena;
+	numeroCadena << user.getQuantitySearchDaily();
+	DBtuple keyQuantitySearchDaily(user.getId() + "_quantitySearchDaily", numeroCadena.str());
+	this->dataBase->put(keyQuantitySearchDaily);
 
-	string userJson = jsonUtils.getUserObjectToJson(user);
-	DBtuple key(user.getId(), userJson);
-	this->dataBase->put(key);
+	DBtuple keyDateLastUpdateSearch(user.getId() + "_dateLastUpdateSearch", user.getDateLastUpdateSearch());
+	this->dataBase->put(keyDateLastUpdateSearch);
 
 	return user;
 }
 
-User UserDao::increaseQuantityMatchs(User user, string idUserMatch){
-	vector<string> matchs = user.getIdUserMatchs();
-	matchs.push_back(idUserMatch);
-	user.setIdUserMatchs(matchs);
-
-	// TODO MOCK - BORRARLO desde aca!
-	if (true){
-		return user;
+bool UserDao::putMatch(User user, User userToMatch){
+	//Actualizo los matchs del usuario que invoco la peticion
+	Json::Value root;
+	Json::Value data;
+	vector<string> idUserMatchs = user.getIdUserMatchs();
+	idUserMatchs.push_back(userToMatch.getId());
+	for(string id : idUserMatchs){
+		data.append(id);
 	}
-	// TODO MOCK - BORRARLO hasta aca!
+	root["idUserMatchs"] = data;
+	DBtuple keyIdUserMatchs(user.getId() + "_idUserMatchs");
+	keyIdUserMatchs.value = jsonParser.valueToString(root);
+	bool userMatchOk = this->dataBase->put(keyIdUserMatchs);
 
-	string userJson = jsonUtils.getUserObjectToJson(user);
-	DBtuple key(user.getId(), userJson);
-	this->dataBase->put(key);
+	//Actualizo los matchs del candidato
+	Json::Value rootCandidate;
+	Json::Value dataCandidate;
+	vector<string> idUserToMatchs = userToMatch.getIdUserMatchs();
+	idUserToMatchs.push_back(user.getId());
+	for(string id : idUserToMatchs){
+		dataCandidate.append(id);
+	}
 
-	return user;
+	rootCandidate["idUserMatchs"] = dataCandidate;
+	DBtuple keyIdUserToMatchs(userToMatch.getId() + "_idUserMatchs");
+	keyIdUserToMatchs.value = jsonParser.valueToString(rootCandidate);
+	bool userToMatchOk = this->dataBase->put(keyIdUserToMatchs);
+
+	//Saco el usuario desde el candidato
+	Json::Value rootUserCandidate;
+	Json::Value dataUserCandidate;
+	for(string id : userToMatch.getIdUserCandidatesMatchs()){
+		if(user.getId().compare(id) != 0){
+			dataUserCandidate.append(id);
+		}
+	}
+	rootUserCandidate["idUserCandidatesMatchs"] = dataUserCandidate;
+	DBtuple keyIdUserCandidateMatchs(userToMatch.getId() + "_idUserCandidatesMatchs");
+	keyIdUserCandidateMatchs.value = jsonParser.valueToString(rootUserCandidate);
+	bool userToMatchCandidateOk = this->dataBase->put(keyIdUserCandidateMatchs);
+
+	if(userMatchOk && userToMatchOk && userToMatchCandidateOk){
+		return true;
+	}
+
+	return false;
+}
+
+bool UserDao::putCandidateMatch(User user, User userToMatch){
+	//Actualizo los candidatos a matchs del usuario que invoco la peticion
+	Json::Value root;
+	Json::Value data;
+	vector<string> idUserCandidatesMatchs = user.getIdUserCandidatesMatchs();
+	idUserCandidatesMatchs.push_back(userToMatch.getId());
+	for(string id : idUserCandidatesMatchs){
+		data.append(id);
+	}
+	root["idUserCandidatesMatchs"] = data;
+	DBtuple keyIdUserCandidatesMatchs(user.getId() + "_idUserCandidatesMatchs");
+	keyIdUserCandidatesMatchs.value = jsonParser.valueToString(root);
+
+	return this->dataBase->put(keyIdUserCandidatesMatchs);
+}
+
+vector<User> UserDao::getCandidatesForIdUser(string idUser){
+	vector<User> users = getUsers();
+	if (idUser.empty()){
+		return users;
+	}
+
+	vector<User> usersOk;
+
+	for (User user : users){
+		if (idUser.compare(user.getId().c_str()) != 0){
+			usersOk.push_back(user);
+		}
+	}
+
+	return usersOk;
 }
