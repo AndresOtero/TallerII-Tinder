@@ -2,11 +2,9 @@
  set (CMAKE_CXX_STANDARD 11)
 ENABLE_TESTING()
 
-SET(CMAKE_CXX_FLAGS "-g -ggdb -fprofile-arcs -ftest-coverage -std=c++11")	
+SET(CMAKE_CXX_FLAGS "-g -ggdb  -std=c++11")	
 
-SET(CMAKE_C_FLAGS="-g -ggdb -O0 -Wall -W -fprofile-arcs -ftest-coverage")
 
-SET(CMAKE_EXE_LINKER_FLAGS="-fprofile-arcs -ftest-coverage")
 
 
 
