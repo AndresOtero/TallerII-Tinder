@@ -48,11 +48,10 @@ const string chatString="chat";
 const string photoString="photo";
 const string tokenString="token";
 const string interestsString="interests";
-const string singInString="singin";
 
 
 typedef enum PrefixType {
-	USERS,MATCH,CHAT,TOKEN,INTERESTS,SINGIN
+	USERS,MATCH,CHAT,TOKEN,INTERESTS,INVALID_PREFIX,
 } PrefixType;
 
 #endif /* INCLUDE_HTTPREQUEST_H_ */

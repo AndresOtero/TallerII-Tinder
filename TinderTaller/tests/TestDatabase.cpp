@@ -81,3 +81,10 @@ TEST(DataBase, DeleteAllKeys)
 
 	delete db;
 }
+TEST(DataBase, status)
+{
+	DataBase* db=new DataBase("./DBTest/",true,true);
+	EXPECT_TRUE(db->ok());
+	db->logStatus();
+	delete db;
+}

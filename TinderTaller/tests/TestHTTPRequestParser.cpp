@@ -104,3 +104,35 @@ TEST(HTTPRequestParser,prefixTypeChat) {
 	EXPECT_TRUE(httpParser.prefixType(hm) == CHAT);
 	delete hm;
 }
+TEST(HTTPRequestParser,prefixTypeToken) {
+	HTTPRequestParser httpParser;
+	http_message* hm = new http_message;
+	string chat = "/token/";
+	hm->uri.p = chat.c_str();
+	hm->uri.len = chat.size();
+	EXPECT_TRUE(httpParser.prefixType(hm) == TOKEN);
+	delete hm;
+}
+TEST(HTTPRequestParser,prefixTypeInterests) {
+	HTTPRequestParser httpParser;
+	http_message* hm = new http_message;
+	string chat = "/interests/";
+	hm->uri.p = chat.c_str();
+	hm->uri.len = chat.size();
+	EXPECT_TRUE(httpParser.prefixType(hm) == INTERESTS);
+	delete hm;
+}
+TEST(HTTPRequestParser,prefixTypeInvalid) {
+	HTTPRequestParser httpParser;
+	http_message* hm = new http_message;
+	string chat = "/inv/";
+	hm->uri.p = chat.c_str();
+	hm->uri.len = chat.size();
+	EXPECT_TRUE(httpParser.prefixType(hm) == INVALID_PREFIX);
+	delete hm;
+}
+TEST(HTTPRequestParser,isNumber) {
+	HTTPRequestParser httpParser;
+	EXPECT_TRUE(httpParser.isNumber("2"));
+	EXPECT_FALSE(httpParser.isNumber("A"));
+}

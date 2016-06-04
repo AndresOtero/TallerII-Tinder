@@ -86,3 +86,9 @@ TEST(TokenAuthentificator,validateTokenWithOutTimeStamp){
 	TokenAuthentificator token(db);
 	EXPECT_TRUE(token.validateJsonToken(token.createJsonToken("andy")));
 }
+TEST(TokenAuthentificator,deleteJsonTokenUser){
+	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
+	TokenAuthentificator token(db);
+	string tokenString=token.createJsonToken("andy");
+	EXPECT_TRUE(token.deleteJsonTokenUser(tokenString));
+}

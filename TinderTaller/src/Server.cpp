@@ -87,7 +87,6 @@ void Server::runServer() {
 
 Server::~Server() {
 	/**	Elimina el server**/
-	LOG(INFO)<< "Borro el server";
 	mg_mgr_free(&mgr);
 }
 

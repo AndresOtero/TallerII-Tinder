@@ -84,10 +84,6 @@ bool TokenAuthentificator::deleteJsonTokenUser(string jsonToken){
 	string userName=this->getUserName(jsonToken);
 	DBtuple keyTuple("token_"+userName);
 	bool ok=DB->delete_(keyTuple);
-	if(!ok){
-		LOG(INFO)<<"Token: No existe el usuario en la base de datos, no se puede borrar.";
-		return false;
-	}
 	return true;
 }
 

@@ -76,9 +76,7 @@ PrefixType HTTPRequestParser::prefixType(struct http_message *hm) {
 		return TOKEN;
 	if (isPrefix(hm, interestsString, FIRST_POSITION))
 			return INTERESTS;
-	if (isPrefix(hm, singInString, FIRST_POSITION))
-			return SINGIN;
-
+	return INVALID_PREFIX;
 }
 
 bool HTTPRequestParser::isNumber(const std::string& s) {
