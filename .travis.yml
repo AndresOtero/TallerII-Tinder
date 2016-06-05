@@ -18,7 +18,7 @@ before_install:
   - cmake --version
   - export CXX="g++-4.8"
   - g++ --version
-  - ./Scripts/beforeinstall.sh
-install: ./Scripts/build.sh
-script: ./Scripts/Test.sh
+  - ./beforeinstall.sh
+install: ./build.sh
+script: ./Test.sh
 
