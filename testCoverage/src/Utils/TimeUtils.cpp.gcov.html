@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - output.info - src/Utils/TimeUtils.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">src/Utils</a> - TimeUtils.cpp<span style="font-size: 80%;"> (source / <a href="TimeUtils.cpp.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">output.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">19</td>
+            <td class="headerCovTableEntry">19</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2016-06-05 10:38:03</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">6</td>
+            <td class="headerCovTableEntry">7</td>
+            <td class="headerCovTableEntryMed">85.7 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : /*</a>
+<span class="lineNum">       2 </span>            :  * TimeUtils.cpp
+<span class="lineNum">       3 </span>            :  *
+<span class="lineNum">       4 </span>            :  *  Created on: 24 de abr. de 2016
+<span class="lineNum">       5 </span>            :  *      Author: andres
+<span class="lineNum">       6 </span>            :  */
+<span class="lineNum">       7 </span>            : 
+<span class="lineNum">       8 </span>            : 
+<span class="lineNum">       9 </span>            : 
+<a name="10"><span class="lineNum">      10 </span>            : #include &quot;TimeUtils.h&quot;</a>
+<span class="lineNum">      11 </span>            : 
+<span class="lineNum">      12 </span><span class="lineCov">         14 : TimeUtils::TimeUtils() {</span>
+<span class="lineNum">      13 </span>            :         // TODO Auto-generated constructor stub
+<a name="14"><span class="lineNum">      14 </span>            : </a>
+<span class="lineNum">      15 </span><span class="lineCov">         14 : }</span>
+<span class="lineNum">      16 </span><span class="lineCov">          9 : string TimeUtils::timeToString(){</span>
+<span class="lineNum">      17 </span>            :         time_t now;
+<span class="lineNum">      18 </span>            :         struct tm * tm;
+<span class="lineNum">      19 </span>            :         char buffer[80];
+<span class="lineNum">      20 </span><span class="lineCov">          9 :         time (&amp;now);</span>
+<span class="lineNum">      21 </span><span class="lineCov">          9 :         tm = localtime(&amp;now);</span>
+<span class="lineNum">      22 </span><span class="lineCov">          9 :         strftime(buffer,80,&quot;%d-%m-%Y %I:%M:%S&quot;,tm);</span>
+<span class="lineNum">      23 </span><span class="lineCov">          9 :         return string(buffer);</span>
+<span class="lineNum">      24 </span>            : }
+<a name="25"><span class="lineNum">      25 </span>            : </a>
+<span class="lineNum">      26 </span>            : 
+<span class="lineNum">      27 </span><span class="lineCov">          4 : double TimeUtils::stringtoTimeDifferencefromNow(string stringTime){</span>
+<span class="lineNum">      28 </span><span class="lineCov">          4 :         struct tm * tm=(struct tm *)new struct tm();</span>
+<span class="lineNum">      29 </span><span class="lineCov">          4 :         struct tm *tmNow=(struct tm *)new  struct tm();</span>
+<span class="lineNum">      30 </span><span class="lineCov">          4 :         strptime(stringTime.c_str(), &quot;%d-%m-%Y %I:%M:%S&quot;, tm);</span>
+<span class="lineNum">      31 </span><span class="lineCov">          8 :         string strNow=timeToString();</span>
+<span class="lineNum">      32 </span><span class="lineCov">          4 :         strptime(strNow.c_str(), &quot;%d-%m-%Y %I:%M:%S&quot;, tmNow);</span>
+<span class="lineNum">      33 </span><span class="lineCov">          4 :         double dif= difftime(mktime(tmNow), mktime(tm));</span>
+<span class="lineNum">      34 </span><span class="lineCov">          4 :         delete tm;</span>
+<span class="lineNum">      35 </span><span class="lineCov">          4 :         delete tmNow;</span>
+<a name="36"><span class="lineNum">      36 </span><span class="lineCov">          8 :         return dif;</span></a>
+<span class="lineNum">      37 </span>            : }
+<a name="38"><span class="lineNum">      38 </span><span class="lineCov">         14 : TimeUtils::~TimeUtils() {</span></a>
+<span class="lineNum">      39 </span>            :         // TODO Auto-generated destructor stub
+<span class="lineNum">      40 </span><span class="lineCov">         17 : }</span>
+<span class="lineNum">      41 </span>            : 
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.11</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

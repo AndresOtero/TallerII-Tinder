@@ -1,0 +1,306 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - output.info - src/Handlers/HandlerUsers.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">src/Handlers</a> - HandlerUsers.cpp<span style="font-size: 80%;"> (source / <a href="HandlerUsers.cpp.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">output.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">8</td>
+            <td class="headerCovTableEntry">151</td>
+            <td class="headerCovTableEntryLo">5.3 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2016-06-05 10:38:03</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">5</td>
+            <td class="headerCovTableEntry">13</td>
+            <td class="headerCovTableEntryLo">38.5 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : /*</a>
+<span class="lineNum">       2 </span>            :  * HandlerUsers.cpp
+<span class="lineNum">       3 </span>            :  *
+<span class="lineNum">       4 </span>            :  *  Created on: 17 de abr. de 2016
+<span class="lineNum">       5 </span>            :  *      Author: andres
+<span class="lineNum">       6 </span>            :  */
+<span class="lineNum">       7 </span>            : #define TERCERA_POSITION 3
+<a name="8"><span class="lineNum">       8 </span>            : #include &quot;HandlerUsers.h&quot;</a>
+<span class="lineNum">       9 </span>            : 
+<span class="lineNum">      10 </span><span class="lineCov">          1 : HandlerUsers::HandlerUsers(shared_ptr&lt;DataBase&gt; DB,shared_ptr&lt;TokenAuthentificator&gt; tokenAuthentificator,shared_ptr&lt;SharedClient&gt; sharedClient){</span>
+<span class="lineNum">      11 </span>            :         /**Creo el handler de users**/
+<span class="lineNum">      12 </span><span class="lineCov">          1 :         this-&gt;DB=DB;</span>
+<span class="lineNum">      13 </span><span class="lineCov">          1 :         this-&gt;tokenAuthentificator=tokenAuthentificator;</span>
+<span class="lineNum">      14 </span><span class="lineCov">          1 :         this-&gt;prefix=USERS;</span>
+<span class="lineNum">      15 </span><span class="lineCov">          1 :         this-&gt;sharedClient=sharedClient;</span>
+<a name="16"><span class="lineNum">      16 </span><span class="lineCov">          1 : }</span></a>
+<span class="lineNum">      17 </span>            : 
+<span class="lineNum">      18 </span><span class="lineNoCov">          0 : msg_t HandlerUsers::handleGet(struct http_message * hm) {</span>
+<span class="lineNum">      19 </span>            :         /**Manejo el get de user, recibe un mensaje y una base de datos. Devuelve el msg correspondiente**/
+<span class="lineNum">      20 </span>            :         /**Json::Value val = jsonParse.stringToValue(hm-&gt;body.p);
+<span class="lineNum">      21 </span>            :         if(jsonParse.isNullValue(val))return badRequest(&quot;Bad Json&quot;);
+<span class="lineNum">      22 </span>            :         if(!val.isMember(&quot;user&quot;))return badRequest(&quot;Bad Json&quot;);
+<span class="lineNum">      23 </span>            :         Json::Value user=val[&quot;user&quot;];
+<span class="lineNum">      24 </span>            :         if(jsonParse.isNullValue(user))return badRequest(&quot;Bad Json&quot;);
+<span class="lineNum">      25 </span>            :         string a = jsonParse.getStringFromValue(user, &quot;name&quot;);
+<span class="lineNum">      26 </span>            :         DBtuple tp(a);
+<span class="lineNum">      27 </span>            :         bool ok =DB-&gt;get(tp);**/
+<span class="lineNum">      28 </span><span class="lineNoCov">          0 :         msg_t msg;</span>
+<span class="lineNum">      29 </span><span class="lineNoCov">          0 :         string id = httpReqParser.getId(hm);</span>
+<span class="lineNum">      30 </span>            : 
+<span class="lineNum">      31 </span><span class="lineNoCov">          0 :         if (httpReqParser.idOk()) {</span>
+<span class="lineNum">      32 </span><span class="lineNoCov">          0 :                 LOG(INFO)&lt;&lt;&quot;Busco &quot;&lt;&lt; id &lt;&lt;&quot; como identificador&quot;;</span>
+<span class="lineNum">      33 </span><span class="lineNoCov">          0 :                 DBtuple userId(id+&quot;_id&quot;);</span>
+<span class="lineNum">      34 </span><span class="lineNoCov">          0 :                 bool ok=DB-&gt;get(userId);</span>
+<span class="lineNum">      35 </span><span class="lineNoCov">          0 :                 if(ok){</span>
+<span class="lineNum">      36 </span><span class="lineNoCov">          0 :                         LOG(INFO)&lt;&lt;&quot;Id:  &quot;&lt;&lt; userId.value;</span>
+<span class="lineNum">      37 </span><span class="lineNoCov">          0 :                         msg = sharedClient-&gt;getUser(userId.value);</span>
+<span class="lineNum">      38 </span>            :                 }
+<span class="lineNum">      39 </span>            :                 else{
+<span class="lineNum">      40 </span><span class="lineNoCov">          0 :                         LOG(WARNING)&lt;&lt;&quot;Not success&quot;;</span>
+<span class="lineNum">      41 </span><span class="lineNoCov">          0 :                         msg=this-&gt;badRequest(&quot;Id isnt correct&quot;);</span>
+<span class="lineNum">      42 </span>            :                 }
+<span class="lineNum">      43 </span>            :         } else {
+<span class="lineNum">      44 </span><span class="lineNoCov">          0 :                 LOG(WARNING)&lt;&lt;&quot;Not success&quot;;</span>
+<span class="lineNum">      45 </span><span class="lineNoCov">          0 :                 msg=this-&gt;badRequest(&quot;Id isnt correct&quot;);</span>
+<span class="lineNum">      46 </span>            :         }
+<span class="lineNum">      47 </span><span class="lineNoCov">          0 :         return msg;</span>
+<a name="48"><span class="lineNum">      48 </span>            : }</a>
+<span class="lineNum">      49 </span>            : 
+<span class="lineNum">      50 </span><span class="lineNoCov">          0 : bool HandlerUsers::userExists(struct http_message * hm){</span>
+<span class="lineNum">      51 </span>            :         /**Devuelve si el usuario del mensaje existe o no **/
+<span class="lineNum">      52 </span><span class="lineNoCov">          0 :         string mail = jsonParse.getMail(hm-&gt;body.p);</span>
+<span class="lineNum">      53 </span><span class="lineNoCov">          0 :         DBtuple key(mail+&quot;_id&quot;);</span>
+<span class="lineNum">      54 </span><span class="lineNoCov">          0 :         return DB-&gt;get(key);</span>
+<a name="55"><span class="lineNum">      55 </span>            : }</a>
+<span class="lineNum">      56 </span>            : 
+<span class="lineNum">      57 </span><span class="lineNoCov">          0 : msg_t HandlerUsers::handlePost(struct http_message * hm) {</span>
+<span class="lineNum">      58 </span>            :         /**Manejo el post de user, recibe un mensaje y una base de datos.Devuelve el msg correspondiente.Crea un usuario**/
+<span class="lineNum">      59 </span>            :         /*Candidata a funcion*/
+<span class="lineNum">      60 </span><span class="lineNoCov">          0 :         msg_t msg;</span>
+<span class="lineNum">      61 </span><span class="lineNoCov">          0 :         Json::Value val = jsonParse.stringToValue(hm-&gt;body.p);</span>
+<span class="lineNum">      62 </span><span class="lineNoCov">          0 :         string pass=jsonParse.removePassword(val);</span>
+<span class="lineNum">      63 </span><span class="lineNoCov">          0 :         string gcm_registration_id=jsonParse.removeGcmId(val);</span>
+<span class="lineNum">      64 </span><span class="lineNoCov">          0 :         LOG(INFO)&lt;&lt;&quot;Pass: &quot;&lt;&lt;pass&lt;&lt;&quot;\n&quot;;</span>
+<span class="lineNum">      65 </span><span class="lineNoCov">          0 :         string user=jsonParse.valueToString(val);</span>
+<span class="lineNum">      66 </span><span class="lineNoCov">          0 :         if(userExists(hm)){</span>
+<span class="lineNum">      67 </span><span class="lineNoCov">          0 :                 msg.change(BAD_REQUEST, &quot;{\&quot;Mensaje\&quot;:\&quot;Usuario ya creado\&quot;}&quot;);</span>
+<span class="lineNum">      68 </span><span class="lineNoCov">          0 :                 return msg;</span>
+<span class="lineNum">      69 </span>            :         }
+<span class="lineNum">      70 </span>            :         //Va a dar de alta el usuario en el Shared
+<span class="lineNum">      71 </span><span class="lineNoCov">          0 :         LOG(INFO)&lt;&lt;&quot;Mensaje: &quot;&lt;&lt;user&lt;&lt;&quot;\n&quot;;</span>
+<span class="lineNum">      72 </span><span class="lineNoCov">          0 :         msg_t  response = sharedClient-&gt;setUser(user);</span>
+<span class="lineNum">      73 </span><span class="lineNoCov">          0 :         LOG(INFO)&lt;&lt;&quot;Respuesta: &quot;&lt;&lt;(response.body)&lt;&lt;&quot;,&quot;&lt;&lt;response.status&lt;&lt;&quot;\n&quot;;</span>
+<span class="lineNum">      74 </span><span class="lineNoCov">          0 :         if (response.status==CREATED){</span>
+<span class="lineNum">      75 </span><span class="lineNoCov">          0 :                 string id = jsonParse.getId(response.body);</span>
+<span class="lineNum">      76 </span><span class="lineNoCov">          0 :                 string mail = jsonParse.getMail(hm-&gt;body.p);</span>
+<span class="lineNum">      77 </span><span class="lineNoCov">          0 :                 LOG(INFO)&lt;&lt;&quot;Creo &quot;&lt;&lt; mail &lt;&lt;&quot; como usuario&quot;;</span>
+<span class="lineNum">      78 </span><span class="lineNoCov">          0 :                 string token=tokenAuthentificator-&gt;createJsonToken(mail);</span>
+<span class="lineNum">      79 </span><span class="lineNoCov">          0 :                 val[&quot;token&quot;]=token;</span>
+<span class="lineNum">      80 </span><span class="lineNoCov">          0 :                 string  result = jsonParse.valueToString(val);</span>
+<span class="lineNum">      81 </span><span class="lineNoCov">          0 :                 LOG(INFO)&lt;&lt;&quot;Result &quot;&lt;&lt; result ;</span>
+<span class="lineNum">      82 </span><span class="lineNoCov">          0 :                 DBtuple userId(mail+&quot;_id&quot;,id);</span>
+<span class="lineNum">      83 </span><span class="lineNoCov">          0 :                 bool okPutId = DB-&gt;put(userId);</span>
+<span class="lineNum">      84 </span><span class="lineNoCov">          0 :                 DBtuple userPass(mail+&quot;_pass&quot;,pass);</span>
+<span class="lineNum">      85 </span><span class="lineNoCov">          0 :                 bool okPutPass = DB-&gt;put(userPass);</span>
+<span class="lineNum">      86 </span><span class="lineNoCov">          0 :                 DBtuple userGcmId(mail+&quot;_gcmId&quot;,gcm_registration_id);</span>
+<span class="lineNum">      87 </span><span class="lineNoCov">          0 :                 bool okPutGcmId = DB-&gt;put(userGcmId);</span>
+<span class="lineNum">      88 </span><span class="lineNoCov">          0 :                 Json::Value empty=Json::Value(Json::nullValue);</span>
+<span class="lineNum">      89 </span><span class="lineNoCov">          0 :                 DBtuple userChats(mail+&quot;_chats&quot;,jsonParse.valueToString(empty));</span>
+<span class="lineNum">      90 </span><span class="lineNoCov">          0 :                 bool okPutChats = DB-&gt;put(userChats);</span>
+<span class="lineNum">      91 </span><span class="lineNoCov">          0 :                 if (!okPutId || !okPutPass || !okPutGcmId || !okPutChats){</span>
+<span class="lineNum">      92 </span><span class="lineNoCov">          0 :                         msg.change(INTERNAL_ERROR, &quot;{\&quot;Mensaje\&quot;:\&quot;Error en la creacion\&quot;}&quot;);</span>
+<span class="lineNum">      93 </span><span class="lineNoCov">          0 :                         return msg;</span>
+<span class="lineNum">      94 </span>            :                 }
+<span class="lineNum">      95 </span><span class="lineNoCov">          0 :                 LOG(INFO)&lt;&lt;&quot;Token: &quot;&lt;&lt;token&lt;&lt;&quot;\n&quot;;</span>
+<span class="lineNum">      96 </span><span class="lineNoCov">          0 :                 msg.change(response.status, result);</span>
+<span class="lineNum">      97 </span>            :         }else{
+<span class="lineNum">      98 </span><span class="lineNoCov">          0 :                 msg=this-&gt;badRequest(&quot;&quot;);</span>
+<span class="lineNum">      99 </span>            :         }
+<span class="lineNum">     100 </span><span class="lineNoCov">          0 :         return msg;</span>
+<a name="101"><span class="lineNum">     101 </span>            : }</a>
+<span class="lineNum">     102 </span>            : 
+<span class="lineNum">     103 </span><span class="lineNoCov">          0 : msg_t HandlerUsers::handlePut(struct http_message * hm) {</span>
+<span class="lineNum">     104 </span>            :         /**Manejo el put de user, recibe un mensaje y una base de datos.Devuelve el msg correspondiente.Modifica un usuario**/
+<span class="lineNum">     105 </span><span class="lineNoCov">          0 :         vector &lt; string &gt; uriVector = httpReqParser.parsePrefix(hm);</span>
+<span class="lineNum">     106 </span><span class="lineNoCov">          0 :         string p = uriVector[TERCERA_POSITION];</span>
+<span class="lineNum">     107 </span><span class="lineNoCov">          0 :         if (p == photoString) {</span>
+<span class="lineNum">     108 </span><span class="lineNoCov">          0 :                 return this-&gt;putUserUpdatePhoto(hm);</span>
+<span class="lineNum">     109 </span>            :         } else {
+<span class="lineNum">     110 </span><span class="lineNoCov">          0 :                 return this-&gt;putUserUpdateProfile(hm);</span>
+<span class="lineNum">     111 </span>            :         }
+<a name="112"><span class="lineNum">     112 </span>            : }</a>
+<span class="lineNum">     113 </span>            : 
+<span class="lineNum">     114 </span><span class="lineNoCov">          0 : msg_t HandlerUsers::putUserUpdateProfile(struct http_message * hm) {</span>
+<span class="lineNum">     115 </span>            :         /**Manejo el put de user, recibe un mensaje y una base de datos.Devuelve el msg correspondiente.Modifica un usuario**/
+<span class="lineNum">     116 </span><span class="lineNoCov">          0 :         msg_t msg;</span>
+<span class="lineNum">     117 </span><span class="lineNoCov">          0 :         string id = httpReqParser.getId(hm);</span>
+<span class="lineNum">     118 </span><span class="lineNoCov">          0 :         Json::Value userNew = jsonParse.stringToValue(hm-&gt;body.p);</span>
+<span class="lineNum">     119 </span><span class="lineNoCov">          0 :         string pass=jsonParse.removePassword(userNew);</span>
+<span class="lineNum">     120 </span><span class="lineNoCov">          0 :         string gcm_registration_id=jsonParse.removeGcmId(userNew);</span>
+<span class="lineNum">     121 </span><span class="lineNoCov">          0 :         LOG(INFO)&lt;&lt;&quot;Pass: &quot;&lt;&lt;pass&lt;&lt;&quot;\n&quot;;</span>
+<span class="lineNum">     122 </span><span class="lineNoCov">          0 :         if (httpReqParser.idOk()) {</span>
+<span class="lineNum">     123 </span><span class="lineNoCov">          0 :                 LOG(INFO)&lt;&lt;&quot;Busco &quot;&lt;&lt; id &lt;&lt;&quot; como identificador&quot;;</span>
+<span class="lineNum">     124 </span><span class="lineNoCov">          0 :                 DBtuple userId(id+&quot;_id&quot;);</span>
+<span class="lineNum">     125 </span><span class="lineNoCov">          0 :                 bool okGet=DB-&gt;get(userId);</span>
+<span class="lineNum">     126 </span><span class="lineNoCov">          0 :                 if(pass!=&quot;&quot;){</span>
+<span class="lineNum">     127 </span><span class="lineNoCov">          0 :                         DBtuple userPass(id+&quot;_pass&quot;,pass);</span>
+<span class="lineNum">     128 </span><span class="lineNoCov">          0 :                         bool okPutPass = DB-&gt;put(userPass);</span>
+<span class="lineNum">     129 </span><span class="lineNoCov">          0 :                         bool okDelete =this-&gt;deleteToken(hm);</span>
+<span class="lineNum">     130 </span><span class="lineNoCov">          0 :                         LOG(INFO)&lt;&lt;&quot;Registro Nueva Password &quot;;</span>
+<span class="lineNum">     131 </span>            :                 }
+<span class="lineNum">     132 </span><span class="lineNoCov">          0 :                 if(gcm_registration_id!=&quot;&quot;){</span>
+<span class="lineNum">     133 </span><span class="lineNoCov">          0 :                         DBtuple userGcmId(id+&quot;_gcmId&quot;,gcm_registration_id);</span>
+<span class="lineNum">     134 </span><span class="lineNoCov">          0 :                         bool okPutGcmId = DB-&gt;put(userGcmId);</span>
+<span class="lineNum">     135 </span><span class="lineNoCov">          0 :                         LOG(INFO)&lt;&lt;&quot;Registro Nuevo GCM Id &quot;;</span>
+<span class="lineNum">     136 </span>            :                 }
+<span class="lineNum">     137 </span><span class="lineNoCov">          0 :                 if(okGet){</span>
+<span class="lineNum">     138 </span><span class="lineNoCov">          0 :                         msg_t msgGet = sharedClient-&gt;getUser(userId.value);</span>
+<span class="lineNum">     139 </span><span class="lineNoCov">          0 :                         Json::Value userOld=jsonParse.stringToValue(msgGet.body);</span>
+<span class="lineNum">     140 </span><span class="lineNoCov">          0 :                         Json::Value val=jsonParse.replaceNewUserInOldUser(userNew,userOld);</span>
+<span class="lineNum">     141 </span><span class="lineNoCov">          0 :                         LOG(INFO)&lt;&lt;&quot;Modifico &quot;&lt;&lt; id &lt;&lt;&quot; como usuario&quot;;</span>
+<span class="lineNum">     142 </span><span class="lineNoCov">          0 :                         LOG(INFO)&lt;&lt;&quot;Modifico &quot;&lt;&lt; userId.value &lt;&lt;&quot; como id_usuario&quot;;</span>
+<span class="lineNum">     143 </span>            :                         //string token=tokenAuthentificator-&gt;createJsonToken(mail);
+<span class="lineNum">     144 </span>            :                         //val[&quot;token&quot;]=token;
+<span class="lineNum">     145 </span>            :                         //string  result = jsonParse.valueToString(val);
+<span class="lineNum">     146 </span>            :                         //Va a actualizar un usuario en el Shared
+<span class="lineNum">     147 </span><span class="lineNoCov">          0 :                         string userNew=jsonParse.valueToString(val);</span>
+<span class="lineNum">     148 </span><span class="lineNoCov">          0 :                         msg_t  response = sharedClient-&gt;updateUser(userId.value, userNew);</span>
+<span class="lineNum">     149 </span><span class="lineNoCov">          0 :                         msg.status = response.status;</span>
+<span class="lineNum">     150 </span><span class="lineNoCov">          0 :                         msg.body = response.body;</span>
+<span class="lineNum">     151 </span>            :                 }else {
+<span class="lineNum">     152 </span><span class="lineNoCov">          0 :                         LOG(WARNING)&lt;&lt;&quot;Not success&quot;;</span>
+<span class="lineNum">     153 </span><span class="lineNoCov">          0 :                         msg=this-&gt;badRequest(&quot;Not success&quot;);</span>
+<span class="lineNum">     154 </span>            :                 }
+<span class="lineNum">     155 </span>            :         } else {
+<span class="lineNum">     156 </span><span class="lineNoCov">          0 :                 LOG(WARNING)&lt;&lt;&quot;Not success&quot;;</span>
+<span class="lineNum">     157 </span><span class="lineNoCov">          0 :                 msg=this-&gt;badRequest(&quot;Not success&quot;);</span>
+<span class="lineNum">     158 </span>            :         }
+<span class="lineNum">     159 </span><span class="lineNoCov">          0 :         return msg;</span>
+<a name="160"><span class="lineNum">     160 </span>            : }</a>
+<span class="lineNum">     161 </span>            : 
+<span class="lineNum">     162 </span><span class="lineNoCov">          0 : msg_t HandlerUsers::putUserUpdatePhoto(struct http_message * hm) {</span>
+<span class="lineNum">     163 </span>            :         /**Manejo el put de user, recibe un mensaje y una base de datos.Devuelve el msg correspondiente.Modifica un usuario**/
+<span class="lineNum">     164 </span><span class="lineNoCov">          0 :         msg_t msg;</span>
+<span class="lineNum">     165 </span><span class="lineNoCov">          0 :         LOG(INFO)&lt;&lt;&quot;Modificar Foto&quot;;</span>
+<span class="lineNum">     166 </span><span class="lineNoCov">          0 :         string id = httpReqParser.getId(hm);</span>
+<span class="lineNum">     167 </span><span class="lineNoCov">          0 :         if (httpReqParser.idOk()) {</span>
+<span class="lineNum">     168 </span><span class="lineNoCov">          0 :                 LOG(INFO)&lt;&lt;&quot;Busco &quot;&lt;&lt; id &lt;&lt;&quot; como identificador&quot;;</span>
+<span class="lineNum">     169 </span><span class="lineNoCov">          0 :                 DBtuple userId(id+&quot;_id&quot;);</span>
+<span class="lineNum">     170 </span><span class="lineNoCov">          0 :                 bool ok=DB-&gt;get(userId);</span>
+<span class="lineNum">     171 </span><span class="lineNoCov">          0 :                 if(ok){</span>
+<span class="lineNum">     172 </span><span class="lineNoCov">          0 :                         LOG(INFO)&lt;&lt;&quot;Modifico la foto &quot;&lt;&lt; id &lt;&lt;&quot; como usuario&quot;;</span>
+<span class="lineNum">     173 </span><span class="lineNoCov">          0 :                         LOG(INFO)&lt;&lt;&quot;Modifico  la foto &quot;&lt;&lt; userId.value &lt;&lt;&quot; como id_usuario&quot;;</span>
+<span class="lineNum">     174 </span>            :                         //Va a actualizar un usuario en el Shared
+<span class="lineNum">     175 </span><span class="lineNoCov">          0 :                         string user = &quot;&quot;;</span>
+<span class="lineNum">     176 </span><span class="lineNoCov">          0 :                         user.append(hm-&gt;body.p);</span>
+<span class="lineNum">     177 </span><span class="lineNoCov">          0 :                         string photo = &quot;&quot;;</span>
+<span class="lineNum">     178 </span><span class="lineNoCov">          0 :                         photo.append(hm-&gt;body.p);</span>
+<span class="lineNum">     179 </span><span class="lineNoCov">          0 :                         msg = sharedClient-&gt;updateUserPhoto(userId.value, photo);</span>
+<span class="lineNum">     180 </span>            :                 } else {
+<span class="lineNum">     181 </span><span class="lineNoCov">          0 :                         LOG(WARNING)&lt;&lt;&quot;Not success&quot;;</span>
+<span class="lineNum">     182 </span><span class="lineNoCov">          0 :                         msg=this-&gt;badRequest(&quot;Not success&quot;);</span>
+<span class="lineNum">     183 </span>            :                 }
+<span class="lineNum">     184 </span>            :         } else {
+<span class="lineNum">     185 </span><span class="lineNoCov">          0 :                 LOG(WARNING)&lt;&lt;&quot;Not success&quot;;</span>
+<span class="lineNum">     186 </span><span class="lineNoCov">          0 :                 msg=this-&gt;badRequest(&quot;Not success&quot;);</span>
+<span class="lineNum">     187 </span>            :         }
+<span class="lineNum">     188 </span><span class="lineNoCov">          0 :         return msg;</span>
+<a name="189"><span class="lineNum">     189 </span>            : }</a>
+<span class="lineNum">     190 </span>            : 
+<span class="lineNum">     191 </span><span class="lineNoCov">          0 : msg_t HandlerUsers::handleDelete(struct http_message * hm) {</span>
+<span class="lineNum">     192 </span>            :         /**Manejo el delete de user, recibe un mensaje y una base de datos.Devuelve el msg correspondiente.Borro Usuario**/
+<span class="lineNum">     193 </span><span class="lineNoCov">          0 :         msg_t msg;</span>
+<span class="lineNum">     194 </span><span class="lineNoCov">          0 :         string id = httpReqParser.getId(hm);</span>
+<span class="lineNum">     195 </span><span class="lineNoCov">          0 :         if (httpReqParser.idOk()) {</span>
+<span class="lineNum">     196 </span><span class="lineNoCov">          0 :                 LOG(INFO)&lt;&lt;&quot;Busco &quot;&lt;&lt; id &lt;&lt;&quot; como identificador&quot;;</span>
+<span class="lineNum">     197 </span><span class="lineNoCov">          0 :                 DBtuple userId(id+&quot;_id&quot;);</span>
+<span class="lineNum">     198 </span><span class="lineNoCov">          0 :                 bool okGetId = DB-&gt;get(userId);</span>
+<span class="lineNum">     199 </span><span class="lineNoCov">          0 :                 DBtuple userPass(id+&quot;_pass&quot;);</span>
+<span class="lineNum">     200 </span><span class="lineNoCov">          0 :                 bool okDeletePass = DB-&gt;delete_(userPass);</span>
+<span class="lineNum">     201 </span><span class="lineNoCov">          0 :                 bool okDeleteUser=DB-&gt;delete_(userId);</span>
+<span class="lineNum">     202 </span><span class="lineNoCov">          0 :                 bool okDeleteToken=this-&gt;deleteToken(hm);</span>
+<span class="lineNum">     203 </span><span class="lineNoCov">          0 :                 if(okDeleteUser&amp;&amp;okDeleteToken&amp;&amp;okDeletePass&amp;&amp;okGetId){</span>
+<span class="lineNum">     204 </span><span class="lineNoCov">          0 :                         LOG(INFO)&lt;&lt;&quot;Elimino &quot;&lt;&lt; id &lt;&lt;&quot; como usuario&quot;;</span>
+<span class="lineNum">     205 </span>            :                         //Va a eliminar un usuario en el Shared
+<span class="lineNum">     206 </span><span class="lineNoCov">          0 :                         msg_t  response = sharedClient-&gt;deleteUser(userId.value);</span>
+<span class="lineNum">     207 </span><span class="lineNoCov">          0 :                         msg.status = response.status;</span>
+<span class="lineNum">     208 </span><span class="lineNoCov">          0 :                         msg.body = response.body;</span>
+<span class="lineNum">     209 </span>            :                 }else{
+<span class="lineNum">     210 </span><span class="lineNoCov">          0 :                         LOG(WARNING)&lt;&lt;&quot;Not success&quot;;</span>
+<span class="lineNum">     211 </span><span class="lineNoCov">          0 :                         msg=this-&gt;badRequest(&quot;Not success&quot;);</span>
+<span class="lineNum">     212 </span>            :                 }
+<span class="lineNum">     213 </span>            :         } else {
+<span class="lineNum">     214 </span><span class="lineNoCov">          0 :                 LOG(WARNING)&lt;&lt;&quot;Not success&quot;;</span>
+<span class="lineNum">     215 </span><span class="lineNoCov">          0 :                 msg=this-&gt;badRequest(&quot;Not success&quot;);</span>
+<span class="lineNum">     216 </span>            :         }
+<a name="217"><span class="lineNum">     217 </span><span class="lineNoCov">          0 :         return msg;</span></a>
+<span class="lineNum">     218 </span>            : }
+<span class="lineNum">     219 </span><span class="lineNoCov">          0 : msg_t HandlerUsers::handleMsg(struct http_message *hm){</span>
+<span class="lineNum">     220 </span>            :         /**Valida el token del mensaje excepto que sea un POST**/
+<span class="lineNum">     221 </span><span class="lineNoCov">          0 :         if((httpReqParser.methodType(hm)!=POST)&amp;&amp;(!validateToken(hm))){</span>
+<span class="lineNum">     222 </span><span class="lineNoCov">          0 :                 return unathorized();</span>
+<span class="lineNum">     223 </span>            :         }
+<span class="lineNum">     224 </span><span class="lineNoCov">          0 :         return handle(hm);</span>
+<a name="225"><span class="lineNum">     225 </span>            : }</a>
+<span class="lineNum">     226 </span>            : 
+<a name="227"><span class="lineNum">     227 </span><span class="lineCov">          2 : HandlerUsers::~HandlerUsers() {</span></a>
+<span class="lineNum">     228 </span>            :         /**Destruyo el handler de users**/
+<span class="lineNum">     229 </span><span class="lineCov">          5 : }</span>
+<span class="lineNum">     230 </span>            : 
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.11</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>
