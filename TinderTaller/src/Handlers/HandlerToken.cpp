@@ -24,6 +24,8 @@ msg_t HandlerToken::handleMsg(struct http_message *hm){
 
 msg_t HandlerToken::handlePost(struct http_message *hm) {
 	/**	Recibo el post de un mensaje y devuelvo un accepted si se realizo correctamente**/
+	LOG(INFO)<<"Post token";
+	LOG(INFO)<<"El mensaje es "<<hm->body.p;
 	msg_t msg;
 	Json::Value val = jsonParse.stringToValue(hm->body.p);
 	string mail = jsonParse.getMail(hm->body.p);
@@ -37,6 +39,7 @@ msg_t HandlerToken::handlePost(struct http_message *hm) {
 	if (okPass&&(pass==tpPass.value)&&okDelete&&okId){
 		string token=tokenAuthentificator->createJsonToken(mail);
 		if(httpReqParser.parsePrefix(hm)[2]=="singin"){
+			LOG(INFO)<<"Sing In token";
 			msg_t msgGet = sharedClient->getUser(tpId.value);
 			val=jsonParse.stringToValue(msgGet.body);
 			jsonParse.removeMember(val["user"],"id");
@@ -54,6 +57,7 @@ msg_t HandlerToken::handlePost(struct http_message *hm) {
 msg_t HandlerToken::handleDelete(struct http_message *hm) {
 	/**	Recibo el post de un mensaje y devuelvo un accepted si se realizo correctamente**/
 	msg_t msg;
+	LOG(INFO)<<"Delete token";
 	if(this->deleteToken(hm)){
 		msg.status=OK;
 	}else{

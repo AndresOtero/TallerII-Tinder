@@ -6,7 +6,7 @@ Created on Mon May 23 07:59:04 2016
 """
 
 users=["Andy","Ely","Fede"]
-
+host="localhost"
 def crear_usuarios():
 	r={}
 	for user in users:
@@ -15,7 +15,7 @@ def crear_usuarios():
 		foto = "photo"
 		ubicacion = {'latitude':-34.610510, 'longitude':-58.386391}
 		user = {'gcm_registration_id':"aaaaaaaaaa",'name':user,'password': "hashed",'interests':intereses,'location':ubicacion,'alias':user,'age':45,'sex':'H','photo_profile':foto,'email':mail}
-		urlGetUsers = 'http://localhost:8080/users/'
+		urlGetUsers = 'http://'+host+':8080/users/'
 		metadata = {'version':"0.1"}
 		r['user'] = user
 		r['metadata'] = metadata
@@ -40,16 +40,20 @@ nuevo_mensaje={'To':'Ely@gmail.com','message':'Chau'}
 nuevo_mensaje_json=json.dumps(nuevo_mensaje)
 respuesta={'To':'Fede@gmail.com','message':'respuesta'}
 respuesta_json=json.dumps(respuesta)
-urlToken='http://localhost:8080/token/singin/'
-urlChat='http://localhost:8080/chat/'
-urlChat0='http://localhost:8080/chat/0-0/'
-urlChat1='http://localhost:8080/chat/1-10/'
-urlChat1_15='http://localhost:8080/chat/1-15/'
+urlToken='http://'+host+':8080/token/singin/'
+urlChat='http://'+host+':8080/chat/'
+urlChat0='http://'+host+':8080/chat/0-0/'
+urlChat1='http://'+host+':8080/chat/1-10/'
+urlChat1_15='http://'+host+':8080/chat/1-15/'
 
-
-
+ 
+crear=raw_input("Desea crear usuarios?(Si) para crear, cualquiero otro para no \n")
+if crear=="Si":
+	print "Crear usuarios"
+	crear_usuarios()
+else:
+	print "No crear usuarios"
 print "Sing in "
-crear_usuarios()
 auth={}
 for user in users:
 	mail = user+'@gmail.com'
@@ -62,6 +66,7 @@ for user in users:
 
 
 print "Get mensajes andy"
+print urlChat
 response = requests.get(urlChat ,headers=auth["Andy"])
 print response
 print response.json()
@@ -70,9 +75,12 @@ response = requests.get(urlChat ,headers=auth["Ely"])
 print response
 print response.json()
 print "Get mensajes Chat 0"
+print urlChat0
 response = requests.get(urlChat0 ,headers=auth["Ely"])
 print response
 print "Mensaje de andy a Ely"
+print urlChat
+print mensaje_json
 response = requests.post(urlChat ,headers=auth["Andy"] ,data=mensaje_json)
 print response
 print "Mensaje de fede a Ely"
@@ -88,10 +96,12 @@ print "Respuesta de Ely a Fede"
 response = requests.post(urlChat ,headers=auth["Ely"] ,data=respuesta_json)
 print response
 print "Get mensajes Ely"
+print urlChat
 response = requests.get(urlChat ,headers=auth["Ely"])
 print response
 print response.json()
 print "Get mensajes Ely 1 desde 10 a 0"
+print urlChat1
 response = requests.get(urlChat1 ,headers=auth["Ely"])
 print response
 print response.json()
@@ -107,3 +117,13 @@ print "Get mensajes Ely 1 desde 10 a 0"
 response = requests.get(urlChat1 ,headers=auth["Fede"])
 print response
 print response.json()
+
+borrar=raw_input("Desea borrar usuarios?(Si) para crear, cualquiero otro para no \n")
+if borrar=="Si":
+	print "delete users"
+	for user in users:
+		urlDeleteUser = 'http://'+host+':8080/users/'+user+'@gmail.com/'
+		response = requests.delete(urlDeleteUser, headers=auth[user])
+		print response
+else:
+	print "No borra"

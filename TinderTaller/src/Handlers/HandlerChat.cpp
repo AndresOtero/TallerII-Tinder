@@ -13,11 +13,12 @@ HandlerChat::~HandlerChat() {
 	// TODO Auto-generated destructor stub
 }
 
-HandlerChat::HandlerChat(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificator> tokenAuthentificator) {
+HandlerChat::HandlerChat(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificator> tokenAuthentificator,shared_ptr<SharedClient> sharedClient) {
 	/**Creo el handler de match**/
 	this->DB=DB;
 	this->tokenAuthentificator=tokenAuthentificator;
 	this->prefix=CHAT;
+	this->sharedClient= sharedClient;
 }
 
 bool HandlerChat::saveNewMessage(string chatId,string  remitente,string message) {
@@ -156,10 +157,18 @@ string HandlerChat::getChatHeader(string user,string chatString){
 	if(chat["User1"].asString()==user){
 		header["Unread"]=chat["LastMessage1"];
 		header["User"]=chat["User2"];
+
 	}else{
 		header["Unread"]=chat["LastMessage2"];
 		header["User"]=chat["User1"];
 	}
+	string mail = header["User"].asString();
+	DBtuple tpId(mail+"_id");
+	bool okId=DB->get(tpId);
+	msg_t msgGet = sharedClient->getUser(tpId.value);
+	Json::Value jsonData=jsonParse.stringToValue(msgGet.body);
+	jsonParse.removeMember(jsonData["user"],"id");
+	header["user_data"]=jsonData;
 	int newMessageId=chat["message_id"].asInt();
 	header["LastMessage"]=chat["Messages"][to_string(newMessageId-1)];
 	header["message_id"]=newMessageId-1;
@@ -243,6 +252,7 @@ msg_t HandlerChat::handleGetChat(struct http_message *hm){
 			msg.body=this->readChat(getChat.value,user,message_id,conversation_id);
 		}
 	}else{
+		LOG(INFO) << "Esta conversacion no le pertenece";
 		msg.status=StatusCode::UNAUTHORIZED;
 	}
 

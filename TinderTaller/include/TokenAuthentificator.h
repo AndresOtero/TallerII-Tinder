@@ -30,6 +30,7 @@ private:
 	const string alg="HS256";
 	const string type="JWT";
 	const double experationTime=31536000;//Un año
+	//const double experationTime=60;
 	string createJsonTokenHeader();
 	string createJsonTokenPayload(string user, string time) ;
 	string createJsonTokenSignature(string encodedHeader, string encodedPayload);

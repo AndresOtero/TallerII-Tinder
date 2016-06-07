@@ -8,14 +8,15 @@
 #ifndef SRC_HANDLERCHAT_H_
 #define SRC_HANDLERCHAT_H_
 #include "HandlerInterface.h"
-
+#include "SharedClient.h"
 #include "HTTPRequestParser.h"
 const size_t CANT_MESSAGES=10;
 class HandlerChat: public HandlerInterface {
 	public:
-		HandlerChat(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificator> tokenAuthentificator);
+		HandlerChat(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificator> tokenAuthentificator,shared_ptr<SharedClient> sharedClient);
 		virtual ~HandlerChat();
 	private:
+		shared_ptr<SharedClient> sharedClient;
 		virtual msg_t handlePost(struct http_message *hm);
 		virtual msg_t handleGet(struct http_message *hm);
 		vector<string> getChatsId(struct http_message *hm);
