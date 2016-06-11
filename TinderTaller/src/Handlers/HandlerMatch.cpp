@@ -7,13 +7,13 @@
 
 #include "HandlerMatch.h"
 
-HandlerMatch::HandlerMatch(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificator> tokenAuthentificator) {
+HandlerMatch::HandlerMatch(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificator> tokenAuthentificator,shared_ptr<SharedClient> sharedClient) {
 	/**Creo el handler de match**/
 	this->DB=DB;
 	this->tokenAuthentificator=tokenAuthentificator;
 	this->prefix=MATCH;
 
-	shared_ptr<CandidateService> candidateServiceAux(new CandidateService(DB));
+	shared_ptr<CandidateService> candidateServiceAux(new CandidateService(DB,sharedClient));
 
 	this->candidateService = candidateServiceAux;
 }

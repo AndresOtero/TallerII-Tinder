@@ -15,7 +15,7 @@ using namespace std;
 
 class SharedClient {
 public:
-	SharedClient();
+	SharedClient(ClientServiceInterface* clientService);
 	virtual ~SharedClient();
 	msg_t getUsers();
 	msg_t setUser(string & user);
@@ -26,7 +26,7 @@ public:
 	msg_t getInterests();
 	msg_t setInterests(string & interests);
 private:
-	ClientService * clientService;
+	ClientServiceInterface * clientService;
 };
 
 #endif /* SRC_SHAREDCLIENT_H_ */

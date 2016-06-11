@@ -17,6 +17,8 @@ include_directories(../include)
 
 LINK_DIRECTORIES( ../lib/rocksdb-master/)
 LINK_DIRECTORIES( ../lib/googletest/)
+#LINK_DIRECTORIES( ../lib/googlemock/)
+
 LINK_DIRECTORIES(../src)
 LINK_DIRECTORIES(../src/Handlers)
 LINK_DIRECTORIES(../src/Utils)
@@ -32,6 +34,9 @@ add_executable(Test ${_SOURCES_CPP_TESTS})
  TARGET_LINK_LIBRARIES(Test libtindertaller)
  TARGET_LINK_LIBRARIES(Test gtest)
  TARGET_LINK_LIBRARIES(Test gtest_main)
+ # TARGET_LINK_LIBRARIES(Test gmock_main)
+ # TARGET_LINK_LIBRARIES(Test gmock)
+ 
  TARGET_LINK_LIBRARIES(Test pthread)
  TARGET_LINK_LIBRARIES(Test rocksdb )
  TARGET_LINK_LIBRARIES(Test curl  )

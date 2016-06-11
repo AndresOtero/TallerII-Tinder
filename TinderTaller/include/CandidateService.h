@@ -50,14 +50,14 @@ typedef struct search {
 class CandidateService {
 private:
 	shared_ptr<UserDao> userDao;
-	SharedClient sharedClient;
+	shared_ptr<SharedClient> sharedClient;
 	vector<User> getUsersLeastVoted(vector<User> candidates);
 	vector<User> getUsersNotMatch(User user, vector<User> candidates);
 	vector<User> getUsersNear(User user, vector<User> candidates);
 	vector<User> getUsersCommonInterests(User user, vector<User> candidates);
 	string cleanString(string idUserCandidateMatch);
 public:
-	CandidateService(shared_ptr<DataBase> DB);
+	CandidateService(shared_ptr<DataBase> DB,shared_ptr<SharedClient> sharedClient);
 	virtual ~CandidateService();
 	search_candidate_t searchCandidate(string idUser);
 	StatusCodeMatch match(string idUser, string idUserMatch);

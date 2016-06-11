@@ -7,8 +7,9 @@
 
 #include "UserDao.h"
 
-UserDao::UserDao(shared_ptr<DataBase> dataBase) {
+UserDao::UserDao(shared_ptr<DataBase> dataBase,shared_ptr<SharedClient> sharedClient) {
 	this->dataBase = dataBase;
+	this->sharedClient=sharedClient;
 }
 
 UserDao::~UserDao() {
@@ -19,7 +20,7 @@ User UserDao::getUser(string idUser){
 	DBtuple key(idUser + "_id");
 	this->dataBase->get(key);
 
-	string userInJsonShared = sharedClient.getUser(key.value).body;//TODO FALTA CONTROLAR EL STATUS DEL REQUEST
+	string userInJsonShared = sharedClient->getUser(key.value).body;//TODO FALTA CONTROLAR EL STATUS DEL REQUEST
 	Json::Value responseJson = jsonParser.stringToValue(userInJsonShared);
 	string user = jsonParser.valueToString(responseJson["user"]);
 
@@ -110,7 +111,7 @@ User UserDao::buildUser(string idUser, string userInJsonShared){
 
 vector<User> UserDao::getUsers(){
 	vector<User> users;
-	string responseInJsonShared = sharedClient.getUsers().body;//TODO FALTA CONTROLAR EL STATUS DEL REQUEST
+	string responseInJsonShared = sharedClient->getUsers().body;//TODO FALTA CONTROLAR EL STATUS DEL REQUEST
 	Json::Value usersInJsonShared = jsonParser.stringToValue(responseInJsonShared);
 
 	vector<string> usersJson = jsonParser.getVectorFromValue(usersInJsonShared["users"]);

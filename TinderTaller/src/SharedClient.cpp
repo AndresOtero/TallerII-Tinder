@@ -4,9 +4,9 @@
 
 #include "SharedClient.h"
 
-SharedClient::SharedClient() {
+SharedClient::SharedClient(ClientServiceInterface* clientServ) {
 	LOG(INFO)<< "Inicio Shared Cliente";
-	this->clientService = new ClientService();
+	this->clientService = clientServ;
 }
 
 

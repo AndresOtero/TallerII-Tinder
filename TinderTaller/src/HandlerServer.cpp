@@ -19,11 +19,12 @@ HandlerServer::HandlerServer(shared_ptr<DataBase> DB) {
 	/**Asigna la base de datos al handler del server.**/
 	this->DB= DB;
 	shared_ptr<TokenAuthentificator> tokenAuth(new TokenAuthentificator(DB));
-	shared_ptr<SharedClient> sharedClient(new SharedClient());
+	ClientService *clientServ =new ClientService();
+	shared_ptr<SharedClient> sharedClient(new SharedClient(clientServ));
 	this->tokenAuthentificator=tokenAuth;
 	vecHandler.push_back(shared_ptr<HandlerInterface>(new HandlerUsers(DB,tokenAuthentificator,sharedClient)));
 	vecHandler.push_back(shared_ptr<HandlerInterface>(new HandlerInterest(DB,tokenAuthentificator,sharedClient)));
-	vecHandler.push_back(shared_ptr<HandlerInterface>(new HandlerMatch(DB,tokenAuthentificator)));
+	vecHandler.push_back(shared_ptr<HandlerInterface>(new HandlerMatch(DB,tokenAuthentificator,sharedClient)));
 	vecHandler.push_back(shared_ptr<HandlerInterface>(new HandlerChat(DB,tokenAuthentificator,sharedClient)));
 	vecHandler.push_back(shared_ptr<HandlerInterface>(new HandlerToken(DB,tokenAuthentificator,sharedClient)));
 	DBtuple chatId("chat_id");

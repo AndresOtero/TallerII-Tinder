@@ -7,8 +7,9 @@
 
 #include "CandidateService.h"
 
-CandidateService::CandidateService(shared_ptr<DataBase> DB) {
-	shared_ptr<UserDao> userDaoAux(new UserDao(DB));
+CandidateService::CandidateService(shared_ptr<DataBase> DB,shared_ptr<SharedClient> sharedClient) {
+	this->sharedClient=sharedClient;
+	shared_ptr<UserDao> userDaoAux(new UserDao(DB,sharedClient));
 	userDao = userDaoAux;
 }
 

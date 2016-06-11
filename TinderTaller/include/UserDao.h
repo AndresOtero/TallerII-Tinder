@@ -27,11 +27,11 @@ private:
 	shared_ptr<DataBase> dataBase;
 	TimeUtils timeUtils;
 	JsonParser jsonParser;
-	SharedClient sharedClient;
+	shared_ptr<SharedClient> sharedClient;
 	User buildUser(string idUser, string userInJsonShared);
 	string cleanString(string idUserCandidateMatch);
 public:
-	UserDao(shared_ptr<DataBase> dataBase);
+	UserDao(shared_ptr<DataBase> dataBase,shared_ptr<SharedClient> sharedClient);
 	virtual ~UserDao();
 	User getUser(string idUser);
 	vector<User> getUsers();

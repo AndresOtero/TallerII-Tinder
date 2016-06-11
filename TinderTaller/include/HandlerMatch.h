@@ -12,7 +12,7 @@
 class HandlerMatch: public HandlerInterface {
 
 	public:
-		HandlerMatch(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificator> tokenAuthentificator);
+		HandlerMatch(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificator> tokenAuthentificator,shared_ptr<SharedClient> sharedClient);
 		virtual ~HandlerMatch();
 	private:
 		virtual msg_t handlePost(struct http_message *hm);

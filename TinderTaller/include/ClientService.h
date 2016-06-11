@@ -12,8 +12,9 @@
 #include "easylogging++.h"
 #include <curl/curl.h>
 #include "ClientUtils.h"
+#include "ClientServiceInterface.h"
 
-class ClientService {
+class ClientService : public ClientServiceInterface {
 	public:
 		ClientService();
 		virtual ~ClientService();
