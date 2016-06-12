@@ -199,8 +199,12 @@ msg_t HandlerUsers::handleDelete(struct http_message * hm) {
 		DBtuple userPass(id+"_pass");
 		bool okDeletePass = DB->delete_(userPass);
 		bool okDeleteUser=DB->delete_(userId);
+		DBtuple userGcmId(id+"_gcmId");
+		bool okDeleteGcmId = DB->delete_(userGcmId);
+		DBtuple userChats(id+"_chats");
+		bool okDeleteChats = DB->delete_(userChats);
 		bool okDeleteToken=this->deleteToken(hm);
-		if(okDeleteUser&&okDeleteToken&&okDeletePass&&okGetId){
+		if(okDeleteUser&&okDeleteToken&&okDeletePass&&okGetId&&okDeleteChats&&okDeleteGcmId){
 			LOG(INFO)<<"Elimino "<< id <<" como usuario";
 			//Va a eliminar un usuario en el Shared
 			msg_t  response = sharedClient->deleteUser(userId.value);

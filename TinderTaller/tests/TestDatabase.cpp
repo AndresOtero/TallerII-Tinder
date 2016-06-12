@@ -24,6 +24,16 @@ TEST(DataBase,CreateADataBase){
 	EXPECT_TRUE(db->ok());
 	delete db;
 }
+
+TEST(DataBase, GetAValueWithoutErasing)
+{
+	DataBase* db=new DataBase("./DBTest/",true,false);
+	EXPECT_TRUE(db->put(tupleDB));
+	EXPECT_TRUE(db->ok());
+	EXPECT_TRUE(db->get(tupleDBGet));
+	EXPECT_TRUE(tupleDBGet.value=="mundo");
+	delete db;
+}
 TEST(DataBase, StoreAValue)
 {
 	DataBase* db=new DataBase("./DBTest/",true,true);
@@ -32,14 +42,6 @@ TEST(DataBase, StoreAValue)
 	EXPECT_TRUE(db->put(tupleDB));
 	delete db;
 
-}
-TEST(DataBase, GetAValueWithoutErasing)
-{
-	DataBase* db=new DataBase("./DBTest/",true,false);
-	EXPECT_TRUE(db->ok());
-	EXPECT_TRUE(db->get(tupleDBGet));
-	EXPECT_TRUE(tupleDBGet.value=="mundo");
-	delete db;
 }
 TEST(DataBase, NotGetAValueErasing)
 {
