@@ -7,7 +7,7 @@
 
 #include "HandlerMatch.h"
 
-HandlerMatch::HandlerMatch(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificator> tokenAuthentificator,shared_ptr<SharedClient> sharedClient) {
+HandlerMatch::HandlerMatch(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificatorInterface> tokenAuthentificator,shared_ptr<SharedClient> sharedClient) {
 	/**Creo el handler de match**/
 	this->DB=DB;
 	this->tokenAuthentificator=tokenAuthentificator;

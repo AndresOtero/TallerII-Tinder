@@ -16,11 +16,11 @@
 #include "../include/hmac.h"
 #include "../include/DataBase.h"
 #include "json/json.h"
-
+#include "../include/TokenAuthentificatorInterface.h"
 #ifndef SRC_TOKENAUTHENTIFICATOR_H_
 #define SRC_TOKENAUTHENTIFICATOR_H_
 
-class TokenAuthentificator {
+class TokenAuthentificator:public TokenAuthentificatorInterface {
 private:
 	Base64Utils base64Utils;
 	TimeUtils timeUtils;

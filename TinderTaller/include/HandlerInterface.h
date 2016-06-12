@@ -7,6 +7,7 @@
 #include "HTTPRequest.h"
 #include "mongoose.h"
 #include "HTTPRequestParser.h"
+#include "TokenAuthentificatorInterface.h"
 #include "TokenAuthentificator.h"
 #include "JsonParser.h"
 #include "DataBase.h"
@@ -25,7 +26,7 @@ class HandlerInterface {
 		virtual msg_t badRequest(string strMsg);
 
 	protected:
-		shared_ptr<TokenAuthentificator> tokenAuthentificator;
+		shared_ptr<TokenAuthentificatorInterface> tokenAuthentificator;
 		HTTPRequestParser httpReqParser;
 		JsonParser jsonParse;
 		shared_ptr<DataBase> DB;

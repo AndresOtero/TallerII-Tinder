@@ -13,7 +13,7 @@
 const size_t CANT_MESSAGES=10;
 class HandlerChat: public HandlerInterface {
 	public:
-		HandlerChat(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificator> tokenAuthentificator,shared_ptr<SharedClient> sharedClient);
+		HandlerChat(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificatorInterface> tokenAuthentificator,shared_ptr<SharedClient> sharedClient);
 		virtual ~HandlerChat();
 	private:
 		shared_ptr<SharedClient> sharedClient;

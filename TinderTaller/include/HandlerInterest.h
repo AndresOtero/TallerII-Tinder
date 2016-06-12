@@ -12,7 +12,7 @@
 
 class HandlerInterest: public HandlerInterface {
 public:
-	HandlerInterest(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificator> tokenAuthentificator,shared_ptr<SharedClient> sharedClient);
+	HandlerInterest(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificatorInterface> tokenAuthentificator,shared_ptr<SharedClient> sharedClient);
 	virtual ~HandlerInterest();
 
 private:

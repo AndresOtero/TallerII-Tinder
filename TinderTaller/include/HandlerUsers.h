@@ -10,10 +10,10 @@
 
 #include "HandlerInterface.h"
 #include "SharedClient.h"
-
+#include "TokenAuthentificatorInterface.h"
 class HandlerUsers: public HandlerInterface {
 public:
-	HandlerUsers(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificator> tokenAuthentificator,shared_ptr<SharedClient> sharedClient);
+	HandlerUsers(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificatorInterface> tokenAuthentificator,shared_ptr<SharedClient> sharedClient);
 	virtual msg_t handleMsg(struct http_message *hm);
 	virtual ~HandlerUsers();
 private:

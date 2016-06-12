@@ -7,7 +7,7 @@
 
 #include "HandlerToken.h"
 
-HandlerToken::HandlerToken(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificator> tokenAuthentificator,shared_ptr<SharedClient> sharedClient){
+HandlerToken::HandlerToken(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificatorInterface> tokenAuthentificator,shared_ptr<SharedClient> sharedClient){
 	/**Creo el handler de Token**/
 	this->DB=DB;
 	this->tokenAuthentificator=tokenAuthentificator;

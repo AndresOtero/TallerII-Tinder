@@ -7,7 +7,7 @@
 
 #include "HandlerInterest.h"
 
-HandlerInterest::HandlerInterest(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificator> tokenAuthentificator,shared_ptr<SharedClient> sharedClient){
+HandlerInterest::HandlerInterest(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificatorInterface> tokenAuthentificator,shared_ptr<SharedClient> sharedClient){
 	/**Creo el handler de interest**/
 	this->DB=DB;
 	this->tokenAuthentificator=tokenAuthentificator;

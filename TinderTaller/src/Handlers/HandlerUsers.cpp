@@ -7,7 +7,7 @@
 #define TERCERA_POSITION 3
 #include "HandlerUsers.h"
 
-HandlerUsers::HandlerUsers(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificator> tokenAuthentificator,shared_ptr<SharedClient> sharedClient){
+HandlerUsers::HandlerUsers(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificatorInterface> tokenAuthentificator,shared_ptr<SharedClient> sharedClient){
 	/**Creo el handler de users**/
 	this->DB=DB;
 	this->tokenAuthentificator=tokenAuthentificator;
