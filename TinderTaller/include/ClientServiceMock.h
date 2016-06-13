@@ -13,6 +13,7 @@ public:
 	ClientServiceMock();
 	MemoryStruct getClientService(const char * url);
 	MemoryStruct postClientService(const char * url, const char * data);
+	MemoryStruct postWithAuthorizationClientService(const char * url, const char * data, const char * authorization);
 	MemoryStruct putClientService(const char * url, const char * data);
 	MemoryStruct deleteClientService(const char * url);
 	virtual ~ClientServiceMock();

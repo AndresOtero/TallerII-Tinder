@@ -20,8 +20,11 @@ class ClientService : public ClientServiceInterface {
 		virtual ~ClientService();
 		MemoryStruct getClientService(const char * url);
 		MemoryStruct postClientService(const char * url, const char * data);
+		MemoryStruct postWithAuthorizationClientService(const char * url, const char * data, const char * authorization);
 		MemoryStruct putClientService(const char * url, const char * data);
 		MemoryStruct deleteClientService(const char * url);
+	private:
+		MemoryStruct postBaseClientService(const char * url, const char * data, const char * authorization);
 };
 
 #endif /* SRC_CLIENTSERVICE_H_ */

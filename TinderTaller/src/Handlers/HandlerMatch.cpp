@@ -14,8 +14,11 @@ HandlerMatch::HandlerMatch(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificat
 	this->prefix=MATCH;
 
 	shared_ptr<CandidateService> candidateServiceAux(new CandidateService(DB,sharedClient));
-
 	this->candidateService = candidateServiceAux;
+
+	ClientService *clientServ =new ClientService();
+	shared_ptr<GcmClient> gcmClientAux(new GcmClient(clientServ));
+	this->gcmClient = gcmClientAux;
 }
 
 msg_t HandlerMatch::handlePost(struct http_message *hm){
@@ -35,8 +38,24 @@ msg_t HandlerMatch::handlePost(struct http_message *hm){
 	if(ok && okMatch){
 		StatusCodeMatch rdo = this->candidateService->match(idEmail, idEmailMatch);
 		if (rdo == StatusCodeMatch::OK_UPDATE_MATCH){
-			//TODO ACA HAY Q INFORMAR AL ANDROID - GOOGLE CLIENT
 			msg.change(ACCEPTED, "{\"Mensaje\":\"Se produjo Match con el candidato seleccionado.\"}");
+			//TODO ACA HAY Q INFORMAR AL ANDROID - GOOGLE CLIENT
+			//TODO ESTO DEBERIA DE ESTAR EN UN HILO QUE SE CORRA MIENTRAS LE RESPONDO AL ANDROID DEL MATCH OK
+			DBtuple userGcm(idEmail + "_gcmId");
+			bool okUserGcm = DB->get(userGcm);
+			DBtuple userGcmMatch(idEmailMatch + "_gcmId");
+			bool okUserGcmMatch = DB->get(userGcmMatch);
+			if(okUserGcm && okUserGcmMatch){
+				LOG(INFO) << "Se van a informar los matchs por Gcm (HandlerMatch - handlePost).";
+				string matchGcmJsonString = jsonParse.getGcmJson(userGcm.value, idEmailMatch);
+				this->gcmClient->setNewMatch(matchGcmJsonString);
+				matchGcmJsonString.clear();
+				matchGcmJsonString = jsonParse.getGcmJson(userGcmMatch.value, idEmail);
+				this->gcmClient->setNewMatch(matchGcmJsonString);
+			} else {
+				LOG(WARNING)<<"Error buscando los gcm de los usuarios para informar el match.";
+				msg=this->badRequest("{\"Mensaje\":\"Error buscando los gcm de los usuarios para informar el match.\"}");
+			}
 		} else if(rdo == StatusCodeMatch::ERROR_UPDATE_MATCH) {
 			LOG(WARNING)<<"Error informando match";
 			msg=this->badRequest("{\"Mensaje\":\"Error informando match.\"}");
