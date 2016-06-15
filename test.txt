@@ -1,0 +1,114 @@
+[==========] Running 83 tests from 14 test cases.
+[----------] Global test environment set-up.
+[----------] 9 tests from TokenAuthentificator
+[ RUN      ] TokenAuthentificator.askTokenVerificateToken
+2016-06-15 13:55:14,339 INFO  [default] Borro los registros anteriores de la  base de datos
+2016-06-15 13:55:14,339 INFO  [default] Creo base de datos
+2016-06-15 13:55:14,340 INFO  [default] Borro la base de datos
+[       OK ] TokenAuthentificator.askTokenVerificateToken (77 ms)
+[ RUN      ] TokenAuthentificator.askTokenVerificateUser
+2016-06-15 13:55:14,407 INFO  [default] Borro los registros anteriores de la  base de datos
+2016-06-15 13:55:14,407 INFO  [default] Creo base de datos
+2016-06-15 13:55:14,408 INFO  [default] Json: Se parseo de manera satisfactoria
+2016-06-15 13:55:14,408 INFO  [default] Borro la base de datos
+[       OK ] TokenAuthentificator.askTokenVerificateUser (66 ms)
+[ RUN      ] TokenAuthentificator.askTokenVerificateTime
+2016-06-15 13:55:14,471 INFO  [default] Borro los registros anteriores de la  base de datos
+2016-06-15 13:55:14,471 INFO  [default] Creo base de datos
+2016-06-15 13:55:14,471 INFO  [default] Json: Se parseo de manera satisfactoria
+2016-06-15 13:55:14,471 INFO  [default] Borro la base de datos
+[       OK ] TokenAuthentificator.askTokenVerificateTime (63 ms)
+[ RUN      ] TokenAuthentificator.notValidateNotFormattedToken
+2016-06-15 13:55:14,539 INFO  [default] Borro los registros anteriores de la  base de datos
+2016-06-15 13:55:14,540 INFO  [default] Creo base de datos
+2016-06-15 13:55:14,540 INFO  [default] Json: No se parseo de manera satisfactoria
+2016-06-15 13:55:14,540 INFO  [default] Token: No existe el usuario en la base de datos
+2016-06-15 13:55:14,540 INFO  [default] Borro la base de datos
+[       OK ] TokenAuthentificator.notValidateNotFormattedToken (80 ms)
+[ RUN      ] TokenAuthentificator.notValidateWrongSignature
+2016-06-15 13:55:14,622 INFO  [default] Borro los registros anteriores de la  base de datos
+2016-06-15 13:55:14,623 INFO  [default] Creo base de datos
+2016-06-15 13:55:14,624 INFO  [default] Json: Se parseo de manera satisfactoria
+2016-06-15 13:55:14,624 INFO  [default] Json: Se parseo de manera satisfactoria
+db  NGIyMjQxM2M1MTEwOTVlYzk5NjY1YTUwMmRhMDdlZDUyZDFkMWZjN2E4M2M4MDI5NmM1NzJmMjNlZGYwMzcwNQ==
+db len 88
+to  NGIyMjQxM2M1MTEwOTVlYzk5NjY1YTUwMmRhMDdlZDUyZDFkMWZjN2E4M2M4MDI5NmM1NzJmMjNlZGYwMzcwNQ==x
+to len 89
+2016-06-15 13:55:14,624 INFO  [default] No esta bien el signature del token
+2016-06-15 13:55:14,624 INFO  [default] Borro la base de datos
+[       OK ] TokenAuthentificator.notValidateWrongSignature (74 ms)
+[ RUN      ] TokenAuthentificator.notValidateExperatedToken
+2016-06-15 13:55:14,693 INFO  [default] Borro los registros anteriores de la  base de datos
+2016-06-15 13:55:14,693 INFO  [default] Creo base de datos
+2016-06-15 13:55:14,694 INFO  [default] Json: Se parseo de manera satisfactoria
+2016-06-15 13:55:14,694 INFO  [default] Json: Se parseo de manera satisfactoria
+db  NmE2NGFjNDdmNDAxYjU5NWUyN2I4NjI2NTNkMjAxNjQwMzlhZWNiZTA0ZDZlMTcyNzg3YmEwYzExYzJjMjMyNw==
+db len 88
+to  NmE2NGFjNDdmNDAxYjU5NWUyN2I4NjI2NTNkMjAxNjQwMzlhZWNiZTA0ZDZlMTcyNzg3YmEwYzExYzJjMjMyNw==
+to len 88
+2016-06-15 13:55:14,694 INFO  [default] Json: Se parseo de manera satisfactoria
+2016-06-15 13:55:14,694 INFO  [default] Token expirado
+2016-06-15 13:55:14,694 INFO  [default] Json: Se parseo de manera satisfactoria
+2016-06-15 13:55:14,694 INFO  [default] Borro la base de datos
+[       OK ] TokenAuthentificator.notValidateExperatedToken (69 ms)
+[ RUN      ] TokenAuthentificator.validateTokenWithTimeStamp
+2016-06-15 13:55:14,770 INFO  [default] Borro los registros anteriores de la  base de datos
+2016-06-15 13:55:14,771 INFO  [default] Creo base de datos
+2016-06-15 13:55:14,771 INFO  [default] Json: Se parseo de manera satisfactoria
+2016-06-15 13:55:14,777 INFO  [default] Json: Se parseo de manera satisfactoria
+db  NGIyMjQxM2M1MTEwOTVlYzk5NjY1YTUwMmRhMDdlZDUyZDFkMWZjN2E4M2M4MDI5NmM1NzJmMjNlZGYwMzcwNQ==
+db len 88
+to  NGIyMjQxM2M1MTEwOTVlYzk5NjY1YTUwMmRhMDdlZDUyZDFkMWZjN2E4M2M4MDI5NmM1NzJmMjNlZGYwMzcwNQ==
+to len 88
+2016-06-15 13:55:14,777 INFO  [default] Json: Se parseo de manera satisfactoria
+2016-06-15 13:55:14,777 INFO  [default] Borro la base de datos
+[       OK ] TokenAuthentificator.validateTokenWithTimeStamp (83 ms)
+[ RUN      ] TokenAuthentificator.validateTokenWithOutTimeStamp
+2016-06-15 13:55:14,856 INFO  [default] Borro los registros anteriores de la  base de datos
+2016-06-15 13:55:14,856 INFO  [default] Creo base de datos
+2016-06-15 13:55:14,856 INFO  [default] Json: Se parseo de manera satisfactoria
+2016-06-15 13:55:14,857 INFO  [default] Json: Se parseo de manera satisfactoria
+db  NGIyMjQxM2M1MTEwOTVlYzk5NjY1YTUwMmRhMDdlZDUyZDFkMWZjN2E4M2M4MDI5NmM1NzJmMjNlZGYwMzcwNQ==
+db len 88
+to  NGIyMjQxM2M1MTEwOTVlYzk5NjY1YTUwMmRhMDdlZDUyZDFkMWZjN2E4M2M4MDI5NmM1NzJmMjNlZGYwMzcwNQ==
+to len 88
+2016-06-15 13:55:14,857 INFO  [default] Json: Se parseo de manera satisfactoria
+2016-06-15 13:55:14,857 INFO  [default] Borro la base de datos
+[       OK ] TokenAuthentificator.validateTokenWithOutTimeStamp (84 ms)
+[ RUN      ] TokenAuthentificator.deleteJsonTokenUser
+2016-06-15 13:55:14,937 INFO  [default] Borro los registros anteriores de la  base de datos
+2016-06-15 13:55:14,937 INFO  [default] Creo base de datos
+2016-06-15 13:55:14,937 INFO  [default] Json: Se parseo de manera satisfactoria
+2016-06-15 13:55:14,937 INFO  [default] Borro la base de datos
+[       OK ] TokenAuthentificator.deleteJsonTokenUser (100 ms)
+[----------] 9 tests from TokenAuthentificator (697 ms total)
+
+[----------] 5 tests from HandlerToken
+[ RUN      ] HandlerToken.isHandler
+2016-06-15 13:55:15,058 INFO  [default] Borro los registros anteriores de la  base de datos
+2016-06-15 13:55:15,058 INFO  [default] Creo base de datos
+2016-06-15 13:55:15,058 INFO  [default] Crear mock Cliente Service
+2016-06-15 13:55:15,058 INFO  [default] Inicio Shared Cliente
+2016-06-15 13:55:15,058 INFO  [default] Borro Shared Cliente
+2016-06-15 13:55:15,059 INFO  [default] Borro la base de datos
+[       OK ] HandlerToken.isHandler (94 ms)
+[ RUN      ] HandlerToken.post
+2016-06-15 13:55:15,149 INFO  [default] Borro los registros anteriores de la  base de datos
+2016-06-15 13:55:15,149 INFO  [default] Creo base de datos
+2016-06-15 13:55:15,149 INFO  [default] Crear mock Cliente Service
+2016-06-15 13:55:15,149 INFO  [default] Inicio Shared Cliente
+2016-06-15 13:55:15,150 INFO  [default] Post token
+2016-06-15 13:55:15,150 INFO  [default] El mensaje es {"user":{"email":"andy@yahoo.com","password":"pass"}}
+
+2016-06-15 13:55:15,150 INFO  [default] Json: Se parseo de manera satisfactoria
+2016-06-15 13:55:15,150 INFO  [default] Json: Se parseo de manera satisfactoria
+2016-06-15 13:55:15,150 INFO  [default] Json: Se parseo de manera satisfactoria
+2016-06-15 13:55:15,150 INFO  [default] HTTPParser: header incorrecto
+2016-06-15 13:55:15,151 INFO  [default] Json: No se parseo de manera satisfactoria
+2016-06-15 13:55:15,151 INFO  [default] Mando un mensaje
+2016-06-15 13:55:15,151 INFO  [default] Borro Shared Cliente
+2016-06-15 13:55:15,151 INFO  [default] Borro la base de datos
+[       OK ] HandlerToken.post (97 ms)
+[ RUN      ] HandlerToken.singin
+2016-06-15 13:55:15,269 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGINT] signal
+2016-06-15 13:55:15,269 WARN  [default] Aborting application. Reason: Fatal log at [/home/andres/git/TallerII-Tinder/TinderTaller/src/../include/easylogging++.h:5583]

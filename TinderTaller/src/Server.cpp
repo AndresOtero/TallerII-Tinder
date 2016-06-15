@@ -11,14 +11,15 @@ shared_ptr<Server> Server::serverInstance = NULL; //Singleton Patron
 bool Server::set = false; //Singleton Patron
 
 //static const char *s_http_port = "192.168.1.113:8080";
-static const char *s_http_port = "localhost:8080";
 static int s_sig_num = 0;
 static void *s_db_handle = NULL;
 
 Server::Server() {
 	/**Creo el server**/
+	this->configuration=Configuration::getConfiguration();
 	mg_mgr_init(&mgr, NULL);  //Inicializo el Mongoose manager
-	nc = mg_bind(&mgr, s_http_port, Server::staticEvHandler); //Creo la conexion que escucha.
+	string http_port=this->configuration->getStringAttribute("http_port");
+	nc = mg_bind(&mgr, http_port.c_str(), Server::staticEvHandler); //Creo la conexion que escucha.
 	mg_set_protocol_http_websocket(nc); //Conecta al event handler de http con la conexion.
 }
 

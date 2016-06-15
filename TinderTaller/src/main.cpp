@@ -14,10 +14,13 @@ INITIALIZE_EASYLOGGINGPP
 #include "../include/DataBase.h"
 
 int main(int argc, char* argv[]) {
-	shared_ptr<DataBase> db(new DataBase("./DBServer/", true, true));
+	Configuration::setPath("./config/tinderConfig.Json");
+	Configuration* conf=Configuration::getConfiguration().get();
+	bool createIfMissing=conf->getBooleanAttribute("createIfMissing");
+	bool deleteAll=conf->getBooleanAttribute("deleteAll");
+	shared_ptr<DataBase> db(new DataBase("./DBServer/", createIfMissing, deleteAll));
 	shared_ptr<Server> server = Server::getServer();
 	server->setServerDB(db);
-
 	bool continuar = true;
 	while (continuar && server->isSet()) {
 		server->runServer();
