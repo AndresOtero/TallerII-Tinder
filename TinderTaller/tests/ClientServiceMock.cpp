@@ -64,6 +64,14 @@ MemoryStruct ClientServiceMock::postClientService(const char * url,
 
 	return chunk;
 }
+
+MemoryStruct ClientServiceMock::postWithAuthorizationClientService(const char * url, const char * data,
+		const char * authorization) {
+	MemoryStruct chunk;
+	//TODO
+	return chunk;
+}
+
 MemoryStruct ClientServiceMock::putClientService(const char * url,
 		const char * data) {
 	MemoryStruct chunk;

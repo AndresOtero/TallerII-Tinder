@@ -56,7 +56,7 @@ MemoryStruct ClientService::getClientService(const char * url) {
 	return chunk;
 }
 
-MemoryStruct ClientService::postClientService(const char * url, const char * data){
+MemoryStruct ClientService::postBaseClientService(const char * url, const char * data, const char * authorization){
 	CURL *curl;
 	CURLcode res;
 
@@ -80,42 +80,59 @@ MemoryStruct ClientService::postClientService(const char * url, const char * dat
 		headers = curl_slist_append(headers, "Accept: application/json");
 		headers = curl_slist_append(headers, "Content-Type: application/json");
 		headers = curl_slist_append(headers, "charsets: utf-8");
+
+		std::string authorizationData = "";
+		authorizationData.append(authorization);
+		if(!authorizationData.empty()){
+			std::string headersAuthorization = "Authorization: ";
+			headersAuthorization.append(authorization);
+			headers = curl_slist_append(headers, headersAuthorization.c_str());
+		}
+
 		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 
 		/* First set the URL that is about to receive our POST. This URL can
-       	   just as well be a https:// URL if that is what should receive the
-       	   data. */
+		   just as well be a https:// URL if that is what should receive the
+		   data. */
 		curl_easy_setopt(curl, CURLOPT_URL, url);
 		/* Now specify the POST data */
 		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data);
 		/* Now specify we want to POST data */
-      	curl_easy_setopt(curl, CURLOPT_POST, 1L);
-      	/* we want to use our own read function */
-      	curl_easy_setopt(curl, CURLOPT_READFUNCTION, readMemoryCallback);
-      	/* pointer to pass to our read function */
-      	curl_easy_setopt(curl, CURLOPT_READDATA, (void *)&pooh);
-      	/* Set the expected POST size. If you want to POST large amounts of data,
-      		   consider CURLOPT_POSTFIELDSIZE_LARGE */
+		curl_easy_setopt(curl, CURLOPT_POST, 1L);
+		/* we want to use our own read function */
+		curl_easy_setopt(curl, CURLOPT_READFUNCTION, readMemoryCallback);
+		/* pointer to pass to our read function */
+		curl_easy_setopt(curl, CURLOPT_READDATA, (void *)&pooh);
+		/* Set the expected POST size. If you want to POST large amounts of data,
+			   consider CURLOPT_POSTFIELDSIZE_LARGE */
 		curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, (curl_off_t) pooh.size);
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeMemoryCallback);
 		/* we pass our 'chunk' struct to the callback function */
 		curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *) &chunk);
 
-      	/* Perform the request, res will get the return code */
-      	res = curl_easy_perform(curl);
-      	/* Check for errors */
-      	if(res != CURLE_OK) {
-      		LOG(WARNING)<< "curl_easy_perform() failed: " << curl_easy_strerror(res);
-      	}
+		/* Perform the request, res will get the return code */
+		res = curl_easy_perform(curl);
+		/* Check for errors */
+		if(res != CURLE_OK) {
+			LOG(WARNING)<< "curl_easy_perform() failed: " << curl_easy_strerror(res);
+		}
 
-      	/* always cleanup */
-      	curl_easy_cleanup(curl);
+		/* always cleanup */
+		curl_easy_cleanup(curl);
 	}
 
 	curl_global_cleanup();
 
 	chunk.status = res;
 	return chunk;
+}
+
+MemoryStruct ClientService::postClientService(const char * url, const char * data){
+	return postBaseClientService(url, data, "");
+}
+
+MemoryStruct ClientService::postWithAuthorizationClientService(const char * url, const char * data, const char * authorization){
+	return postBaseClientService(url, data, authorization);
 }
 
 MemoryStruct ClientService::putClientService(const char * url, const char * data){
