@@ -14,7 +14,10 @@ INITIALIZE_EASYLOGGINGPP
 #include "../include/DataBase.h"
 
 int main(int argc, char* argv[]) {
-	Configuration::setPath("./config/tinderConfig.Json");
+	if(argc!=2){
+		return 1;
+	}
+	Configuration::setPath(argv[1]);
 	Configuration* conf=Configuration::getConfiguration().get();
 	bool createIfMissing=conf->getBooleanAttribute("createIfMissing");
 	bool deleteAll=conf->getBooleanAttribute("deleteAll");
