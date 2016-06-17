@@ -23,7 +23,7 @@ HandlerChat::HandlerChat(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificator
 
 }
 
-bool HandlerChat::saveNewMessage(string chatId,string  remitente,string message) {
+Json::Value HandlerChat::saveNewMessage(string chatId,string  remitente,string message) {
 	/**Recibe el mensaje el remitente y el chat id y lo guarda en Base de datos.**/
 	DBtuple getChat("chat_"+chatId);
 	DB->get(getChat);
@@ -50,6 +50,8 @@ bool HandlerChat::saveNewMessage(string chatId,string  remitente,string message)
 	string newMessageString=jsonParse.valueToString(newMessage);
 	LOG(INFO)<<"Nuevo Mensaje id:"<< messageIdString<<" mensaje:"<<newMessageString;
 	DB->put(getChat);
+	newMessage["message_id"]=newMessageId;
+	return newMessage;
 }
 
 bool HandlerChat::saveNewChat(string chatId,string  remitente,string destinatario) {
@@ -73,7 +75,7 @@ msg_t HandlerChat::handlePost(struct http_message *hm) {
 	msg_t msg;
 	LOG(INFO) << "Obteniendo los datos para guardar el mensaje del chat.";
 	Json::Value bodyValue=jsonParse.stringToValue(hm->body.p);
-	string  remitente=this->getUser(hm);
+	string remitente=this->getUser(hm);
 	string destinatario=jsonParse.getStringFromValue(bodyValue,"To");
 	string mensaje=jsonParse.getStringFromValue(bodyValue,"message");
 	LOG(INFO)<< "El mensaje de "<<remitente<<" a "<<destinatario<<" es "<<mensaje;
@@ -84,8 +86,24 @@ msg_t HandlerChat::handlePost(struct http_message *hm) {
 	if(!okGetChat){
 		this->saveNewChat(chatId,remitente,destinatario);
 	}
-	this->saveNewMessage(chatId,remitente,mensaje);
-	this->gcmClient->
+	Json::Value newMessage=this->saveNewMessage(chatId,remitente,mensaje);
+	DBtuple getGcmId(destinatario+"_gcmId");
+	bool okGetGcm=DB->get(getChat);
+	Json::Value PushNotification;
+	PushNotification["to"]=getGcmId.value;
+	Json::Value Notification;
+	Notification["title"]=("Nuevo mensaje de "+remitente);
+	Notification["body"]=(mensaje);
+	PushNotification["notification"]=Notification;
+	Json::Value Data;
+	Data["type"]="2";
+	Data["chat_room_id"]=chatId;
+	Data["message_id"]=newMessage["message_id"];
+	Data["message"]=mensaje;
+	Data["created_at"]=newMessage["time"];
+	PushNotification["data"]=Data;
+	string jsonNotification=jsonParse.valueToString(PushNotification);
+	this->gcmClient->setNewChat(jsonNotification);
 	msg.status=OK;
 	return msg;
 }
