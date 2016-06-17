@@ -241,3 +241,17 @@ vector<User> UserDao::getCandidatesForIdUser(string idUser){
 
 	return usersOk;
 }
+
+vector<User> UserDao::updateUserPhotoForUrl(vector<User> users){
+	vector<User> usersUpdate ;
+
+	for(User user : users){
+		msg_t msg = this->sharedClient->getUser(user.getIdShared());
+		Json::Value val = jsonParser.stringToValue(msg.body);
+		string photo = jsonParser.getStringFromValue(val["user"], "photo_profile");
+		user.setPhotoProfile(photo);
+		usersUpdate.push_back(user);
+	}
+
+	return usersUpdate;
+}

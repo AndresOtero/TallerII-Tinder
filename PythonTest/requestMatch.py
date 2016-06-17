@@ -33,7 +33,7 @@ interesNuevo = {}
 interesNuevo['interest'] = intereses2
 interesNuevo['metadata'] = {'version':"0.1",'count': 1}
 
-userMatch = {"email" : "RobertoM50.0226379021885@gmail.com"}
+userMatch = {"email" : "RobertoM50.847066322702@gmail.com"}
 
 #host='192.168.0.200'
 host='localhost'
@@ -75,7 +75,10 @@ print response.json()
 url='http://' + host + ':8080/match/'
 print url
 print "post"
+print "Request:"
+print dataMatchPost_json
 response = requests.post(url,headers=auth,data=dataMatchPost_json)
+print "Response:"
 print response
 print response.json()
 
@@ -99,6 +102,9 @@ print response.json()
 url='http://' + host + ':8080/match/'
 print url
 print "post"
+print "Request:"
+print dataMatchPost_json
 response = requests.post(url,headers=auth,data=dataMatchPost_json)
+print "Response:"
 print response
 print response.json()

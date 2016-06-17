@@ -148,7 +148,7 @@ std::string JsonParser::getCandidatesJson(vector<User> users){
 		userValue["email"] = user.getEmail();
 		userValue["sex"] = user.getSex();
 		userValue["age"] = user.getBirthday();
-		userValue["photo_profile"] = user.getUrlPhotoProfile();
+		userValue["photo_profile"] = user.getPhotoProfile();
 
 		Json::Value interestsValue;
 		for (Interest interest : user.getInterests()){
@@ -165,7 +165,9 @@ std::string JsonParser::getCandidatesJson(vector<User> users){
 		locationValue["longitude"] = user.getLongitude();
 		userValue["location"] = locationValue;
 
-		usersValue.append(userValue);
+		Json::Value userRoot;
+		userRoot["user"] = userValue;
+		usersValue.append(userRoot);
 	}
 
 	root["users"] = usersValue;

@@ -39,6 +39,7 @@ public:
 	vector<User> getCandidatesForIdUser(string idUser);
 	bool putMatch(User user, User userToMatch);
 	bool putCandidateMatch(User user, User userToMatch);
+	vector<User> updateUserPhotoForUrl(vector<User> users);
 };
 
 #endif /* DAOS_USERDAO_H_ */

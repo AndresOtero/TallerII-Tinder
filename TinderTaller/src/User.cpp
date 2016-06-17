@@ -155,3 +155,11 @@ void User::setIdUserCandidatesMatchs(vector<string> idUserCandidatesMatchs){
 vector<string> User::getIdUserCandidatesMatchs(){
 	return this->idUserCandidatesMatchs;
 }
+
+void User::setPhotoProfile(string photoProfile){
+	this->photoProfile = photoProfile;
+}
+
+string User::getPhotoProfile(){
+	return this->photoProfile;
+}
