@@ -101,7 +101,7 @@ msg_t HandlerMatch::handleGet(struct http_message *hm){
 		search_candidate_t searchCandidate = this->candidateService->searchCandidate(idEmail);
 		if(searchCandidate.status == StatusCodeMatch::ERROR_LIMIT_DAILY){
 			LOG(WARNING)<<"Excede limite diario de busqueda de candidatos.";
-			msg=this->badRequest("{\"Mensaje\":\"Excede limite diario de busqueda de candidatos.\"}");
+			msg.change(StatusCode::ERROR_LIMIT_DAILY_STATUS_CODE, "{\"Mensaje\":\"Excede limite diario de busqueda de candidatos.\"}");
 		} else {
 			string candidatesJson = jsonParse.getCandidatesJson(searchCandidate.candidates);
 			LOG(DEBUG) << "Candidatos a match: " << candidatesJson << endl;

@@ -39,6 +39,7 @@ class JsonParser {
 		std::string getCandidatesJson(vector<User> users);
 		vector<string> getVectorFromValue(Json::Value value);
 		std::string getGcmJson(string gcmRegistrationId, string idUserWithConexion);
+		Json::Value getUserValueJson(Json::Value user);
 };
 
 #endif /* SRC_JSONPARSER_H_ */

@@ -188,8 +188,7 @@ string HandlerChat::getChatHeader(string user,string chatString){
 	bool okId=DB->get(tpId);
 	msg_t msgGet = sharedClient->getUser(tpId.value);
 	Json::Value jsonData=jsonParse.stringToValue(msgGet.body);
-	jsonParse.removeMember(jsonData["user"],"id");
-	header["user_data"]=jsonData;
+	header["user"]= jsonParse.getUserValueJson(jsonData["user"]);
 	int newMessageId=chat["message_id"].asInt();
 	header["LastMessage"]=chat["Messages"][to_string(newMessageId-1)];
 	header["message_id"]=newMessageId-1;
@@ -203,14 +202,25 @@ msg_t HandlerChat::handleGetAll(struct http_message *hm){
 	string  user=this->getUser(hm);
 	LOG(INFO)<<"Busco todas las conversaciones";
 	vector<string> chatsIdVector=this->getChatsId(hm);
-	for (auto itr: chatsIdVector){
+	/*for (auto itr: chatsIdVector){
 		DBtuple getChat("chat_"+(itr));
 		DB->get(getChat);
 		//Habria que mandar 1 pag o algo asi
 		chats[itr]=this->getChatHeader(user,getChat.value);
 	}
 	msg.status=OK;
+	msg.body=jsonParse.valueToString(chats);*/
+
+	for (auto itr: chatsIdVector){
+		DBtuple getChat("chat_"+(itr));
+		DB->get(getChat);
+		//Habria que mandar 1 pag o algo asi
+		chats.append(this->getChatHeader(user,getChat.value));
+	}
+
+	msg.status=OK;
 	msg.body=jsonParse.valueToString(chats);
+
 	return msg;
 }
 string HandlerChat::readChat(string chatString,string user,string messageId,string conversationId){
