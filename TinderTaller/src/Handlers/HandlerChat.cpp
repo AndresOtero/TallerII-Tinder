@@ -13,12 +13,14 @@ HandlerChat::~HandlerChat() {
 	// TODO Auto-generated destructor stub
 }
 
-HandlerChat::HandlerChat(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificatorInterface> tokenAuthentificator,shared_ptr<SharedClient> sharedClient) {
+HandlerChat::HandlerChat(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificatorInterface> tokenAuthentificator,shared_ptr<SharedClient> sharedClient,shared_ptr<GcmClient> gcmClient) {
 	/**Creo el handler de match**/
 	this->DB=DB;
 	this->tokenAuthentificator=tokenAuthentificator;
 	this->prefix=CHAT;
 	this->sharedClient= sharedClient;
+	this->gcmClient = gcmClient;
+
 }
 
 bool HandlerChat::saveNewMessage(string chatId,string  remitente,string message) {
@@ -83,6 +85,7 @@ msg_t HandlerChat::handlePost(struct http_message *hm) {
 		this->saveNewChat(chatId,remitente,destinatario);
 	}
 	this->saveNewMessage(chatId,remitente,mensaje);
+	this->gcmClient->
 	msg.status=OK;
 	return msg;
 }

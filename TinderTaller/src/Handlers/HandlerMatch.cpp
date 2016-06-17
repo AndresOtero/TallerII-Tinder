@@ -7,7 +7,7 @@
 
 #include "HandlerMatch.h"
 
-HandlerMatch::HandlerMatch(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificatorInterface> tokenAuthentificator,shared_ptr<SharedClient> sharedClient) {
+HandlerMatch::HandlerMatch(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificatorInterface> tokenAuthentificator,shared_ptr<SharedClient> sharedClient,shared_ptr<GcmClient> gcmClient) {
 	/**Creo el handler de match**/
 	this->DB=DB;
 	this->tokenAuthentificator=tokenAuthentificator;
@@ -16,9 +16,8 @@ HandlerMatch::HandlerMatch(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificat
 	shared_ptr<CandidateService> candidateServiceAux(new CandidateService(DB,sharedClient));
 	this->candidateService = candidateServiceAux;
 
-	ClientService *clientServ =new ClientService();
-	shared_ptr<GcmClient> gcmClientAux(new GcmClient(clientServ));
-	this->gcmClient = gcmClientAux;
+
+	this->gcmClient = gcmClient;
 }
 
 msg_t HandlerMatch::handlePost(struct http_message *hm){

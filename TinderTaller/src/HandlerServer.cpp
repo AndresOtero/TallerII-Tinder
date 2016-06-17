@@ -21,11 +21,12 @@ HandlerServer::HandlerServer(shared_ptr<DataBase> DB) {
 	shared_ptr<TokenAuthentificator> tokenAuth(new TokenAuthentificator(DB));
 	ClientService *clientServ =new ClientService();
 	shared_ptr<SharedClient> sharedClient(new SharedClient(clientServ));
+	shared_ptr<GcmClient> gcmClientAux(new GcmClient(clientServ));
 	this->tokenAuthentificator=tokenAuth;
 	vecHandler.push_back(shared_ptr<HandlerInterface>(new HandlerUsers(DB,tokenAuthentificator,sharedClient)));
 	vecHandler.push_back(shared_ptr<HandlerInterface>(new HandlerInterest(DB,tokenAuthentificator,sharedClient)));
-	vecHandler.push_back(shared_ptr<HandlerInterface>(new HandlerMatch(DB,tokenAuthentificator,sharedClient)));
-	vecHandler.push_back(shared_ptr<HandlerInterface>(new HandlerChat(DB,tokenAuthentificator,sharedClient)));
+	vecHandler.push_back(shared_ptr<HandlerInterface>(new HandlerMatch(DB,tokenAuthentificator,sharedClient,gcmClientAux)));
+	vecHandler.push_back(shared_ptr<HandlerInterface>(new HandlerChat(DB,tokenAuthentificator,sharedClient,gcmClientAux)));
 	vecHandler.push_back(shared_ptr<HandlerInterface>(new HandlerToken(DB,tokenAuthentificator,sharedClient)));
 	DBtuple chatId("chat_id");
 	if(!DB->get(chatId)){
