@@ -133,16 +133,14 @@ std::string JsonParser::getCandidatesJson(vector<User> users){
 	metadataValue["count"] = (int)users.size();
 	root["metadata"] = metadataValue;
 
-	Json::Value usersValue;
-
 	if(users.empty()){
 		root["users"] = "";
 		return valueToString(root);
 	}
 
+	Json::Value usersValue;
 	for (User user : users){
 		Json::Value userValue;
-		userValue["id"] = user.getIdShared();
 		userValue["name"] = user.getName();
 		userValue["alias"] = user.getAlias();
 		userValue["email"] = user.getEmail();
@@ -196,4 +194,31 @@ std::string JsonParser::getGcmJson(string gcmRegistrationId, string idUserWithCo
 	root["user_id"] = idUserWithConexion;
 
 	return valueToString(root);
+}
+
+Json::Value JsonParser::getUserValueJson(Json::Value user){
+	Json::Value userValue;
+	userValue["name"] = user["name"];
+	userValue["alias"] = user["alias"];
+	userValue["email"] = user["email"];
+	userValue["sex"] = user["sex"];
+	userValue["age"] = user["age"];
+	userValue["photo_profile"] = user["photo_profile"];
+
+	Json::Value interestsValue;
+	for (Interest interest : getInterest(user["interests"])){
+		Json::Value interestValue;
+		interestValue["category"] = interest.getCategory();
+		interestValue["value"] = interest.getValue();
+
+		interestsValue.append(interestValue);
+	}
+	userValue["interests"] = interestsValue;
+
+	Json::Value locationValue;
+	locationValue["latitude"] = (user["location"])["latitude"];
+	locationValue["longitude"] = (user["location"])["longitude"];
+	userValue["location"] = locationValue;
+
+	return userValue;
 }
