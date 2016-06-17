@@ -38,7 +38,7 @@ msg_t HandlerMatch::handlePost(struct http_message *hm){
 	if(ok && okMatch){
 		StatusCodeMatch rdo = this->candidateService->match(idEmail, idEmailMatch);
 		if (rdo == StatusCodeMatch::OK_UPDATE_MATCH){
-			msg.change(ACCEPTED, "{\"Mensaje\":\"Se produjo Match con el candidato seleccionado.\"}");
+			msg.change(CREATED, "{\"Mensaje\":\"Se produjo Match con el candidato seleccionado.\"}");
 			//TODO ACA HAY Q INFORMAR AL ANDROID - GOOGLE CLIENT
 			//TODO ESTO DEBERIA DE ESTAR EN UN HILO QUE SE CORRA MIENTRAS LE RESPONDO AL ANDROID DEL MATCH OK
 			DBtuple userGcm(idEmail + "_gcmId");
@@ -60,7 +60,7 @@ msg_t HandlerMatch::handlePost(struct http_message *hm){
 			LOG(WARNING)<<"Error informando match";
 			msg=this->badRequest("{\"Mensaje\":\"Error informando match.\"}");
 		} else if(rdo == StatusCodeMatch::OK_UPDATE_CANDIDATE_MATCH){
-			msg.change(ACCEPTED, "{\"Mensaje\":\"Se almaceno correctamente el candidato a match seleccionado.\"}");
+			msg.change(CREATED, "{\"Mensaje\":\"Se almaceno correctamente el candidato a match seleccionado.\"}");
 		} else if(rdo == StatusCodeMatch::ERROR_MATCH_DUPLICATE){
 			LOG(WARNING)<<"Error match ya informado.";
 			msg=this->badRequest("{\"Mensaje\":\"Error match ya informado.\"}");
