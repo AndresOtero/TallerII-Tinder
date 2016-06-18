@@ -47,18 +47,53 @@ search_candidate_t CandidateService::searchCandidate(string idUser){
 	//Saco los que tuvieron un match en comun
 	candidates = getUsersNotMatch(user, candidates);
 
+	//Saco los que ya likeo en comun
+	candidates = getUsersNotLiked(user, candidates);
+
 	//Filtro por cercania. Me quedo con los que estan mas cerca
 	candidates = getUsersNear(user, candidates);
 
 	//Me quedo con los que tengan algun interes en comun
 	candidates = getUsersCommonInterests(user, candidates);
 
-	candidates = userDao->updateUserPhotoForUrl(candidates);
-
 	search_candidate.change(OK_SEARCH, candidates);
 
 	LOG(INFO) << "Fin de busqueda de candidatos a match (CandidateService - searchCandidate).";
 	return search_candidate;
+}
+vector<User> CandidateService::getUsersNotLiked(User user,
+		vector<User> candidates) {
+	/*
+	 * Saco los que ya hizo like.
+	 */
+	LOG(DEBUG)<< "Se van a sacar los candidatos con los que ya tuvo match (CandidateService - getUsersNotMatch).";
+
+	if(user.getIdUserCandidatesMatchs().empty()) {
+		LOG(DEBUG) << "Cantidad de candidatos con los que no tuvo match (CandidateService - getUsersNotMatch): 0";
+		return candidates;
+	}
+	vector<User> candidatesOk;
+	for(int i = 0; i < candidates.size(); i++) {
+		User candidate = candidates[i];
+		bool match = false;
+		int iMatch = 0;
+		while (iMatch < user.getIdUserCandidatesMatchs().size() && !match) {
+			string idUserMatch = user.getIdUserCandidatesMatchs()[iMatch];
+			idUserMatch = cleanString(idUserMatch);
+			if (idUserMatch.compare(user.getId().c_str()) == 0) {
+				match = true;
+				LOG(DEBUG) << "Candidato que se saca por tener ya un like con el usuario(CandidateService - getUsersNotMatch): " << idUserMatch;
+				break;
+			}
+			iMatch++;
+		}
+
+		if (!match) {
+			candidatesOk.push_back(candidate);
+		}
+	}
+	LOG(DEBUG) << "Cantidad de candidatos con los que no tuvo like (CandidateService - getUsersNotMatch):" << candidatesOk.size();
+	return candidatesOk;
 }
 
 vector<User> CandidateService::getUsersLeastVoted(vector<User> candidates){

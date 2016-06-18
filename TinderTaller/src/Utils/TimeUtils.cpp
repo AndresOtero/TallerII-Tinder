@@ -23,7 +23,11 @@ string TimeUtils::timeToString(){
 	return string(buffer);
 }
 
-
+string TimeUtils::unixTimeToString(){
+	time_t now;
+	time (&now);
+	return to_string(now);
+}
 double TimeUtils::stringtoTimeDifferencefromNow(string stringTime){
 	struct tm * tm=(struct tm *)new struct tm();
 	struct tm *tmNow=(struct tm *)new  struct tm();

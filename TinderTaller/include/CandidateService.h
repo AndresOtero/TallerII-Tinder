@@ -51,6 +51,7 @@ class CandidateService {
 private:
 	shared_ptr<UserDao> userDao;
 	shared_ptr<SharedClient> sharedClient;
+	vector<User>getUsersNotLiked(User user,vector<User> candidate);
 	vector<User> getUsersLeastVoted(vector<User> candidates);
 	vector<User> getUsersNotMatch(User user, vector<User> candidates);
 	vector<User> getUsersNear(User user, vector<User> candidates);

@@ -72,7 +72,7 @@ print dataUserPut_json
 print urlGetUser
 response = requests.put(urlGetUser, headers=auth,data=dataUserPut_json)
 print response
-print response.json()
+#print response.json()
 print 'get user'
 print urlGetUser
 response = requests.get(urlGetUser ,headers=auth)

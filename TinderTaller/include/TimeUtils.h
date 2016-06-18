@@ -16,6 +16,7 @@ class TimeUtils {
 public:
 	TimeUtils();
 	string timeToString();
+	string unixTimeToString();
 	double stringtoTimeDifferencefromNow(string stringTime);
 	virtual ~TimeUtils();
 

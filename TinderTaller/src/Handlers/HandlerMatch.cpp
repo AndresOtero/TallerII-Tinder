@@ -19,7 +19,9 @@ HandlerMatch::HandlerMatch(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificat
 
 	this->gcmClient = gcmClient;
 }
+/**void HandlerMatch::createChat(struct http_message *hm){
 
+}**/
 msg_t HandlerMatch::handlePost(struct http_message *hm){
 	/**Recibo el post de un match y devuelvo un Accepted en caso de exito.**/
 	msg_t msg;
@@ -40,17 +42,29 @@ msg_t HandlerMatch::handlePost(struct http_message *hm){
 			msg.change(CREATED, "{\"Mensaje\":\"Se produjo Match con el candidato seleccionado.\"}");
 			//TODO ACA HAY Q INFORMAR AL ANDROID - GOOGLE CLIENT
 			//TODO ESTO DEBERIA DE ESTAR EN UN HILO QUE SE CORRA MIENTRAS LE RESPONDO AL ANDROID DEL MATCH OK
+			this->saveNewChat(idEmail,idEmailMatch);
 			DBtuple userGcm(idEmail + "_gcmId");
 			bool okUserGcm = DB->get(userGcm);
 			DBtuple userGcmMatch(idEmailMatch + "_gcmId");
 			bool okUserGcmMatch = DB->get(userGcmMatch);
 			if(okUserGcm && okUserGcmMatch){
 				LOG(INFO) << "Se van a informar los matchs por Gcm (HandlerMatch - handlePost).";
-				string matchGcmJsonString = jsonParse.getGcmJson(userGcm.value, idEmailMatch);
-				this->gcmClient->setNewMatch(matchGcmJsonString);
-				matchGcmJsonString.clear();
-				matchGcmJsonString = jsonParse.getGcmJson(userGcmMatch.value, idEmail);
-				this->gcmClient->setNewMatch(matchGcmJsonString);
+				DBtuple userToken("token_"+idEmailMatch);
+				bool okUserToken = DB->get(userToken);
+				string matchGcmJsonString;
+				if(okUserToken){
+					LOG(INFO) << "Se informa a"<<idEmailMatch ;
+					matchGcmJsonString = jsonParse.getGcmJson(userGcm.value, idEmailMatch);
+					this->gcmClient->setNewMatch(matchGcmJsonString);
+					matchGcmJsonString.clear();
+				}
+				DBtuple user2Token("token_"+idEmail);
+				okUserToken = DB->get(user2Token);
+				if(okUserToken){
+					LOG(INFO) << "Se informa a"<<idEmail ;
+					string matchGcmJsonString = jsonParse.getGcmJson(userGcmMatch.value, idEmail);
+					this->gcmClient->setNewMatch(matchGcmJsonString);
+				}
 			} else {
 				LOG(WARNING)<<"Error buscando los gcm de los usuarios para informar el match.";
 				msg=this->badRequest("{\"Mensaje\":\"Error buscando los gcm de los usuarios para informar el match.\"}");
@@ -85,7 +99,39 @@ msg_t HandlerMatch::handlePost(struct http_message *hm){
 
 	return msg;
 }
-
+bool HandlerMatch::saveNewChat(string  remitente,string destinatario) {
+	/**Recibe el remitente , el chat id y el destinatario y guarda el chat en Base de datos.**/
+	DBtuple chatId("chat_id");
+	DB->get(chatId);
+	string id=chatId.value;
+	int id_int=atoi(id.c_str())+1;
+	chatId.value=to_string(id_int);
+	DB->put(chatId);
+	this->saveUserChatId(remitente,destinatario,id);
+	this->saveUserChatId(destinatario,remitente,id);
+	DBtuple putChat("chat_"+id);
+	Json::Value newChat;
+	newChat["User1"]=remitente;
+	newChat["User2"]=destinatario;
+	newChat["LastMessage1"]=0;
+	newChat["LastMessage2"]=0;
+	newChat["message_id"]=0;
+	newChat["Messages"]=Json::Value(Json::nullValue);
+	string saveChat=jsonParse.valueToString(newChat);
+	putChat.value=saveChat;
+	LOG(INFO)<<"Nuevo chat"<<saveChat;
+	return DB->put(putChat);
+}
+bool  HandlerMatch::saveUserChatId(string user,string otherUser,string id){
+	/**Guarde el chat id de una nueva conversacion en la lista de chats del usuario**/
+	DBtuple getUserChatsId(user+"_chats");
+	DB->get(getUserChatsId);
+	Json::Value jsonUserChatsId=jsonParse.stringToValue(getUserChatsId.value);
+	jsonUserChatsId[id]=otherUser;
+	string saveUser=jsonParse.valueToString(jsonUserChatsId);
+	DBtuple saveUsersChatId(user+"_chats",saveUser);
+	return DB->put(saveUsersChatId);
+}
 msg_t HandlerMatch::handleGet(struct http_message *hm){
 	/**Recibo el get de los candidatos a match y devuelvo un Ok en caso de exito.**/
 	msg_t msg;
