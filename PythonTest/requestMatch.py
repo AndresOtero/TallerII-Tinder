@@ -21,7 +21,7 @@ mail = user+'@gmail.com'
 user = {'gcm_registration_id':"aaaaaaaaaa",'name':user,'password': "hashed",'interests':intereses,'location':ubicacion,'alias':user,'age':45,'sex':'H','photo_profile':foto,'email':mail}
 headers = {'content-type': 'application/json'}
 metadata = {'version':"0.1"}
-token={'user':{'email': 'g@gmail.com','password': "aaaa" } }
+token={'user':{'email': mail,'password': "hashed" } }
 r = {}
 r['user'] = user
 r['metadata'] = metadata
@@ -33,7 +33,7 @@ interesNuevo = {}
 interesNuevo['interest'] = intereses2
 interesNuevo['metadata'] = {'version':"0.1",'count': 1}
 
-userMatch = {"email" : "f@gmail.com"}
+userMatch = {"email" : "RobertoM50.714818550517@gmail.com"}
 
 #host='192.168.0.13'
 host='localhost'
@@ -79,6 +79,13 @@ print "Request:"
 print dataMatchPost_json
 response = requests.post(url,headers=auth,data=dataMatchPost_json)
 print "Response:"
+print response
+print response.json()
+
+url='http://' + host + ':8080/match/'
+print url
+print "get 2 - no tiene que venir el like"
+response = requests.get(url, headers=auth)
 print response
 print response.json()
 
