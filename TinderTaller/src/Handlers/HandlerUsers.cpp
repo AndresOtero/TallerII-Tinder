@@ -147,7 +147,7 @@ msg_t HandlerUsers::putUserUpdateProfile(struct http_message * hm) {
 			string userNew=jsonParse.valueToString(val);
 			msg_t  response = sharedClient->updateUser(userId.value, userNew);
 			msg.status = response.status;
-			msg.body = response.body;
+			msg.body = "";//response.body;
 		}else {
 			LOG(WARNING)<<"Not success";
 			msg=this->badRequest("Not success");

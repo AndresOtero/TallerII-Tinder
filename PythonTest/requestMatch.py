@@ -21,7 +21,7 @@ mail = user+'@gmail.com'
 user = {'gcm_registration_id':"aaaaaaaaaa",'name':user,'password': "hashed",'interests':intereses,'location':ubicacion,'alias':user,'age':45,'sex':'H','photo_profile':foto,'email':mail}
 headers = {'content-type': 'application/json'}
 metadata = {'version':"0.1"}
-token={'user':{'email': mail,'password': "hashed" } }
+token={'user':{'email': 'g@gmail.com','password': "aaaa" } }
 r = {}
 r['user'] = user
 r['metadata'] = metadata
@@ -33,9 +33,9 @@ interesNuevo = {}
 interesNuevo['interest'] = intereses2
 interesNuevo['metadata'] = {'version':"0.1",'count': 1}
 
-userMatch = {"email" : "RobertoM50.847066322702@gmail.com"}
+userMatch = {"email" : "f@gmail.com"}
 
-#host='192.168.0.200'
+#host='192.168.0.13'
 host='localhost'
 
 urlGetUsers = 'http://' + host + ':8080/users/'
