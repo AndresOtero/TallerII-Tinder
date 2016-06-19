@@ -42,18 +42,10 @@ msg_t HandlerInterface::handleDelete(struct http_message *hm){
 	/**Metodo que maneja el handle delete por definicion no esta permitido **/
 	return this->methodNotAllowed();
 }
-void parse(struct http_message *hm){
-	JsonParser jsonParse;
-	if(hm->body.p){
-		string parsed =jsonParse.parseBody(hm->body.p);
-		hm->body.p=parsed.c_str();
-		hm->body.len=parsed.size();
-	}
-}
+
 msg_t HandlerInterface::handle(struct http_message *hm) {
 	/**Manejo los mensajes recibidos por el server con prefix de users.Recibe el mensaje y la base de datos. Devuelve la respuesta como un msg.**/
 	MethodType methodT = httpReqParser.methodType(hm);
-
 	msg_t msg;
 	switch (methodT) {
 	case POST:

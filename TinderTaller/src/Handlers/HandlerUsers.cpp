@@ -173,7 +173,7 @@ msg_t HandlerUsers::putUserUpdatePhoto(struct http_message * hm) {
 			LOG(INFO)<<"Modifico  la foto "<< userId.value <<" como id_usuario";
 			//Va a actualizar un usuario en el Shared
 			string photo = "";
-			photo.append(hm->body.p);
+			photo.append(jsonParse.parseBody(hm->body.p));
 			msg = sharedClient->updateUserPhoto(userId.value, photo);
 			if(msg.body=="Bad Request\n"){
 				msg=this->badRequest("Bad Photo");
