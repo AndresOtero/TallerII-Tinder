@@ -44,11 +44,11 @@ search_candidate_t CandidateService::searchCandidate(string idUser){
 	//Me quedo con el XX% menos votados
 	candidates = getUsersLeastVoted(candidates);
 
-	//Saco los que tuvieron un match en comun
-	candidates = getUsersNotMatch(user, candidates);
-
 	//Saco los que ya likeo en comun
 	candidates = getUsersNotLiked(user, candidates);
+
+	//Saco los que tuvieron un match en comun
+	candidates = getUsersNotMatch(user, candidates);
 
 	//Filtro por cercania. Me quedo con los que estan mas cerca
 	candidates = getUsersNear(user, candidates);
@@ -61,38 +61,40 @@ search_candidate_t CandidateService::searchCandidate(string idUser){
 	LOG(INFO) << "Fin de busqueda de candidatos a match (CandidateService - searchCandidate).";
 	return search_candidate;
 }
-vector<User> CandidateService::getUsersNotLiked(User user,
-		vector<User> candidates) {
-	/*
-	 * Saco los que ya hizo like.
-	 */
-	LOG(DEBUG)<< "Se van a sacar los candidatos con los que ya tuvo match (CandidateService - getUsersNotMatch).";
 
-	if(user.getIdUserCandidatesMatchs().empty()) {
-		LOG(DEBUG) << "Cantidad de candidatos con los que no tuvo match (CandidateService - getUsersNotMatch): 0";
+vector<User> CandidateService::getUsersNotLiked(User user, vector<User> candidates) {
+	/*
+	 * Saco a los que les dio like.
+	 */
+	LOG(DEBUG) << "Se van a sacar los candidatos a los que les dio like (CandidateService - getUsersNotLiked).";
+
+	if(user.getIdUserCandidatesMatchs().empty()){
+		LOG(DEBUG) << "Cantidad de candidatos a los que les dio like (CandidateService - getUsersNotLiked): 0";
 		return candidates;
 	}
+
 	vector<User> candidatesOk;
-	for(int i = 0; i < candidates.size(); i++) {
+
+	for(int i = 0; i < candidates.size(); i++){
 		User candidate = candidates[i];
-		bool match = false;
+		bool like = false;
 		int iMatch = 0;
-		while (iMatch < user.getIdUserCandidatesMatchs().size() && !match) {
-			string idUserMatch = user.getIdUserCandidatesMatchs()[iMatch];
-			idUserMatch = cleanString(idUserMatch);
-			if (idUserMatch.compare(user.getId().c_str()) == 0) {
-				match = true;
-				LOG(DEBUG) << "Candidato que se saca por tener ya un like con el usuario(CandidateService - getUsersNotMatch): " << idUserMatch;
-				break;
+		while (iMatch < user.getIdUserCandidatesMatchs().size() && !like){
+			string idUserLike = user.getIdUserCandidatesMatchs()[iMatch];
+			idUserLike = cleanString(idUserLike);
+			if (idUserLike.compare(candidate.getId().c_str()) == 0){
+				like = true;
+				LOG(DEBUG) << "Candidato que se saca porque el usuario le dio like (CandidateService - getUsersNotLiked): " << idUserLike;
 			}
 			iMatch++;
 		}
 
-		if (!match) {
+		if (!like){
 			candidatesOk.push_back(candidate);
 		}
 	}
-	LOG(DEBUG) << "Cantidad de candidatos con los que no tuvo like (CandidateService - getUsersNotMatch):" << candidatesOk.size();
+
+	LOG(DEBUG) << "Cantidad de candidatos a los que no le dio like  (CandidateService - getUsersNotLiked):" << candidatesOk.size();
 	return candidatesOk;
 }
 
