@@ -16,9 +16,7 @@ TEST(TokenAuthentificator,askTokenVerificateToken){
 	TokenAuthentificator token(db);
 	string strTime ="25-04-2016 11:09:16";
 	string strToken=token.createJsonToken("andy",strTime);
-	EXPECT_EQ(strToken,"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9Cg==.eyJ0aW1lIjoiMjUtMDQtMjAxNiAxMTowOToxNiIsInVzZXIiOiJhbmR5In0K.M2QxNDg4MWJhNDc3N2QyZjRmNDIzZGMzZTE2ZmE1NGEzNmY3OTlhZDg5OTlmMDlhMTBjZGFkMmJjYmQxMjliNw==");
-
-
+	EXPECT_EQ(strToken,"ewogICAiYWxnIiA6ICJIUzI1NiIsCiAgICJ0eXAiIDogIkpXVCIKfQo=.ewogICAidGltZSIgOiAiMjUtMDQtMjAxNiAxMTowOToxNiIsCiAgICJ1c2VyIiA6ICJhbmR5Igp9Cg==.MGM5OTJkMWZhNDM1NTFjMzRlZDQzMTBlMDg4MzgwYWEwNTgzNzBkZWUzOTM3MTdhZGEzMDQwYmJhYmM5ZjE3Zg==");
 }
 TEST(TokenAuthentificator,askTokenVerificateUser){
 	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
