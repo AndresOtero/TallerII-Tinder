@@ -177,6 +177,9 @@ msg_t HandlerUsers::putUserUpdatePhoto(struct http_message * hm) {
 			string photo = "";
 			photo.append(hm->body.p);
 			msg = sharedClient->updateUserPhoto(userId.value, photo);
+			if(msg.body=="Bad Request\n"){
+				msg=this->badRequest("Bad Photo");
+			}
 		} else {
 			LOG(WARNING)<<"Not success";
 			msg=this->badRequest("Not success");
