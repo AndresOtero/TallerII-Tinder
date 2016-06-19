@@ -172,8 +172,6 @@ msg_t HandlerUsers::putUserUpdatePhoto(struct http_message * hm) {
 			LOG(INFO)<<"Modifico la foto "<< id <<" como usuario";
 			LOG(INFO)<<"Modifico  la foto "<< userId.value <<" como id_usuario";
 			//Va a actualizar un usuario en el Shared
-			string user = "";
-			user.append(hm->body.p);
 			string photo = "";
 			photo.append(hm->body.p);
 			msg = sharedClient->updateUserPhoto(userId.value, photo);

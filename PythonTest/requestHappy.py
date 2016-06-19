@@ -80,11 +80,8 @@ print urlGetUser
 response = requests.get(urlGetUser ,headers=auth)
 print response
 print response.json()
-print 'delete user'
-print urlDeleteUser
-response = requests.delete(urlDeleteUser, headers=auth)
-print response
-"""print 'photo'
+
+print 'photo'
 print 'put'	
 print photo_json
 print urlPutPhoto
@@ -138,4 +135,3 @@ print 'delete user'
 print urlDeleteUser
 response = requests.delete(urlDeleteUser, headers=auth)
 print response
-"""
