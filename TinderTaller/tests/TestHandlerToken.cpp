@@ -4,7 +4,7 @@
 TEST(HandlerToken,isHandler) {
 	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
 	shared_ptr<TokenAuthentificator> tokenAuth(new TokenAuthentificator(db));
-	ClientServiceMock *clientServ =new ClientServiceMock();
+	shared_ptr<ClientServiceMock>clientServ (new ClientServiceMock());
 	shared_ptr<SharedClient> sharedClient(new SharedClient(clientServ));
 	HandlerToken* handler=new HandlerToken(db,tokenAuth,sharedClient);
 	http_message* hm = new http_message;
@@ -17,7 +17,7 @@ TEST(HandlerToken,isHandler) {
 TEST(HandlerToken,post) {
 	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
 	shared_ptr<TokenAuthentificator> tokenAuth(new TokenAuthentificator(db));
-	ClientServiceMock *clientServ =new ClientServiceMock();
+	shared_ptr<ClientServiceMock>clientServ (new ClientServiceMock());
 	shared_ptr<SharedClient> sharedClient(new SharedClient(clientServ));
 	HandlerToken* handler=new HandlerToken(db,tokenAuth,sharedClient);
 	http_message* hm = new http_message;
@@ -49,7 +49,7 @@ TEST(HandlerToken,post) {
 TEST(HandlerToken,singin) {
 	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
 	shared_ptr<TokenAuthentificator> tokenAuth(new TokenAuthentificator(db));
-	ClientServiceMock *clientServ =new ClientServiceMock();
+	shared_ptr<ClientServiceMock>clientServ (new ClientServiceMock());
 	shared_ptr<SharedClient> sharedClient(new SharedClient(clientServ));
 	HandlerToken* handler=new HandlerToken(db,tokenAuth,sharedClient);
 	http_message* hm = new http_message;
@@ -81,7 +81,7 @@ TEST(HandlerToken,singin) {
 TEST(HandlerToken,delete_) {
 	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
 	shared_ptr<TokenAuthentificator> tokenAuth(new TokenAuthentificator(db));
-	ClientServiceMock *clientServ =new ClientServiceMock();
+	shared_ptr<ClientServiceMock>clientServ (new ClientServiceMock());
 	shared_ptr<SharedClient> sharedClient(new SharedClient(clientServ));
 	HandlerToken* handler=new HandlerToken(db,tokenAuth,sharedClient);
 	http_message* hm = new http_message;
@@ -123,7 +123,7 @@ TEST(HandlerToken,delete_) {
 TEST(HandlerToken,deleteUnauthorized) {
 	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
 	shared_ptr<TokenAuthentificator> tokenAuth(new TokenAuthentificator(db));
-	ClientServiceMock *clientServ =new ClientServiceMock();
+	shared_ptr<ClientServiceMock>clientServ (new ClientServiceMock());
 	shared_ptr<SharedClient> sharedClient(new SharedClient(clientServ));
 	HandlerToken* handler=new HandlerToken(db,tokenAuth,sharedClient);
 	http_message* hm = new http_message;

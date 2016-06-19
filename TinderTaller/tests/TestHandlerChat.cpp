@@ -2,11 +2,11 @@
 #include "../include/HandlerChat.h"
 #include "../include/ClientServiceMock.h"
 #include "../include/TokenAuthentificatorMock.h"
-/**TEST(HandlerChat,isHandler) {
+TEST(HandlerChat,isHandler) {
 	JsonParser jsonParser;
 	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
 	shared_ptr<TokenAuthentificatorMock> tokenAuth(new TokenAuthentificatorMock());
-	ClientServiceMock *clientServ =new ClientServiceMock();
+	shared_ptr<ClientServiceMock>clientServ (new ClientServiceMock());
 	shared_ptr<SharedClient> sharedClient(new SharedClient(clientServ));
 	shared_ptr<GcmClient> gcmClient(new GcmClient(clientServ));
 	HandlerChat* handler=new HandlerChat(db,tokenAuth,sharedClient,gcmClient);
@@ -16,13 +16,13 @@
 	EXPECT_TRUE(handler->isHandler(hm));
 	delete hm;
 	delete handler;
-}**/
-/**
+}
+
 TEST(HandlerChat,postChat) {
 	JsonParser jsonParser;
 	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
 	shared_ptr<TokenAuthentificatorMock> tokenAuth(new TokenAuthentificatorMock());
-	ClientServiceMock *clientServ =new ClientServiceMock();
+	shared_ptr<ClientServiceMock>clientServ (new ClientServiceMock());
 	shared_ptr<SharedClient> sharedClient(new SharedClient(clientServ));
 	shared_ptr<GcmClient> gcmClient(new GcmClient(clientServ));
 	HandlerChat* handler=new HandlerChat(db,tokenAuth,sharedClient,gcmClient);
@@ -61,7 +61,7 @@ TEST(HandlerChat,getAllChat) {
 	JsonParser jsonParser;
 	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
 	shared_ptr<TokenAuthentificatorMock> tokenAuth(new TokenAuthentificatorMock());
-	ClientServiceMock *clientServ =new ClientServiceMock();
+	shared_ptr<ClientServiceMock>clientServ (new ClientServiceMock());
 	shared_ptr<SharedClient> sharedClient(new SharedClient(clientServ));
 	shared_ptr<GcmClient> gcmClient(new GcmClient(clientServ));
 	HandlerChat* handler=new HandlerChat(db,tokenAuth,sharedClient,gcmClient);
@@ -109,7 +109,7 @@ TEST(HandlerChat,getIdChat) {
 	JsonParser jsonParser;
 	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
 	shared_ptr<TokenAuthentificatorMock> tokenAuth(new TokenAuthentificatorMock());
-	ClientServiceMock *clientServ =new ClientServiceMock();
+	shared_ptr<ClientServiceMock>clientServ (new ClientServiceMock());
 	shared_ptr<SharedClient> sharedClient(new SharedClient(clientServ));
 	shared_ptr<GcmClient> gcmClient(new GcmClient(clientServ));
 	HandlerChat* handler=new HandlerChat(db,tokenAuth,sharedClient,gcmClient);
@@ -154,4 +154,3 @@ TEST(HandlerChat,getIdChat) {
 	delete handler;
 }
 
-**/

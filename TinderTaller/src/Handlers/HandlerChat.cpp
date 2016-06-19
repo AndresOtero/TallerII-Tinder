@@ -20,7 +20,6 @@ HandlerChat::HandlerChat(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificator
 	this->prefix=CHAT;
 	this->sharedClient= sharedClient;
 	this->gcmClient = gcmClient;
-
 }
 
 Json::Value HandlerChat::saveNewMessage(string chatId,string  remitente,string message) {
@@ -103,7 +102,7 @@ msg_t HandlerChat::handlePost(struct http_message *hm) {
 	Data["created_at"]=newMessage["time"];
 	PushNotification["data"]=Data;
 	string jsonNotification=jsonParse.valueToString(PushNotification);
-	this->gcmClient->setNewChat(jsonNotification);
+	//this->gcmClient->setNewChat(jsonNotification);
 	msg.status=OK;
 	return msg;
 }

@@ -10,12 +10,12 @@
 #include "ClientService.h"
 #include "easylogging++.h"
 #include "HTTPRequest.h"
-
+#include "GcmClient.h"
 using namespace std;
 
 class SharedClient {
 public:
-	SharedClient(ClientServiceInterface* clientService);
+	SharedClient(shared_ptr<ClientServiceInterface> clientService);
 	virtual ~SharedClient();
 	msg_t getUsers();
 	msg_t setUser(string & user);
@@ -26,7 +26,7 @@ public:
 	msg_t getInterests();
 	msg_t setInterests(string & interests);
 private:
-	ClientServiceInterface * clientService;
+	shared_ptr<ClientServiceInterface> clientService;
 };
 
 #endif /* SRC_SHAREDCLIENT_H_ */

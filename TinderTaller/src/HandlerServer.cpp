@@ -19,9 +19,9 @@ HandlerServer::HandlerServer(shared_ptr<DataBase> DB) {
 	/**Asigna la base de datos al handler del server.**/
 	this->DB= DB;
 	shared_ptr<TokenAuthentificator> tokenAuth(new TokenAuthentificator(DB));
-	ClientService *clientServ =new ClientService();
-	shared_ptr<SharedClient> sharedClient(new SharedClient(clientServ));
-	shared_ptr<GcmClient> gcmClientAux(new GcmClient(clientServ));
+	shared_ptr<ClientServiceInterface> clientService(new ClientService());
+	shared_ptr<SharedClient> sharedClient(new SharedClient(clientService));
+	shared_ptr<GcmClient> gcmClientAux(new GcmClient(clientService));
 	this->tokenAuthentificator=tokenAuth;
 	vecHandler.push_back(shared_ptr<HandlerInterface>(new HandlerUsers(DB,tokenAuthentificator,sharedClient)));
 	vecHandler.push_back(shared_ptr<HandlerInterface>(new HandlerInterest(DB,tokenAuthentificator,sharedClient)));

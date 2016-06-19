@@ -10,14 +10,14 @@
 const char * url = "https://android.googleapis.com/gcm/send";
 const char * passApiGcm = "key=AIzaSyAxI8_jN5OLI0eTkI03c7FOkQPE1pNdnrA";
 
-GcmClient::GcmClient(ClientServiceInterface* clientService) {
+GcmClient::GcmClient(shared_ptr<ClientServiceInterface> clientService) {
 	LOG(INFO)<< "Inicio Gcm Cliente";
 	this->clientService = clientService;
 }
 
 GcmClient::~GcmClient() {
 	LOG(INFO)<< "Borro Gcm Cliente";
-	delete this->clientService;
+	//delete this->clientService;
 }
 
 msg_t GcmClient::setInGcm(string & data){

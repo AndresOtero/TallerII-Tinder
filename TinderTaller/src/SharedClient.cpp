@@ -4,15 +4,16 @@
 
 #include "SharedClient.h"
 
-SharedClient::SharedClient(ClientServiceInterface* clientServ) {
+SharedClient::SharedClient(shared_ptr<ClientServiceInterface> clientService) {
 	LOG(INFO)<< "Inicio Shared Cliente";
-	this->clientService = clientServ;
+	this->clientService = clientService;
 }
 
 
 SharedClient::~SharedClient() {
 	LOG(INFO)<< "Borro Shared Cliente";
-	delete this->clientService;
+
+
 }
 
 msg_t  SharedClient::getUsers(){

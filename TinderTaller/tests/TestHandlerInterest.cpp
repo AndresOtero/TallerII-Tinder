@@ -5,7 +5,7 @@
 TEST(HandlerInterest,isHandler) {
 	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
 	shared_ptr<TokenAuthentificatorMock> tokenAuth(new TokenAuthentificatorMock());
-	ClientServiceMock *clientServ =new ClientServiceMock();
+	shared_ptr<ClientServiceMock>clientServ (new ClientServiceMock());
 	shared_ptr<SharedClient> sharedClient(new SharedClient(clientServ));
 	HandlerInterest* handler=new HandlerInterest(db,tokenAuth,sharedClient);
 	http_message* hm = new http_message;
@@ -18,7 +18,7 @@ TEST(HandlerInterest,isHandler) {
 TEST(HandlerInterest,getIntersts) {
 	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
 	shared_ptr<TokenAuthentificatorMock> tokenAuth(new TokenAuthentificatorMock());
-	ClientServiceMock *clientServ =new ClientServiceMock();
+	shared_ptr<ClientServiceMock>clientServ (new ClientServiceMock());
 	shared_ptr<SharedClient> sharedClient(new SharedClient(clientServ));
 	HandlerInterest* handler=new HandlerInterest(db,tokenAuth,sharedClient);
 	http_message* hm = new http_message;
@@ -36,7 +36,7 @@ TEST(HandlerInterest,getIntersts) {
 TEST(HandlerInterest,postIntersts) {
 	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
 	shared_ptr<TokenAuthentificatorMock> tokenAuth(new TokenAuthentificatorMock());
-	ClientServiceMock *clientServ =new ClientServiceMock();
+	shared_ptr<ClientServiceMock>clientServ (new ClientServiceMock());
 	shared_ptr<SharedClient> sharedClient(new SharedClient(clientServ));
 	HandlerInterest* handler=new HandlerInterest(db,tokenAuth,sharedClient);
 	http_message* hm = new http_message;

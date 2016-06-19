@@ -17,12 +17,12 @@ using namespace std;
 
 class GcmClient {
 public:
-	GcmClient(ClientServiceInterface* clientService);
+	GcmClient(shared_ptr<ClientServiceInterface> clientService);
 	virtual ~GcmClient();
 	msg_t setNewMatch(string & dataMatch);
 	msg_t setNewChat(string & dataChat);
 private:
-	ClientServiceInterface * clientService;
+	shared_ptr<ClientServiceInterface> clientService ;
 	msg_t setInGcm(string & data);
 };
 
