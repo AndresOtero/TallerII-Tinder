@@ -48,8 +48,8 @@ Json::Value JsonParser::stringToValue(std::string jsonStr) {
 }
 std::string  JsonParser::valueToString(Json::Value value){
 	/****/
-	Json::FastWriter fastWriter;
-	return fastWriter.write(value);
+	Json::StyledWriter styledWriter;
+	return styledWriter.write(value);
 }
 int JsonParser::getIntFromValue(Json::Value jsonValue, std::string key) {
 	/**Devuelvo el valor entero que esta registrado en el value de Json con la key**/

@@ -190,7 +190,9 @@ string HandlerChat::getChatHeader(string user,string chatString){
 	Json::Value jsonData=jsonParse.stringToValue(msgGet.body);
 	header["user"]= jsonParse.getUserValueJson(jsonData["user"]);
 	int newMessageId=chat["message_id"].asInt();
-	header["LastMessage"]=chat["Messages"][to_string(newMessageId-1)];
+	if(chat["Messages"].isMember(to_string(newMessageId-1))){
+		header["LastMessage"]=chat["Messages"][to_string(newMessageId-1)];
+	}
 	header["message_id"]=newMessageId-1;
 	string headerString=jsonParse.valueToString(header);
 	return headerString;
@@ -198,6 +200,7 @@ string HandlerChat::getChatHeader(string user,string chatString){
 msg_t HandlerChat::handleGetAll(struct http_message *hm){
 	/**Busca los headers de todos los mensajes de los usuarios.**/
 	msg_t msg;
+	Json::Value headers;
 	Json::Value chats;
 	string  user=this->getUser(hm);
 	LOG(INFO)<<"Busco todas las conversaciones";
@@ -217,10 +220,10 @@ msg_t HandlerChat::handleGetAll(struct http_message *hm){
 		//Habria que mandar 1 pag o algo asi
 		chats.append(this->getChatHeader(user,getChat.value));
 	}
-
+	headers["chats"]=chats;
 	msg.status=OK;
-	msg.body=jsonParse.valueToString(chats);
-
+	string result=jsonParse.valueToString(headers);
+	msg.body=result;
 	return msg;
 }
 string HandlerChat::readChat(string chatString,string user,string messageId,string conversationId){
