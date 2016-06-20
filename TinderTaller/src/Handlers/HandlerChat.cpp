@@ -102,7 +102,7 @@ msg_t HandlerChat::handlePost(struct http_message *hm) {
 	Data["created_at"]=newMessage["time"];
 	PushNotification["data"]=Data;
 	string jsonNotification=jsonParse.valueToString(PushNotification);
-	//this->gcmClient->setNewChat(jsonNotification);
+	this->gcmClient->setNewChat(jsonNotification);
 	msg.status=OK;
 	return msg;
 }

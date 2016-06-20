@@ -17,14 +17,20 @@ foto = "photo"
 #ubicacion = {'latitude':-34.610510, 'longitude':-58.386391}
 ubicacion = {'latitude':-14.610510, 'longitude':7.386391}
 user= "RobertoM5"+str(rdm)
+user2= "RobertoM51"+str(rdm)
 mail = user+'@gmail.com'
+mail2= user2+'@gmail.com'
 user = {'gcm_registration_id':"aaaaaaaaaa",'name':user,'password': "hashed",'interests':intereses,'location':ubicacion,'alias':user,'age':45,'sex':'H','photo_profile':foto,'email':mail}
+user2 = {'gcm_registration_id':"aaaaaaaaaa",'name':user2,'password': "hashed",'interests':intereses,'location':ubicacion,'alias':user2,'age':45,'sex':'H','photo_profile':foto,'email':mail2}
 headers = {'content-type': 'application/json'}
 metadata = {'version':"0.1"}
 token={'user':{'email': mail,'password': "hashed" } }
 r = {}
 r['user'] = user
 r['metadata'] = metadata
+r2={}
+r2['user'] = user2
+r2['metadata'] = metadata
 photo = {'photo':foto2}
 photo['metadata'] = metadata
 textoInteres='Chico Serna'+ str(rdm)
@@ -33,7 +39,8 @@ interesNuevo = {}
 interesNuevo['interest'] = intereses2
 interesNuevo['metadata'] = {'version':"0.1",'count': 1}
 
-userMatch = {"email" : "RobertoM50.714818550517@gmail.com"}
+userMatch = {"email" : mail2}
+user2Match = {"email" : mail}
 
 #host='192.168.0.13'
 host='localhost'
@@ -44,6 +51,7 @@ urlDeleteUser = 'http://' + host + ':8080/users/'+mail +'/'
 urlPutPhoto = 'http://' + host + ':8080/users/'+mail+'/photo/'
 
 dataUserPost_json = json.dumps(r)
+dataUser2Post_json = json.dumps(r2)
 r={}
 userPut = { 'age':47,'sex':'M' ,'gcm_registration_id':"aaaaaaaaaa"	}
 r['user']=userPut
@@ -53,9 +61,11 @@ photo_json = json.dumps(photo)
 dataInterestPost_json=json.dumps(interesNuevo)
 token_json=json.dumps(token)
 dataMatchPost_json = json.dumps(userMatch)
+dataMatch2Post_json = json.dumps(user2Match)
 
 print "MATCH - Pruebas desde la creacion de un usuario nuevo"
 print "post user - token"
+print dataUserPost_json
 response = requests.post(urlGetUsers,data=dataUserPost_json)
 print response
 print response.json()
@@ -64,7 +74,16 @@ token= response.json()["token"]
 print token
 auth={}
 auth["Authorization"]=token
-
+print "post user2 - token"
+print dataUser2Post_json
+response = requests.post(urlGetUsers,data=dataUser2Post_json)
+print response
+print response.json()
+#exit(0)
+token2= response.json()["token"]
+print token2
+auth2={}
+auth2["Authorization"]=token2
 print "\n MATCH"
 url='http://' + host + ':8080/match/'
 print url
@@ -88,9 +107,15 @@ print "get 2 - no tiene que venir el like"
 response = requests.get(url, headers=auth)
 print response
 print response.json()
-
+print "post"
+print "Request:"
+print dataMatch2Post_json
+response = requests.post(url,headers=auth2,data=dataMatch2Post_json)
+print "Response:"
+print response
+print response.json()
 print "--------------------------------------------------------------"
-
+"""
 print "MATCH - Pruebas con un usuario ya creado"
 print "\n PEDIDO TOKEN"
 url='http://' + host + ':8080/token/'
@@ -115,3 +140,4 @@ response = requests.post(url,headers=auth,data=dataMatchPost_json)
 print "Response:"
 print response
 print response.json()
+"""
