@@ -49,21 +49,26 @@ msg_t HandlerMatch::handlePost(struct http_message *hm){
 			bool okUserGcmMatch = DB->get(userGcmMatch);
 			if(okUserGcm && okUserGcmMatch){
 				LOG(INFO) << "Se van a informar los matchs por Gcm (HandlerMatch - handlePost).";
-				DBtuple userToken("token_"+idEmailMatch);
+				DBtuple userToken("token_"+idEmail);
 				bool okUserToken = DB->get(userToken);
 				string matchGcmJsonString;
 				if(okUserToken){
-					LOG(INFO) << "Se informa a"<<idEmailMatch ;
-					matchGcmJsonString = jsonParse.getGcmJson(userGcm.value, idEmailMatch);
+					LOG(INFO) << "Se informa a "<<idEmailMatch ;
+					matchGcmJsonString = jsonParse.getGcmJson(userGcm.value,idEmail, idEmailMatch);
 					this->gcmClient->setNewMatch(matchGcmJsonString);
 					matchGcmJsonString.clear();
+				}else{
+					LOG(INFO) << "NO se informa a "<<idEmailMatch ;
+
 				}
-				DBtuple user2Token("token_"+idEmail);
-				okUserToken = DB->get(user2Token);
+				DBtuple userTokenMatch("token_"+idEmailMatch);
+				okUserToken = DB->get(userTokenMatch);
 				if(okUserToken){
-					LOG(INFO) << "Se informa a"<<idEmail ;
-					string matchGcmJsonString = jsonParse.getGcmJson(userGcmMatch.value, idEmail);
+					LOG(INFO) << "Se informa a "<<idEmail ;
+					string matchGcmJsonString = jsonParse.getGcmJson(userGcmMatch.value, idEmailMatch,idEmail);
 					this->gcmClient->setNewMatch(matchGcmJsonString);
+				}else{
+					LOG(INFO) << "NO se informa a "<<idEmail ;
 				}
 			} else {
 				LOG(WARNING)<<"Error buscando los gcm de los usuarios para informar el match.";

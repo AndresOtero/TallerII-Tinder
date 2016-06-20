@@ -79,30 +79,38 @@ msg_t HandlerChat::handlePost(struct http_message *hm) {
 	string mensaje=jsonParse.getStringFromValue(bodyValue,"message");
 	LOG(INFO)<< "El mensaje de "<<remitente<<" a "<<destinatario<<" es "<<mensaje;
 	string chatId=this->getChatId(remitente,destinatario);
+	if(chatId==""){
+		msg.change(StatusCode::FORBIDDEN,"Usted no tiene una conversacion con este usuario");
+		return msg;
+	}
 	LOG(INFO)<< "El chat id es  "<<chatId;
 	DBtuple getChat("chat_"+chatId);
 	bool okGetChat=DB->get(getChat);
 	if(!okGetChat){
-		this->saveNewChat(chatId,remitente,destinatario);
-	}
+		msg.change(StatusCode::INTERNAL_ERROR,"Usted no tiene una conversacion con este usuario");
+		return msg;	}
 	Json::Value newMessage=this->saveNewMessage(chatId,remitente,mensaje);
-	DBtuple getGcmId(destinatario+"_gcmId");
-	bool okGetGcm=DB->get(getChat);
-	Json::Value PushNotification;
-	PushNotification["to"]=getGcmId.value;
-	Json::Value Notification;
-	Notification["title"]=("Nuevo mensaje de "+remitente);
-	Notification["body"]=(mensaje);
-	PushNotification["notification"]=Notification;
-	Json::Value Data;
-	Data["type"]="2";
-	Data["chat_room_id"]=chatId;
-	Data["message_id"]=newMessage["message_id"];
-	Data["message"]=mensaje;
-	Data["created_at"]=newMessage["time"];
-	PushNotification["data"]=Data;
-	string jsonNotification=jsonParse.valueToString(PushNotification);
-	this->gcmClient->setNewChat(jsonNotification);
+	DBtuple userToken("token_"+destinatario);
+	bool okUserToken = DB->get(userToken);
+	if(okUserToken){
+		DBtuple getGcmId(destinatario+"_gcmId");
+		bool okGetGcm=DB->get(getChat);
+		Json::Value PushNotification;
+		PushNotification["to"]=getGcmId.value;
+		Json::Value Notification;
+		Notification["title"]=("Nuevo mensaje de "+remitente);
+		Notification["body"]=(mensaje);
+		PushNotification["notification"]=Notification;
+		Json::Value Data;
+		Data["type"]="2";
+		Data["chat_room_id"]=chatId;
+		Data["message_id"]=newMessage["message_id"];
+		Data["message"]=mensaje;
+		Data["created_at"]=newMessage["time"];
+		PushNotification["data"]=Data;
+		string jsonNotification=jsonParse.valueToString(PushNotification);
+		this->gcmClient->setNewChat(jsonNotification);
+	}
 	msg.status=OK;
 	return msg;
 }
@@ -127,7 +135,7 @@ string HandlerChat::getChatId(string remitente,string destinatario){
 			id=itr.key().asString();
 		}
 	}
-	if(id==""){//Si no existe
+	/***if(id==""){//Si no existe
 		DBtuple chatId("chat_id");
 		DB->get(chatId);
 		id=chatId.value;
@@ -136,7 +144,7 @@ string HandlerChat::getChatId(string remitente,string destinatario){
 		DB->put(chatId);
 		this->saveUserChatId(remitente,destinatario,id);
 		this->saveUserChatId(destinatario,remitente,id);
-	}
+	}***/
 	return id;
 }
 
@@ -169,7 +177,7 @@ vector<string> HandlerChat::getChatsIdFromDestinatario(string destinatario){
 	return chatsIdVector;
 }
 
-string HandlerChat::getChatHeader(string user,string chatString){
+Json::Value HandlerChat::getChatHeader(string user,string chatString,string chatId){
 	/**Busca el chat header, devuelvo el header con el ultimo mensaje, con el ultimo mensajeId mandado ,
 	 * con la cantidad de mensajes sin leer y con el otro usario en la conversacion. **/
 	Json::Value chat=jsonParse.stringToValue(chatString);
@@ -193,8 +201,9 @@ string HandlerChat::getChatHeader(string user,string chatString){
 		header["LastMessage"]=chat["Messages"][to_string(newMessageId-1)];
 	}
 	header["message_id"]=newMessageId-1;
+	header["chatroom_id"]=chatId;
 	string headerString=jsonParse.valueToString(header);
-	return headerString;
+	return header;
 }
 msg_t HandlerChat::handleGetAll(struct http_message *hm){
 	/**Busca los headers de todos los mensajes de los usuarios.**/
@@ -217,7 +226,7 @@ msg_t HandlerChat::handleGetAll(struct http_message *hm){
 		DBtuple getChat("chat_"+(itr));
 		DB->get(getChat);
 		//Habria que mandar 1 pag o algo asi
-		chats.append(this->getChatHeader(user,getChat.value));
+		chats.append(this->getChatHeader(user,getChat.value,itr));
 	}
 	headers["chats"]=chats;
 	msg.status=OK;

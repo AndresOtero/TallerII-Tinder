@@ -7,8 +7,8 @@
 
 #include "GcmClient.h"
 
-const char * url = "https://android.googleapis.com/gcm/send";
-const char * passApiGcm = "key=AIzaSyAxI8_jN5OLI0eTkI03c7FOkQPE1pNdnrA";
+const char * url = "https://fcm.googleapis.com/fcm/send";
+const char * passApiGcm = "key=AIzaSyAYrHnfzOKfO4y1FxSUK5V-7tuQM4BqnE4";
 
 GcmClient::GcmClient(shared_ptr<ClientServiceInterface> clientService) {
 	LOG(INFO)<< "Inicio Gcm Cliente";

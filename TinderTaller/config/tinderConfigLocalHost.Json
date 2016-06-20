@@ -1,0 +1,5 @@
+{
+"http_port":"localhost:8080",
+"createIfMissing":"true",
+"deleteAll":"true"
+}

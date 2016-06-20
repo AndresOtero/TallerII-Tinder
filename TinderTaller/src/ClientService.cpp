@@ -77,9 +77,9 @@ MemoryStruct ClientService::postBaseClientService(const char * url, const char *
 
 	if(curl) {
 		struct curl_slist * headers = NULL;
-		headers = curl_slist_append(headers, "Accept: application/json");
+		//headers = curl_slist_append(headers, "Accept: application/json");
 		headers = curl_slist_append(headers, "Content-Type: application/json");
-		headers = curl_slist_append(headers, "charsets: utf-8");
+		//headers = curl_slist_append(headers, "charsets: utf-8");
 
 		std::string authorizationData = "";
 		authorizationData.append(authorization);

@@ -6,7 +6,7 @@ Created on Mon May 23 07:59:04 2016
 """
 
 users=["Andy","Ely","Fede"]
-host="192.168.0.17"
+host="localhost"
 def crear_usuarios():
 	r={}
 	for user in users:

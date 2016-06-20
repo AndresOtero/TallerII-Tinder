@@ -185,14 +185,17 @@ vector<string> JsonParser::getVectorFromValue(Json::Value value){
 }
 
 
-std::string JsonParser::getGcmJson(string gcmRegistrationId, string idUserWithConexion){
+std::string JsonParser::getGcmJson(string gcmRegistrationId, string idUserWithConexion,string idMatch){
 	Json::Value root;
-	string registrationIds = "[\"";
-	registrationIds.append(gcmRegistrationId.c_str());
-	registrationIds.append("\"");
-	root["registration_ids"] = registrationIds;
-	root["user_id"] = idUserWithConexion;
-
+	root["to"]=gcmRegistrationId;
+	Json::Value notification;
+	notification["title"]="Nuevo Match!";
+	notification["body"]="Hubo un match con "+idMatch;
+	root["notification"]=notification;
+	Json::Value data;
+	data["type"]="1";
+	data["user_id"]=idMatch;
+	root["data"]=data;
 	return valueToString(root);
 }
 

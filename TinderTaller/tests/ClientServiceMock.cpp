@@ -40,6 +40,23 @@ MemoryStruct ClientServiceMock::getClientService(const char * url) {
 		chunk.memory = c;
 		chunk.size = strlen(jsonIdString.c_str()) + 1;
 		chunk.status = CURLE_OK;
+	} else if (strcmp("http://tander.herokuapp.com/users/2", url) == 0) {
+		JsonParser jsonParser;
+		Json::Value val;
+		Json::Value user;
+		string pass = "pass";
+		user["password"] = pass;
+		string mail = "andy@yahoo.com";
+		user["email"] = mail;
+		user["sex"] = "F";
+		user["id"] = "1";
+		val["user"] = user;
+		std::string jsonIdString = jsonParser.valueToString(val);
+		char* c = (char*) malloc(strlen(jsonIdString.c_str()) + 1);
+		strcpy(c, jsonIdString.c_str());
+		chunk.memory = c;
+		chunk.size = strlen(jsonIdString.c_str()) + 1;
+		chunk.status = CURLE_OK;
 	}
 	return chunk;
 }

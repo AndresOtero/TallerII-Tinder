@@ -31,7 +31,7 @@ class HandlerChat: public HandlerInterface {
 		string getChatId(string remitente,string destinatario);
 		Json::Value  saveNewMessage(string chatId,string  remitente,string message);
 		bool saveNewChat(string chatId,string  remitente,string destinatario);
-		string getChatHeader(string user,string chat);
+		Json::Value getChatHeader(string user,string chatString,string chatId);
 		string readChat(string chat,string user,string messageId,string conversationId);
 
 };
