@@ -21,7 +21,7 @@ class HandlerMatch: public HandlerInterface {
 		shared_ptr<CandidateService> candidateService;
 		shared_ptr<GcmClient> gcmClient;
 		bool  saveUserChatId(string user,string otherUser,string id);
-		bool saveNewChat(string  remitente,string destinatario);
+		int saveNewChat(string  remitente,string destinatario);
 };
 
 #endif /* SRC_HANDLERMATCH_H_ */

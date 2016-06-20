@@ -204,14 +204,6 @@ msg_t HandlerChat::handleGetAll(struct http_message *hm){
 	string  user=this->getUser(hm);
 	LOG(INFO)<<"Busco todas las conversaciones";
 	vector<string> chatsIdVector=this->getChatsId(hm);
-	/*for (auto itr: chatsIdVector){
-		DBtuple getChat("chat_"+(itr));
-		DB->get(getChat);
-		//Habria que mandar 1 pag o algo asi
-		chats[itr]=this->getChatHeader(user,getChat.value);
-	}
-	msg.status=OK;
-	msg.body=jsonParse.valueToString(chats);*/
 
 	for (auto itr: chatsIdVector){
 		DBtuple getChat("chat_"+(itr));
@@ -265,6 +257,7 @@ string HandlerChat::readChat(string chatString,string user,string messageId,stri
 	DBtuple putChat("chat_"+conversationId,chatString);
 	return lastsMessagesString;
 }
+
 msg_t HandlerChat::handleGetChat(struct http_message *hm){
 	/**Maneja el get de un chat particular.**/
 	msg_t msg;

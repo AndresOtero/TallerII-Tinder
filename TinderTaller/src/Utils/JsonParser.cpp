@@ -185,13 +185,13 @@ vector<string> JsonParser::getVectorFromValue(Json::Value value){
 }
 
 
-std::string JsonParser::getGcmJson(string gcmRegistrationId, string idUserWithConexion){
+std::string JsonParser::getGcmJson(string gcmRegistrationId, string idUserWithConexion, int chatId){
 	Json::Value root;
-	string registrationIds = "[\"";
-	registrationIds.append(gcmRegistrationId.c_str());
-	registrationIds.append("\"");
-	root["registration_ids"] = registrationIds;
+	Json::Value gcmArray;
+	gcmArray.append(gcmRegistrationId);
+	root["registration_ids"] = gcmArray;
 	root["user_id"] = idUserWithConexion;
+	root["chat_id"] = chatId;
 
 	return valueToString(root);
 }
