@@ -56,6 +56,8 @@ search_candidate_t CandidateService::searchCandidate(string idUser){
 	//Me quedo con los que tengan algun interes en comun
 	candidates = getUsersCommonInterests(user, candidates);
 
+	candidates = userDao->updateUserPhotoForUrl(candidates);
+
 	search_candidate.change(OK_SEARCH, candidates);
 
 	LOG(INFO) << "Fin de busqueda de candidatos a match (CandidateService - searchCandidate).";
