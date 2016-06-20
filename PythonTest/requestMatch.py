@@ -48,6 +48,8 @@ host='localhost'
 urlGetUsers = 'http://' + host + ':8080/users/'
 urlGetUser = 'http://' + host + ':8080/users/'+mail+'/'
 urlDeleteUser = 'http://' + host + ':8080/users/'+mail +'/'
+urlDeleteUser2 = 'http://' + host + ':8080/users/'+mail2 +'/'
+
 urlPutPhoto = 'http://' + host + ':8080/users/'+mail+'/photo/'
 
 dataUserPost_json = json.dumps(r)
@@ -114,6 +116,14 @@ response = requests.post(url,headers=auth2,data=dataMatch2Post_json)
 print "Response:"
 print response
 print response.json()
+print 'delete user'
+print urlDeleteUser
+response = requests.delete(urlDeleteUser, headers=auth)
+print response
+print 'delete user'
+print urlDeleteUser
+response = requests.delete(urlDeleteUser2, headers=auth2)
+print response
 print "--------------------------------------------------------------"
 """
 print "MATCH - Pruebas con un usuario ya creado"

@@ -5,7 +5,7 @@
 #include <iostream>
 
 
-/**TEST(HandlerServer,handleBad) {
+TEST(HandlerServer,handleBad) {
 	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, false));
 	HandlerServer* handlerServer=new HandlerServer(db);
 	http_message* hm = new http_message;
@@ -16,4 +16,3 @@
 	delete hm;
 	delete handlerServer;
 }
-**/

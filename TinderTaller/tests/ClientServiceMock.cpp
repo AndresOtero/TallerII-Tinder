@@ -68,7 +68,11 @@ MemoryStruct ClientServiceMock::postClientService(const char * url,
 MemoryStruct ClientServiceMock::postWithAuthorizationClientService(const char * url, const char * data,
 		const char * authorization) {
 	MemoryStruct chunk;
-	//TODO
+	std::string usuario = data;
+	char* c = (char*) malloc(strlen(usuario.c_str()) + 1);
+	strcpy(c, usuario.c_str());
+	chunk.memory = c;
+	chunk.size = strlen(usuario.c_str()) + 1;
 	return chunk;
 }
 
