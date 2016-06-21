@@ -116,6 +116,8 @@ vector<Interest> JsonParser::getInterest(Json::Value value){
 	for( Json::ValueIterator itr = value.begin() ; itr != value.end() ; itr++ ){
 		Json::Value & interestJson = *itr;
 		Interest interest;
+		JsonParser jsonP;
+		string interestString=jsonP.valueToString(interestJson);
 		interest.setCategory(interestJson["category"].asString());
 		interest.setValue(interestJson["value"].asString());
 
@@ -185,16 +187,18 @@ vector<string> JsonParser::getVectorFromValue(Json::Value value){
 }
 
 
-std::string JsonParser::getGcmJson(string gcmRegistrationId, string idUserWithConexion,string idMatch){
+
+std::string JsonParser::getGcmJson(string gcmRegistrationId, string idUserWithConexion, string idUserMatch,int chatId){
 	Json::Value root;
 	root["to"]=gcmRegistrationId;
 	Json::Value notification;
 	notification["title"]="Nuevo Match!";
-	notification["body"]="Hubo un match con "+idMatch;
+	notification["body"]="Hubo un match con "+idUserMatch;
 	root["notification"]=notification;
 	Json::Value data;
 	data["type"]="1";
-	data["user_id"]=idMatch;
+	data["user_id"]=idUserMatch;
+	data["chatroom_id"]=to_string(chatId);
 	root["data"]=data;
 	return valueToString(root);
 }

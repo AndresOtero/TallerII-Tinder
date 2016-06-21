@@ -17,7 +17,6 @@ GcmClient::GcmClient(shared_ptr<ClientServiceInterface> clientService) {
 
 GcmClient::~GcmClient() {
 	LOG(INFO)<< "Borro Gcm Cliente";
-	//delete this->clientService;
 }
 
 msg_t GcmClient::setInGcm(string & data){
@@ -37,21 +36,21 @@ msg_t GcmClient::setInGcm(string & data){
 }
 
 msg_t GcmClient::setNewMatch(string & dataMatch){
-	LOG(INFO)<< "Va a informar un nuevo match (setNewMatch)";
+	LOG(INFO)<< "Va a informar un nuevo match (GcmClient - setNewMatch)";
 	LOG(DEBUG)<< "El json para el nuevo match es: " << dataMatch;
 
 	msg_t  response = setInGcm(dataMatch);
 
-	LOG(INFO)<< "FIN de dar de alta un nuevo match (setNewMatch)";
+	LOG(INFO)<< "FIN de dar de alta un nuevo match (GcmClient - setNewMatch)";
 	return response;
 }
 
 msg_t GcmClient::setNewChat(string & dataChat){
-	LOG(INFO)<< "Va a informar un nuevo chat (setNewChat)";
+	LOG(INFO)<< "Va a informar un nuevo chat (GcmClient - setNewChat)";
 	LOG(DEBUG)<< "El json para el nuevo chat es: " << dataChat;
 
 	msg_t  response = setInGcm(dataChat);
 
-	LOG(INFO)<< "FIN de dar de alta un nuevo chat (setNewChat)";
+	LOG(INFO)<< "FIN de dar de alta un nuevo chat (GcmClient - setNewChat)";
 	return response;
 }

@@ -39,10 +39,13 @@ msg_t HandlerToken::handlePost(struct http_message *hm) {
 	if (okPass&&(pass==tpPass.value)&&okDelete&&okId){
 		string token=tokenAuthentificator->createJsonToken(mail);
 		if(httpReqParser.parsePrefix(hm)[2]=="singin"){
+			string gcm_registration_id = jsonParse.removeGcmId(val);
 			LOG(INFO)<<"Sing In token";
 			msg_t msgGet = sharedClient->getUser(tpId.value);
 			val=jsonParse.stringToValue(msgGet.body);
 			jsonParse.removeMember(val["user"],"id");
+			DBtuple userGcmId(mail+"_gcmId",gcm_registration_id);
+			bool okPutGcmId = DB->put(userGcmId);
 		}
 		val["token"]=token;
 		string  result = jsonParse.valueToString(val);

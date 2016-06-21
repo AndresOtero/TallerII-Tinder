@@ -9,6 +9,7 @@
 #define TOKENAUTHENTIFICATORMOCK_H_
 
 class TokenAuthentificatorMock: public TokenAuthentificatorInterface {
+	string idMail;
 public:
 	TokenAuthentificatorMock();
 	std::string createJsonToken(std::string user,std::string time);
@@ -16,6 +17,7 @@ public:
 	string getUserName(string jsonToken) ;
 	bool deleteJsonTokenUser(string jsonToken) ;
 	bool validateJsonToken(std::string token) ;
+	void match();
 	virtual ~TokenAuthentificatorMock();
 };
 

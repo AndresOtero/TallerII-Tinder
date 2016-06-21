@@ -28,11 +28,7 @@ HandlerServer::HandlerServer(shared_ptr<DataBase> DB) {
 	vecHandler.push_back(shared_ptr<HandlerInterface>(new HandlerMatch(DB,tokenAuthentificator,sharedClient,gcmClientAux)));
 	vecHandler.push_back(shared_ptr<HandlerInterface>(new HandlerChat(DB,tokenAuthentificator,sharedClient,gcmClientAux)));
 	vecHandler.push_back(shared_ptr<HandlerInterface>(new HandlerToken(DB,tokenAuthentificator,sharedClient)));
-	DBtuple chatId("chat_id");
-	if(!DB->get(chatId)){
-		chatId.value="0";
-		DB->put(chatId);
-	}
+
 }
 
 msg_t  HandlerServer::handler(struct http_message *hm) {

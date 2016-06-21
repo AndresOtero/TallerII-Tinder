@@ -26,7 +26,6 @@ class HandlerChat: public HandlerInterface {
 		msg_t handleGetAll(struct http_message *hm);
 		msg_t handleGetChat(struct http_message *hm);
 		Json::Value getChatsIdValueFromDestinatario(string destinatario);
-		vector<string> getChatsIdFromDestinatario(string destinatario);
 		bool  saveUserChatId(string user,string otherUser,string id);
 		string getChatId(string remitente,string destinatario);
 		Json::Value  saveNewMessage(string chatId,string  remitente,string message);

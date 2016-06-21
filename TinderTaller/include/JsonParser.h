@@ -38,7 +38,7 @@ class JsonParser {
 		vector<Interest> getInterest(Json::Value value);
 		std::string getCandidatesJson(vector<User> users);
 		vector<string> getVectorFromValue(Json::Value value);
-		std::string getGcmJson(string gcmRegistrationId, string idUserWithConexion,string idMatch);
+		std::string getGcmJson(string gcmRegistrationId, string idUserWithConexion,string idMatch,int chatId);
 		Json::Value getUserValueJson(Json::Value user);
 };
 

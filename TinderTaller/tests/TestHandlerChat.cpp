@@ -1,5 +1,7 @@
 #include "../include/gtest/gtest.h"
 #include "../include/HandlerChat.h"
+#include "../include/HandlerMatch.h"
+
 #include "../include/ClientServiceMock.h"
 #include "../include/TokenAuthentificatorMock.h"
 TEST(HandlerChat,isHandler) {
@@ -26,6 +28,8 @@ TEST(HandlerChat,postChat) {
 	shared_ptr<SharedClient> sharedClient(new SharedClient(clientServ));
 	shared_ptr<GcmClient> gcmClient(new GcmClient(clientServ));
 	HandlerChat* handler=new HandlerChat(db,tokenAuth,sharedClient,gcmClient);
+	HandlerMatch* handlerMatch=new HandlerMatch(db,tokenAuth,sharedClient,gcmClient);
+
 	http_message* hm = new http_message;
 	string mail="andy@yahoo.com";
 	Json::Value val;
@@ -38,10 +42,10 @@ TEST(HandlerChat,postChat) {
 	hm->body.len=jsonIdString.size();
 	hm->method.p="POST";
 	hm->method.len=4;
-	hm->header_names[1].p="Authorization";
-	hm->header_names[1].len=strlen("Authorization");
-	hm->header_values[1].p=mail.c_str();
-	hm->header_values[1].len=mail.size();
+	hm->header_names[3].p="Authorization";
+	hm->header_names[3].len=strlen("Authorization");
+	hm->header_values[3].p=mail.c_str();
+	hm->header_values[3].len=mail.size();
 	Json::Value empty=Json::Value(Json::nullValue);
 	DBtuple userChats(mail+"_chats",jsonParser.valueToString(empty));
 	EXPECT_TRUE(db->put(userChats));
@@ -51,10 +55,14 @@ TEST(HandlerChat,postChat) {
 	EXPECT_TRUE(db->put(tpId));
 	DBtuple anotherTpId(anotherMail+"_id","1");
 	EXPECT_TRUE(db->put(anotherTpId));
+	DBtuple anotherToken("token_"+anotherMail,"1");
+	EXPECT_TRUE(db->put(anotherToken));
+	handlerMatch->saveNewChat(mail,anotherMail);
 	msg_t msg=handler->handleMsg(hm);
 	EXPECT_TRUE(msg.status==StatusCode::OK);
 	delete hm;
 	delete handler;
+	delete handlerMatch;
 }
 
 TEST(HandlerChat,getAllChat) {
@@ -65,6 +73,7 @@ TEST(HandlerChat,getAllChat) {
 	shared_ptr<SharedClient> sharedClient(new SharedClient(clientServ));
 	shared_ptr<GcmClient> gcmClient(new GcmClient(clientServ));
 	HandlerChat* handler=new HandlerChat(db,tokenAuth,sharedClient,gcmClient);
+	HandlerMatch* handlerMatch=new HandlerMatch(db,tokenAuth,sharedClient,gcmClient);
 	http_message* hm = new http_message;
 	string mail="andy@yahoo.com";
 	Json::Value val;
@@ -82,16 +91,11 @@ TEST(HandlerChat,getAllChat) {
 	hm->header_values[1].p=mail.c_str();
 	hm->header_values[1].len=mail.size();
 	Json::Value empty=Json::Value(Json::nullValue);
-	DBtuple userChats(mail+"_chats",jsonParser.valueToString(empty));
-	EXPECT_TRUE(db->put(userChats));
-	DBtuple anotherUserChats(anotherMail+"_chats",jsonParser.valueToString(empty));
-	EXPECT_TRUE(db->put(anotherUserChats));
 	DBtuple tpId(mail+"_id","1");
 	EXPECT_TRUE(db->put(tpId));
 	DBtuple anotherTpId(anotherMail+"_id","1");
 	EXPECT_TRUE(db->put(anotherTpId));
-	DBtuple chatId("chat_id","0");
-	EXPECT_TRUE(db->put(chatId));
+	handlerMatch->saveNewChat(mail,anotherMail);
 	msg_t msg=handler->handleMsg(hm);
 	EXPECT_TRUE(msg.status==StatusCode::OK);
 	hm->method.p="GET";
@@ -104,6 +108,7 @@ TEST(HandlerChat,getAllChat) {
 
 	delete hm;
 	delete handler;
+	delete handlerMatch;
 }
 TEST(HandlerChat,getIdChat) {
 	JsonParser jsonParser;
@@ -113,6 +118,8 @@ TEST(HandlerChat,getIdChat) {
 	shared_ptr<SharedClient> sharedClient(new SharedClient(clientServ));
 	shared_ptr<GcmClient> gcmClient(new GcmClient(clientServ));
 	HandlerChat* handler=new HandlerChat(db,tokenAuth,sharedClient,gcmClient);
+	HandlerMatch* handlerMatch=new HandlerMatch(db,tokenAuth,sharedClient,gcmClient);
+
 	http_message* hm = new http_message;
 	string mail="andy@yahoo.com";
 	Json::Value val;
@@ -129,17 +136,7 @@ TEST(HandlerChat,getIdChat) {
 	hm->header_names[1].len=strlen("Authorization");
 	hm->header_values[1].p=mail.c_str();
 	hm->header_values[1].len=mail.size();
-	Json::Value empty=Json::Value(Json::nullValue);
-	DBtuple userChats(mail+"_chats",jsonParser.valueToString(empty));
-	EXPECT_TRUE(db->put(userChats));
-	DBtuple anotherUserChats(anotherMail+"_chats",jsonParser.valueToString(empty));
-	EXPECT_TRUE(db->put(anotherUserChats));
-	DBtuple tpId(mail+"_id","1");
-	EXPECT_TRUE(db->put(tpId));
-	DBtuple anotherTpId(anotherMail+"_id","1");
-	EXPECT_TRUE(db->put(anotherTpId));
-	DBtuple chatId("chat_id","0");
-	EXPECT_TRUE(db->put(chatId));
+	handlerMatch->saveNewChat(mail,anotherMail);
 	msg_t msg=handler->handleMsg(hm);
 	EXPECT_TRUE(msg.status==StatusCode::OK);
 	hm->method.p="GET";
@@ -151,6 +148,7 @@ TEST(HandlerChat,getIdChat) {
 	Json::Value jsonValueReturn=jsonParser.stringToValue(msg.body);
 
 	delete hm;
+	delete handlerMatch;
 	delete handler;
 }
 

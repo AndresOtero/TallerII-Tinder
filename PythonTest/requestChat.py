@@ -4,9 +4,12 @@ Created on Mon May 23 07:59:04 2016
 
 @author: ediaz
 """
+import unittest
 
 users=["Andy","Ely","Fede"]
-host="192.168.0.17"
+host="localhost	"
+
+
 def crear_usuarios():
 	r={}
 	for user in users:
@@ -46,7 +49,6 @@ urlChat0='http://'+host+':8080/chat/0-0/'
 urlChat1='http://'+host+':8080/chat/1-10/'
 urlChat1_15='http://'+host+':8080/chat/1-15/'
 
- 
 crear=raw_input("Desea crear usuarios?(Si) para crear, cualquiero otro para no \n")
 if crear=="Si":
 	print "Crear usuarios"
@@ -60,6 +62,7 @@ for user in users:
 	token={'user':{'email': mail,'password': "hashed" } }
 	token_json=json.dumps(token)	
 	response = requests.post(urlToken,data=token_json)
+	myTest.test(response,"200")
 	print response
 	auth[user]={}
 	auth[user]["Authorization"] = response.json()["token"]
