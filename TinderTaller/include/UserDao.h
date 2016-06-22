@@ -22,8 +22,6 @@ using namespace std;
 
 class UserDao {
 private:
-	//shared_ptr<DataBase> dataBase(new DataBase("./DBServer/", true, false));
-	//shared_ptr<DataBase> dataBase;
 	shared_ptr<DataBase> dataBase;
 	TimeUtils timeUtils;
 	JsonParser jsonParser;

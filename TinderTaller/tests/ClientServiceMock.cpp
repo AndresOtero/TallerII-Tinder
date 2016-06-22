@@ -17,11 +17,17 @@ MemoryStruct ClientServiceMock::getClientService(const char * url) {
 	MemoryStruct chunk;
 
 	if (strcmp("http://tander.herokuapp.com/interests", url) == 0) {
-		std::string intereses = "Intereses";
-		char* c = (char*) malloc(strlen(intereses.c_str()) + 1);
-		strcpy(c, intereses.c_str());
+		/**Json::Value null(Json::nullValue);
+		Json::Value intereses;
+		intereses["interests"].append(null);
+		JsonParser jsonParser;
+		std::string interesesString=jsonParser.valueToString(intereses);
+		**/
+		std::string interesesString="";
+		char* c = (char*) malloc(strlen(interesesString.c_str()) + 1);
+		strcpy(c, interesesString.c_str());
 		chunk.memory = c;
-		chunk.size = strlen(intereses.c_str()) + 1;
+		chunk.size = strlen(interesesString.c_str()) + 1;
 		chunk.status = CURLE_OK;
 	} else if (strcmp("http://tander.herokuapp.com/users/1", url) == 0) {
 		JsonParser jsonParser;
@@ -31,7 +37,7 @@ MemoryStruct ClientServiceMock::getClientService(const char * url) {
 		user["password"] = pass;
 		string mail = "andy@yahoo.com";
 		user["email"] = mail;
-		user["sex"] = "F";
+		user["sex"] = "Hombre";
 		user["id"] = "1";
 		Json::Value interest;
 		interest["category"]="Musica";
@@ -70,7 +76,7 @@ MemoryStruct ClientServiceMock::getClientService(const char * url) {
 		user["password"] = pass;
 		string mail = "ely@yahoo.com";
 		user["email"] = mail;
-		user["sex"] = "F";
+		user["sex"] = "Mujer";
 		user["id"] = "1";
 		Json::Value interest;
 		interest["category"]="Musica";

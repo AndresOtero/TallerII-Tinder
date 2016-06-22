@@ -2,6 +2,7 @@
 #include "../include/HandlerToken.h"
 #include "../include/ClientServiceMock.h"
 TEST(HandlerToken,isHandler) {
+	Configuration::setPath("./config/testConfig.Json");
 	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
 	shared_ptr<TokenAuthentificator> tokenAuth(new TokenAuthentificator(db));
 	shared_ptr<ClientServiceMock>clientServ (new ClientServiceMock());
@@ -15,6 +16,7 @@ TEST(HandlerToken,isHandler) {
 	delete hm;
 }
 TEST(HandlerToken,post) {
+	Configuration::setPath("./config/testConfig.Json");
 	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
 	shared_ptr<TokenAuthentificator> tokenAuth(new TokenAuthentificator(db));
 	shared_ptr<ClientServiceMock>clientServ (new ClientServiceMock());
@@ -47,6 +49,7 @@ TEST(HandlerToken,post) {
 	delete hm;
 }
 TEST(HandlerToken,singin) {
+	Configuration::setPath("./config/testConfig.Json");
 	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
 	shared_ptr<TokenAuthentificator> tokenAuth(new TokenAuthentificator(db));
 	shared_ptr<ClientServiceMock>clientServ (new ClientServiceMock());
@@ -79,6 +82,7 @@ TEST(HandlerToken,singin) {
 	delete hm;
 }
 TEST(HandlerToken,delete_) {
+	Configuration::setPath("./config/testConfig.Json");
 	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
 	shared_ptr<TokenAuthentificator> tokenAuth(new TokenAuthentificator(db));
 	shared_ptr<ClientServiceMock>clientServ (new ClientServiceMock());
@@ -121,6 +125,7 @@ TEST(HandlerToken,delete_) {
 	delete hm;
 }
 TEST(HandlerToken,deleteUnauthorized) {
+	Configuration::setPath("./config/testConfig.Json");
 	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
 	shared_ptr<TokenAuthentificator> tokenAuth(new TokenAuthentificator(db));
 	shared_ptr<ClientServiceMock>clientServ (new ClientServiceMock());

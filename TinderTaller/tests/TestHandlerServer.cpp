@@ -6,7 +6,8 @@
 
 
 TEST(HandlerServer,handleBad) {
-	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, false));
+	Configuration::setPath("./config/testConfig.Json");
+	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
 	HandlerServer* handlerServer=new HandlerServer(db);
 	http_message* hm = new http_message;
 	hm->uri.p="/jajaja/";

@@ -53,6 +53,9 @@ search_candidate_t CandidateService::searchCandidate(string idUser){
 	//Filtro por cercania. Me quedo con los que estan mas cerca
 	candidates = getUsersNear(user, candidates);
 
+	//Me quedo con los que son de mi preferencia
+	candidates = getUsersPreferences(user, candidates);
+
 	//Me quedo con los que tengan algun interes en comun
 	candidates = getUsersCommonInterests(user, candidates);
 
@@ -247,7 +250,38 @@ vector<User> CandidateService::getUsersNear(User user, vector<User> candidates){
 	LOG(DEBUG) << "Cantidad de candidatos mas cerca (CandidateService - getUsersNear): " << candidatesOk.size();
 	return candidatesOk;
 }
+vector<User> CandidateService::getUsersPreferences(User user, vector<User> candidates){
+	/*
+	 * Me quedo con los que tengan algun interes en comun.
+	 */
+	LOG(DEBUG) << "Se van a dejar los candidatos con los que coincida sus preferencias en  (CandidateService - getUsersPreferences).";
+	vector<User> candidatesOk;
 
+	//Recorro los candidatos
+	for(int icand = 0; icand < candidates.size(); icand++){
+		User candidate = candidates[icand];
+		bool isPreference = false;
+
+		//Voy a recorrer los intereses del usuario
+		for(int iUseInt = 0; iUseInt < user.getPreferences().size(); iUseInt ++){
+			Interest userPreference = user.getPreferences()[iUseInt];
+			string candidateSex=candidate.getSex();
+			//Voy a recorrer los intereses del candidato en busca de coincidencias
+			if (userPreference.getValue()==candidateSex){
+					isPreference=true;
+					break;
+			}
+		}
+
+		if (isPreference){
+			LOG(DEBUG) << "Es de la preferencia del usuario (CandidateService - getUsersPreferences): " << candidate.getId();
+			candidatesOk.push_back(candidate);
+		}
+	}
+
+	LOG(DEBUG) << "Cantidad de candidatos que son de su preferencia (CandidateService - getUsersPreferences): " << candidatesOk.size();
+	return candidatesOk;
+}
 vector<User> CandidateService::getUsersCommonInterests(User user, vector<User> candidates){
 	/*
 	 * Me quedo con los que tengan algun interes en comun.
@@ -355,8 +389,24 @@ string CandidateService::cleanString(string idUserCandidateMatch){
 	 * Details:"RobertoM50.758326710562@gmail.com"
 	 */
 
-	int length = idUserCandidateMatch.size() - 3;
-	string idOk = idUserCandidateMatch.substr(1, length);
+	string idOk = "";
+	char newline = '\n';
+	char tab = '\t';
+	char backspace = '\b';
+	char backslash = '\\';
+	char nullChar = '\0';
+	char back = 34; // '\'
+	char aux = '\0';
+	int lenght = idUserCandidateMatch.length();
+	for (int i = 0; i < lenght; i++){
+		char caracter = idUserCandidateMatch[i];
+		if(caracter != newline && caracter != tab && caracter != backspace
+				&& caracter != backslash && caracter != nullChar && caracter != back
+				&& !(aux == backslash && caracter == 'n')){
+			idOk += caracter;
+		}
+		aux = caracter;
+	}
 
 	return idOk;
 }

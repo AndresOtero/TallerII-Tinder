@@ -4,6 +4,7 @@
 #include "../include/TokenAuthentificatorMock.h"
 TEST(HandlerMatch,isHandler) {
 	JsonParser jsonParser;
+	Configuration::setPath("./config/testConfig.Json");
 	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
 	shared_ptr<TokenAuthentificatorMock> tokenAuth(new TokenAuthentificatorMock());
 	shared_ptr<ClientServiceMock>clientServ (new ClientServiceMock());
@@ -19,6 +20,7 @@ TEST(HandlerMatch,isHandler) {
 }
 TEST(HandlerMatch,postMatch) {
 	JsonParser jsonParser;
+	Configuration::setPath("./config/testConfig.Json");
 	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
 	shared_ptr<TokenAuthentificatorMock> tokenAuth(new TokenAuthentificatorMock());
 	shared_ptr<ClientServiceMock>clientServ (new ClientServiceMock());
@@ -53,6 +55,7 @@ TEST(HandlerMatch,postMatch) {
 }
 TEST(HandlerMatch,getMatch) {
 	JsonParser jsonParser;
+	Configuration::setPath("./config/testConfig.Json");
 	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
 	shared_ptr<TokenAuthentificatorMock> tokenAuth(new TokenAuthentificatorMock());
 	shared_ptr<ClientServiceMock>clientServ (new ClientServiceMock());
@@ -80,6 +83,12 @@ TEST(HandlerMatch,getMatch) {
 	EXPECT_TRUE(db->put(tpId));
 	DBtuple anotherTpId(anotherMail+"_id","2");
 	EXPECT_TRUE(db->put(anotherTpId));
+	Json::Value preferences ;
+	Interest interest;
+	interest.changeInterest("Me interesa conocer","Mujer");
+	preferences["preferences"].append(interest.getJsonValue());
+	DBtuple userPreferencesTuple(mail+"_preferences",jsonParser.valueToString(preferences));
+	db->put(userPreferencesTuple);
 	msg_t msg=handler->handleMsg(hm);
 	EXPECT_TRUE(msg.status==StatusCode::OK);
 	delete hm;
@@ -87,6 +96,7 @@ TEST(HandlerMatch,getMatch) {
 }
 TEST(HandlerMatch,match) {
 	JsonParser jsonParser;
+	Configuration::setPath("./config/testConfig.Json");
 	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
 	shared_ptr<TokenAuthentificatorMock> tokenAuth(new TokenAuthentificatorMock());
 	shared_ptr<ClientServiceMock>clientServ (new ClientServiceMock());

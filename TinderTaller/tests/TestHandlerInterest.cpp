@@ -3,6 +3,7 @@
 #include "../include/ClientServiceMock.h"
 #include "../include/TokenAuthentificatorMock.h"
 TEST(HandlerInterest,isHandler) {
+	Configuration::setPath("./config/testConfig.Json");
 	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
 	shared_ptr<TokenAuthentificatorMock> tokenAuth(new TokenAuthentificatorMock());
 	shared_ptr<ClientServiceMock>clientServ (new ClientServiceMock());
@@ -16,6 +17,7 @@ TEST(HandlerInterest,isHandler) {
 	delete hm;
 }
 TEST(HandlerInterest,getIntersts) {
+	Configuration::setPath("./config/testConfig.Json");
 	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
 	shared_ptr<TokenAuthentificatorMock> tokenAuth(new TokenAuthentificatorMock());
 	shared_ptr<ClientServiceMock>clientServ (new ClientServiceMock());
@@ -26,14 +28,16 @@ TEST(HandlerInterest,getIntersts) {
 	hm->uri.len=strlen("/interests/");
 	hm->method.p="GET";
 	hm->method.len=strlen("GET");
-
+	JsonParser jsonParser;
 	msg_t msg=handler->handleMsg(hm);
 	EXPECT_TRUE(msg.status=StatusCode::OK);
-	EXPECT_TRUE(msg.body=="Intereses");
+	Json::Value val=jsonParser.stringToValue(msg.body);
+	EXPECT_TRUE(val.isMember("interests"));
 	delete handler;
 	delete hm;
 }
 TEST(HandlerInterest,postIntersts) {
+	Configuration::setPath("./config/testConfig.Json");
 	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
 	shared_ptr<TokenAuthentificatorMock> tokenAuth(new TokenAuthentificatorMock());
 	shared_ptr<ClientServiceMock>clientServ (new ClientServiceMock());

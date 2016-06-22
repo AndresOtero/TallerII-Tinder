@@ -30,7 +30,6 @@ msg_t HandlerToken::handlePost(struct http_message *hm) {
 	Json::Value val = jsonParse.stringToValue(hm->body.p);
 	string mail = jsonParse.getMail(hm->body.p);
 	string pass = jsonParse.getPassword(hm->body.p);
-
 	DBtuple tpPass(mail+"_pass");
 	bool okPass=DB->get(tpPass);
 	DBtuple tpId(mail+"_id");
@@ -44,13 +43,13 @@ msg_t HandlerToken::handlePost(struct http_message *hm) {
 			msg_t msgGet = sharedClient->getUser(tpId.value);
 			val=jsonParse.stringToValue(msgGet.body);
 			jsonParse.removeMember(val["user"],"id");
+			val=this->loadUserPreferences(val,mail);
 			DBtuple userGcmId(mail+"_gcmId",gcm_registration_id);
 			bool okPutGcmId = DB->put(userGcmId);
 		}
 		val["token"]=token;
 		string  result = jsonParse.valueToString(val);
 		LOG(INFO) << "Mando un mensaje";
-
 		msg.change(CREATED, result);
 	}else{
 		msg=this->unathorized();

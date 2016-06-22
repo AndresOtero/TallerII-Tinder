@@ -101,6 +101,12 @@ User UserDao::buildUser(string idUser, string userInJsonShared){
 	Json::Value interestsJson = responseJson["interests"];
 	vector<Interest> interests = jsonParser.getInterest(interestsJson);
 	user.setInterests(interests);
+	DBtuple userPreferencesTuple(user.getEmail()+"_preferences");
+	this->dataBase->get(userPreferencesTuple);
+	Json::Value preferencesValue=jsonParser.stringToValue(userPreferencesTuple.value);
+	Json::Value preferencesJson = preferencesValue["preferences"];
+	vector<Interest> preferencesArray = jsonParser.getInterest(preferencesJson);
+	user.setPreferences(preferencesArray);
 	string latitude = jsonParser.getStringFromValue(responseJson["location"], "latitude");
 	user.setLatitude(atof(latitude.c_str()));
 	string longitude = jsonParser.getStringFromValue(responseJson["location"], "longitude");
@@ -169,6 +175,8 @@ bool UserDao::putMatch(User user, User userToMatch){
 	for(string id : idUserMatchs){
 		data.append(id);
 	}
+	user.setIdUserMatchs(idUserMatchs);
+
 	root["idUserMatchs"] = data;
 	DBtuple keyIdUserMatchs(user.getId() + "_idUserMatchs");
 	keyIdUserMatchs.value = jsonParser.valueToString(root);
@@ -218,6 +226,8 @@ bool UserDao::putCandidateMatch(User user, User userToMatch){
 	for(string id : idUserCandidatesMatchs){
 		data.append(id);
 	}
+	user.setIdUserCandidatesMatchs(idUserCandidatesMatchs);
+
 	root["idUserCandidatesMatchs"] = data;
 	DBtuple keyIdUserCandidatesMatchs(user.getId() + "_idUserCandidatesMatchs");
 	keyIdUserCandidatesMatchs.value = jsonParser.valueToString(root);

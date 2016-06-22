@@ -11,6 +11,7 @@
 #include "easylogging++.h"
 #include "HTTPRequest.h"
 #include "GcmClient.h"
+#include "Configuration.h"
 using namespace std;
 
 class SharedClient {
@@ -27,6 +28,7 @@ public:
 	msg_t setInterests(string & interests);
 private:
 	shared_ptr<ClientServiceInterface> clientService;
+	string urlSharedServer;
 };
 
 #endif /* SRC_SHAREDCLIENT_H_ */

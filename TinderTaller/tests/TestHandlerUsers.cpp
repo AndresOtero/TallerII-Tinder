@@ -3,6 +3,7 @@
 #include "../include/ClientServiceMock.h"
 #include "../include/TokenAuthentificatorMock.h"
 TEST(HandlerUsers,isHandler) {
+	Configuration::setPath("./config/testConfig.Json");
 	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
 	shared_ptr<TokenAuthentificator> tokenAuth(new TokenAuthentificator(db));
 	shared_ptr<ClientServiceMock>clientServ (new ClientServiceMock());
@@ -17,6 +18,7 @@ TEST(HandlerUsers,isHandler) {
 	delete hm;
 }
 TEST(HandlerUsers,postUser) {
+	Configuration::setPath("./config/testConfig.Json");
 	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
 	shared_ptr<TokenAuthentificatorMock> tokenAuth(new TokenAuthentificatorMock());
 	shared_ptr<ClientServiceMock>clientServ (new ClientServiceMock());
@@ -51,6 +53,7 @@ TEST(HandlerUsers,postUser) {
 	delete hm;
 }
 TEST(HandlerUsers,delete_) {
+	Configuration::setPath("./config/testConfig.Json");
 	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
 	shared_ptr<TokenAuthentificatorMock> tokenAuth(new TokenAuthentificatorMock());
 	shared_ptr<ClientServiceMock>clientServ (new ClientServiceMock());
@@ -91,6 +94,7 @@ TEST(HandlerUsers,delete_) {
 	delete hm;
 }
 TEST(HandlerUsers,getUser) {
+	Configuration::setPath("./config/testConfig.Json");
 	JsonParser jsonParser;
 	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
 	shared_ptr<TokenAuthentificatorMock> tokenAuth(new TokenAuthentificatorMock());
@@ -115,6 +119,7 @@ TEST(HandlerUsers,getUser) {
 	delete hm;
 }
 TEST(HandlerUsers,putUser) {
+	Configuration::setPath("./config/testConfig.Json");
 	JsonParser jsonParser;
 	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
 	shared_ptr<TokenAuthentificatorMock> tokenAuth(new TokenAuthentificatorMock());
@@ -148,6 +153,7 @@ TEST(HandlerUsers,putUser) {
 	delete hm;
 }
 TEST(HandlerUsers,putPhoto) {
+	Configuration::setPath("./config/testConfig.Json");
 	JsonParser jsonParser;
 	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
 	shared_ptr<TokenAuthentificatorMock> tokenAuth(new TokenAuthentificatorMock());

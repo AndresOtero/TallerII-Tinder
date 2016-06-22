@@ -95,6 +95,7 @@ Json::Value JsonParser::replaceNewUserInOldUser(Json::Value newVal,Json::Value o
 			oldUser[itr.key().asCString()]=(*itr);
 		}
 	}
+
 	oldVal["user"]=oldUser;
 	oldVal["metadata"]=newVal["metadata"];
 	return oldVal;
