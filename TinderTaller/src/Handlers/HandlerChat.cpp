@@ -150,10 +150,13 @@ vector<string> HandlerChat::getChatsId(struct http_message *hm){
 }
 
 
-Json::Value HandlerChat::getChatHeader(string user,string chatString,string chatId){
+Json::Value HandlerChat::getChatHeader(string user,string chatId){
 	/**Busca el chat header, devuelvo el header con el ultimo mensaje, con el ultimo mensajeId mandado ,
 	 * con la cantidad de mensajes sin leer y con el otro usario en la conversacion. **/
-	Json::Value chat=jsonParse.stringToValue(chatString);
+	DBtuple getChat("chat_"+(chatId));
+	DB->get(getChat);
+	Json::Value chat=jsonParse.stringToValue(getChat.value);
+	LOG(DEBUG)<<getChat.value;
 	Json::Value header;
 	if(chat["User1"].asString()==user){
 		header["Unread"]=chat["LastMessage1"];
@@ -175,22 +178,20 @@ Json::Value HandlerChat::getChatHeader(string user,string chatString,string chat
 	header["message_id"]=newMessageId-1;
 	header["chatroom_id"]=chatId;
 	string headerString=jsonParse.valueToString(header);
+	LOG(DEBUG)<<headerString;
+
 	return header;
 }
 msg_t HandlerChat::handleGetAll(struct http_message *hm){
 	/**Busca los headers de todos los mensajes de los usuarios.**/
 	msg_t msg;
 	Json::Value headers;
-	Json::Value chats;
+	Json::Value chats= Json::Value(Json::arrayValue);;
 	string  user=this->getUser(hm);
 	LOG(INFO)<<"Busco todas las conversaciones";
 	vector<string> chatsIdVector=this->getChatsId(hm);
-
 	for (auto itr: chatsIdVector){
-		DBtuple getChat("chat_"+(itr));
-		DB->get(getChat);
-		//Habria que mandar 1 pag o algo asi
-		chats.append(this->getChatHeader(user,getChat.value,itr));
+		chats.append(this->getChatHeader(user,itr));
 	}
 	headers["chats"]=chats;
 	msg.status=OK;
@@ -203,10 +204,11 @@ string HandlerChat::readChat(string chatString,string user,string messageId,stri
 	 * ultimos mensajes leidos en la conversacion.**/
 	Json::Value chat=jsonParse.stringToValue(chatString);
 	Json::Value lastsMessages;
-	Json::Value lastsMessagesMsg;
+	Json::Value lastsMessagesMsg= Json::Value(Json::arrayValue);
+	LOG(DEBUG)<<chatString;
 	int lastMessageRead;
 	int lastMessageId=chat["message_id"].asInt();
-	if(chat["User1"].asString()!=user){//OJO todo
+	if(chat["User1"].asString()==user){
 		lastMessageRead=chat["LastMessage2"].asInt();
 		chat["LastMessage1"]=0;
 	}else{
@@ -238,7 +240,9 @@ string HandlerChat::readChat(string chatString,string user,string messageId,stri
 	lastsMessages["LastMessageId"]=bottomMessageId;
 	string lastsMessagesString=this->jsonParse.valueToString(lastsMessages);
 	chatString=this->jsonParse.valueToString(chat);
+	LOG(DEBUG)<<chatString;
 	DBtuple putChat("chat_"+conversationId,chatString);
+	DB->put(putChat);
 	return lastsMessagesString;
 }
 

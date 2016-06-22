@@ -45,9 +45,9 @@ respuesta={'To':'Fede@gmail.com','message':'respuesta'}
 respuesta_json=json.dumps(respuesta)
 urlToken='http://'+host+':8080/token/singin/'
 urlChat='http://'+host+':8080/chat/'
-urlChat0='http://'+host+':8080/chat/0-0/'
-urlChat1='http://'+host+':8080/chat/1-10/'
-urlChat1_15='http://'+host+':8080/chat/1-15/'
+urlChat0='http://'+host+':8080/chat/0-10/'
+urlChat1='http://'+host+':8080/chat/2-10/'
+urlChat1_15='http://'+host+':8080/chat/2-15/'
 
 crear=raw_input("Desea crear usuarios?(Si) para crear, cualquiero otro para no \n")
 if crear=="Si":
@@ -79,16 +79,16 @@ print urlChat
 response = requests.get(urlChat ,headers=auth["Andy"])
 print response
 print response.json()
-print "Get mensajes Ely"
+"""print "Get mensajes Ely"
 response = requests.get(urlChat ,headers=auth["Ely"])
 print response
-print response.json()
-print "Get mensajes Chat 0"
+print response.json()"""
+"""print "Get mensajes Chat 0"
 print urlChat0
 response = requests.get(urlChat0 ,headers=auth["Ely"])
 print response
 print "Mensaje de andy a Ely"
-print urlChat
+print urlChat"""
 print mensaje_json
 response = requests.post(urlChat ,headers=auth["Andy"] ,data=mensaje_json)
 print response
@@ -109,7 +109,8 @@ print urlChat
 response = requests.get(urlChat ,headers=auth["Ely"])
 print response
 print response.json()
-print "Get mensajes Ely 1 desde 10 a 0"
+print "----------------------------------------------Test del visto ----------------------------------------------"
+"""print "Get mensajes Ely 1 desde 10 a 0"
 print urlChat1
 response = requests.get(urlChat1 ,headers=auth["Ely"])
 print response
@@ -125,7 +126,27 @@ print response.json()
 print "Get mensajes Ely 1 desde 10 a 0"
 response = requests.get(urlChat1 ,headers=auth["Fede"])
 print response
+print response.json()"""
+print "-------------------------------------------Fin Test del visto ----------------------------------------------"
+print "----------------------------------------------Test del unread ----------------------------------------------"
+print "Get mensajes Ely"
+print urlChat
+response = requests.get(urlChat ,headers=auth["Ely"])
+print response
 print response.json()
+print "Get mensajes Chat 0"
+print urlChat0
+response = requests.get(urlChat0 ,headers=auth["Ely"])
+print response
+print response.json()
+print "Get mensajes Ely"
+print urlChat
+response = requests.get(urlChat ,headers=auth["Ely"])
+print response
+print response.json()
+print "------------------------------------------Fin Test del unread ----------------------------------------------"
+
+
 
 borrar=raw_input("Desea borrar usuarios?(Si) para crear, cualquiero otro para no \n")
 if borrar=="Si":
