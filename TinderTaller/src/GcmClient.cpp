@@ -11,15 +11,19 @@ const char * url = "https://fcm.googleapis.com/fcm/send";
 const char * passApiGcm = "key=AIzaSyAYrHnfzOKfO4y1FxSUK5V-7tuQM4BqnE4";
 
 GcmClient::GcmClient(shared_ptr<ClientServiceInterface> clientService) {
+	/**Constructor del gcm Client**/
 	LOG(INFO)<< "Inicio Gcm Cliente";
 	this->clientService = clientService;
 }
 
 GcmClient::~GcmClient() {
+	/**Destructor del gcm Client**/
+
 	LOG(INFO)<< "Borro Gcm Cliente";
 }
 
 msg_t GcmClient::setInGcm(string & data){
+	/**Hago un POST con la data recibida**/
 	MemoryStruct memoryStruct = this->clientService->postWithAuthorizationClientService(url, data.c_str(), passApiGcm);
 
 	LOG(INFO)<< "Va a cargar el resultado del post en Gcm";
@@ -36,6 +40,7 @@ msg_t GcmClient::setInGcm(string & data){
 }
 
 msg_t GcmClient::setNewMatch(string & dataMatch){
+	/**Mando un mensaje de que hay un nuevo match al usuario correspondiente**/
 	LOG(INFO)<< "Va a informar un nuevo match (GcmClient - setNewMatch)";
 	LOG(DEBUG)<< "El json para el nuevo match es: " << dataMatch;
 
@@ -46,6 +51,7 @@ msg_t GcmClient::setNewMatch(string & dataMatch){
 }
 
 msg_t GcmClient::setNewChat(string & dataChat){
+	/**Mando un mensaje de que hay un nuevo mensaje al usuario correspondiente**/
 	LOG(INFO)<< "Va a informar un nuevo chat (GcmClient - setNewChat)";
 	LOG(DEBUG)<< "El json para el nuevo chat es: " << dataChat;
 

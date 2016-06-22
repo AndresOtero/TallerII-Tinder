@@ -28,6 +28,7 @@ User UserDao::getUser(string idUser){
 }
 
 User UserDao::buildUser(string idUser, string userInJsonShared){
+	/**Crea un nuevo usuario con la informacion recibida**/
 	User user;
 	user.setId(idUser);
 	user.setEmail(idUser);
@@ -116,6 +117,7 @@ User UserDao::buildUser(string idUser, string userInJsonShared){
 }
 
 vector<User> UserDao::getUsers(){
+	/**Devuelve un vector con todos los usuarios del shared**/
 	vector<User> users;
 	string responseInJsonShared = sharedClient->getUsers().body;//TODO FALTA CONTROLAR EL STATUS DEL REQUEST
 	Json::Value usersInJsonShared = jsonParser.stringToValue(responseInJsonShared);
@@ -167,7 +169,7 @@ string UserDao::cleanString(string idUserCandidateMatch){
 }
 
 bool UserDao::putMatch(User user, User userToMatch){
-	//Actualizo los matchs del usuario que invoco la peticion
+	/**Actualizo los matchs del usuario que invoco la peticion**/
 	Json::Value root;
 	Json::Value data;
 	vector<string> idUserMatchs = user.getIdUserMatchs();
@@ -218,7 +220,7 @@ bool UserDao::putMatch(User user, User userToMatch){
 }
 
 bool UserDao::putCandidateMatch(User user, User userToMatch){
-	//Actualizo los candidatos a matchs del usuario que invoco la peticion
+	/**Actualizo los candidatos a matchs del usuario que invoco la peticion**/
 	Json::Value root;
 	Json::Value data;
 	vector<string> idUserCandidatesMatchs = user.getIdUserCandidatesMatchs();
@@ -236,6 +238,7 @@ bool UserDao::putCandidateMatch(User user, User userToMatch){
 }
 
 vector<User> UserDao::getCandidatesForIdUser(string idUser){
+	/**Busco los candidatos del usuario indicado**/
 	vector<User> users = getUsers();
 	if (idUser.empty()){
 		return users;
@@ -253,8 +256,8 @@ vector<User> UserDao::getCandidatesForIdUser(string idUser){
 }
 
 vector<User> UserDao::updateUserPhotoForUrl(vector<User> users){
+	/**Actualizo la foto de los usuarios en el vector**/
 	vector<User> usersUpdate ;
-
 	for(User user : users){
 		msg_t msg = this->sharedClient->getUser(user.getIdShared());
 		Json::Value val = jsonParser.stringToValue(msg.body);

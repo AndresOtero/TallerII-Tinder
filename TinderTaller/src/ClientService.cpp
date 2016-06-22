@@ -13,6 +13,7 @@ ClientService::~ClientService() {
 }
 
 MemoryStruct ClientService::getClientService(const char * url) {
+	/**Ejecuta un GET a la url indicada**/
 	CURL *curl;
 	CURLcode response;
 
@@ -57,6 +58,8 @@ MemoryStruct ClientService::getClientService(const char * url) {
 }
 
 MemoryStruct ClientService::postBaseClientService(const char * url, const char * data, const char * authorization){
+	/**Ejecuta un POST a la url indicada, con la data y autorizacion entregada**/
+
 	CURL *curl;
 	CURLcode res;
 
@@ -128,14 +131,17 @@ MemoryStruct ClientService::postBaseClientService(const char * url, const char *
 }
 
 MemoryStruct ClientService::postClientService(const char * url, const char * data){
+	/**Ejecuta un POST a la url indicada, con la data  entregada**/
 	return postBaseClientService(url, data, "");
 }
 
 MemoryStruct ClientService::postWithAuthorizationClientService(const char * url, const char * data, const char * authorization){
+	/**Ejecuta un POST a la url indicada, con la data y autorizacion entregada**/
 	return postBaseClientService(url, data, authorization);
 }
 
 MemoryStruct ClientService::putClientService(const char * url, const char * data){
+	/**Ejecuta un PUT a la url indicada, con la data entregada**/
 	CURL *curl;
 	CURLcode res;
 
@@ -186,6 +192,8 @@ MemoryStruct ClientService::putClientService(const char * url, const char * data
 }
 
 MemoryStruct ClientService::deleteClientService(const char * url){
+	/**Ejecuta un DELETE a la url indicada**/
+
 	CURL *curl;
 	CURLcode res;
 

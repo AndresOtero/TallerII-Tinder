@@ -47,7 +47,7 @@ Json::Value JsonParser::stringToValue(std::string jsonStr) {
 	return root;
 }
 std::string  JsonParser::valueToString(Json::Value value){
-	/****/
+	/**Recibe un valor y lo devuelve como un string**/
 	Json::StyledWriter styledWriter;
 	return styledWriter.write(value);
 }
@@ -56,22 +56,27 @@ int JsonParser::getIntFromValue(Json::Value jsonValue, std::string key) {
 	return jsonValue[key].asInt();
 }
 std::string JsonParser::getMail(std::string jsonStr){
+	/**Recibe un valor y devuelve el email del usuario**/
 	Json::Value val = stringToValue(jsonStr);
 	return getStringFromValue(val["user"], "email");
 }
 std::string JsonParser::getPassword(std::string jsonStr){
+	/**Recibe un valor y devuelve la password**/
 	Json::Value val = stringToValue(jsonStr);
 	return getStringFromValue(val["user"], "password");
 }
-std::string JsonParser::removePassword(Json::Value val ){
+std::string JsonParser::removePassword(Json::Value& val ){
+	/**Recibe un valor y devuelve la password y la remueve del val**/
 	Json::Value pass=val["user"].removeMember("password");
 	return pass.asString();
 }
-std::string JsonParser::removeGcmId(Json::Value val ){
+std::string JsonParser::removeGcmId(Json::Value& val ){
+	/**Recibe un valor y devuelve el gcmId y la remueve del val**/
 	Json::Value pass=val["user"].removeMember("gcm_registration_id");
 	return pass.asString();
 }
 std::string JsonParser::getId(std::string jsonStr){
+	/*Devuelve el id del user***/
 	Json::Value val = stringToValue(jsonStr);
 	return getStringFromValue(val["user"], "id");
 }
@@ -80,11 +85,13 @@ std::string JsonParser::getStringFromValue(Json::Value jsonValue,
 	/**Devuelvo un string que esta registrado en el value de Json con la key**/
 	return jsonValue[key].asString();
 }
-std::string JsonParser::removeMember(Json::Value val, std::string valRemove){
+std::string JsonParser::removeMember(Json::Value & val, std::string valRemove){
+	/**Devuelvo un string que esta registrado en el value de Json con la key, lo saco del value.**/
 	Json::Value rdo = val.removeMember(valRemove);
 	return rdo.asString();
 }
 Json::Value JsonParser::replaceNewUserInOldUser(Json::Value newVal,Json::Value oldVal){
+	/**Reemplazo lo modificado en el nuevo usuario en el viejo**/
 	Json::Value oldUser=oldVal["user"];
 	//oldUser.removeMember("id");
 	Json::Value newUser=newVal["user"];
@@ -101,6 +108,7 @@ Json::Value JsonParser::replaceNewUserInOldUser(Json::Value newVal,Json::Value o
 	return oldVal;
 }
 std::vector<std::string> JsonParser::getKeyVectorFromValue(Json::Value value){
+	/**Devuelve el vector de keys del vector pasado como valor**/
 	std::vector<std::string> keyVector;
 	for( Json::ValueIterator itr = value.begin() ; itr != value.end() ; itr++ ){
 		keyVector.push_back(itr.key().asString());

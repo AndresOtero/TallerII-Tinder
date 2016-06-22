@@ -5,6 +5,7 @@
 #include "SharedClient.h"
 
 SharedClient::SharedClient(shared_ptr<ClientServiceInterface> clientService) {
+	/**Constructor del shared client**/
 	LOG(INFO)<< "Inicio Shared Cliente";
 	this->clientService = clientService;
  	this->urlSharedServer= Configuration::getConfiguration()->getStringAttribute("urlSharedServer");
@@ -12,12 +13,12 @@ SharedClient::SharedClient(shared_ptr<ClientServiceInterface> clientService) {
 
 
 SharedClient::~SharedClient() {
+	/**Destructor del shared client**/
 	LOG(INFO)<< "Borro Shared Cliente";
-
-
 }
 
 msg_t  SharedClient::getUsers(){
+	/**Obtiene los usuarios del shared server**/
 	LOG(INFO)<< "Va a obtener los usuarios (getUsers)";
 
 	string urlUsers = urlSharedServer+"/users";
@@ -38,6 +39,7 @@ msg_t  SharedClient::getUsers(){
 }
 
 msg_t  SharedClient::setUser(string & user){
+	/**Crea un nuevo usuario en el  shared server**/
 	LOG(INFO)<< "Va a dar de alta un nuevo usuario (setUser)";
 	LOG(DEBUG)<< "El json de alta de usuario es: " << user;
 
@@ -59,6 +61,8 @@ msg_t  SharedClient::setUser(string & user){
 }
 
 msg_t  SharedClient::getUser(string userId){
+	/**Busca un usuario en el  shared server con el id recibido**/
+
 	LOG(INFO)<< "Va a obtener un usuario en particular (getUser) - Id: " << userId;
 
 	string url=urlSharedServer;
@@ -80,6 +84,8 @@ msg_t  SharedClient::getUser(string userId){
 }
 
 msg_t  SharedClient::updateUser(string userId, string & user){
+	/**Actualiza un usuario en el  shared server con el id recibido**/
+
 	LOG(INFO)<< "Va a actualizar un usuario en particular (updateUser) - Id: " << userId;
 	LOG(DEBUG)<< "El json para actualizar un usuarios es: " << user;
 
@@ -103,6 +109,7 @@ msg_t  SharedClient::updateUser(string userId, string & user){
 }
 
 msg_t  SharedClient::updateUserPhoto(string userId, string & photo){
+	/**Actualiza la foto de un usuario en el  shared server con el id recibido**/
 	LOG(INFO)<< "Va a actualizar la foto de un usuario en particular (updateUserPhoto) - Id: " << userId;
 	LOG(DEBUG)<< "El json para actualizar la foto de un usuarios es: " << photo;
 
@@ -128,6 +135,7 @@ msg_t  SharedClient::updateUserPhoto(string userId, string & photo){
 }
 
 msg_t  SharedClient::deleteUser(string userId){
+	/**Borra un usuario en el  shared server con el id recibido**/
 	LOG(INFO)<< "Va a eliminar un usuario en particular (deleteUser) - Id: " << userId;
 
 	string url=urlSharedServer;
@@ -151,6 +159,7 @@ msg_t  SharedClient::deleteUser(string userId){
 }
 
 msg_t  SharedClient::getInterests(){
+	/**Busca los intereses del shared server**/
 	LOG(INFO)<< "Va a buscar los intereses (getInterests)";
 
 	string url = urlSharedServer+"/interests";
@@ -172,6 +181,7 @@ msg_t  SharedClient::getInterests(){
 
 
 msg_t  SharedClient::setInterests(string & interests){
+	/**Da de alta un nuevo interes en el shared server**/
 	LOG(INFO)<< "Va a dar de alta nuevo intereses (setInterests)";
     LOG(DEBUG)<< "El json para el alta nuevo intereses es: " << interests;
 

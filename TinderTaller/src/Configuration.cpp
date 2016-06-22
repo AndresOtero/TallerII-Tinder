@@ -14,6 +14,7 @@ shared_ptr<Configuration> Configuration::configurationInstance = NULL; //Singlet
 bool Configuration::set = false; //Singleton Patron
 string Configuration::pathJson="";
 shared_ptr<Configuration> Configuration::getConfiguration(){
+	/**Singleton consigue la unica instancia del objeto**/
 	if(!configurationInstance){
 		shared_ptr<Configuration> servInst(new Configuration(Configuration::pathJson.c_str()));
 		Configuration::configurationInstance = servInst;
@@ -21,9 +22,11 @@ shared_ptr<Configuration> Configuration::getConfiguration(){
 	return configurationInstance;
 }
 void Configuration::setPath(string path){
+	/**Setea el path al archivo de configuracion**/
 	pathJson=path;
 }
 Configuration::Configuration(const char* pathJson) {
+	/**Constructor de la configuracion**/
 	LOG(INFO)<<"Creo nueva configuracion con path:"<<pathJson;
 	std::ifstream configurationFile(pathJson, std::ifstream::binary);
 	if(!configurationFile.good()){
@@ -40,11 +43,13 @@ Configuration::Configuration(const char* pathJson) {
 
 }
 string Configuration::getStringAttribute(string attribute ){
+	/**Busco un atributo de la configuracion y lo devuelvo como un string**/
 	if(!set)return "";
 	Json::Value val=this->jsonFile;
 	return val[attribute].asString();
 }
 bool Configuration::getBooleanAttribute(string attribute ){
+	/**Busco un atributo de la configuracion y lo devuelvo como un booleano**/
 	if(!set)return false;
 	Json::Value val=this->jsonFile;
 	return (val[attribute].asString()=="true");

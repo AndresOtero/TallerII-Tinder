@@ -8,16 +8,18 @@
 #include "CandidateService.h"
 
 CandidateService::CandidateService(shared_ptr<DataBase> DB,shared_ptr<SharedClient> sharedClient) {
+	/**Constructor del candidate service**/
 	this->sharedClient=sharedClient;
 	shared_ptr<UserDao> userDaoAux(new UserDao(DB,sharedClient));
 	userDao = userDaoAux;
 }
 
 CandidateService::~CandidateService() {
-	// TODO Auto-generated destructor stub
+	// destructor
 }
 
 search_candidate_t CandidateService::searchCandidate(string idUser){
+	/**	Efectuo una busqueda de los candidatos para el usuario, devuelvo el status de la busqueda y una lista de candidatos.**/
 	LOG(INFO) << "Comienzo a buscar candidatos a match (CandidateService - searchCandidate).";
 	search_candidate_t search_candidate;
 	vector<User> candidates;
@@ -326,6 +328,7 @@ vector<User> CandidateService::getUsersCommonInterests(User user, vector<User> c
 }
 
 StatusCodeMatch CandidateService::match(string idUser, string idUserMatch){
+	/**Busco si hay un match o no entre los usuarios, devuelve un status con el resultado**/
 	LOG(INFO) << "Busco match entre el usuario " << idUser << " y el usuario " << idUserMatch << " (CandidateService - match).";
 
 	User user = this->userDao->getUser(idUser);

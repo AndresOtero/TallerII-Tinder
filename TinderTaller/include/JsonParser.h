@@ -23,8 +23,8 @@ class JsonParser {
 		Json::Value replaceNewUserInOldUser(Json::Value newVal, Json::Value  oldVal);
 		std::string parseBody(std::string body);
 		bool isNullValue(Json::Value val);
-		std::string removePassword(Json::Value value );
-		std::string removeGcmId(Json::Value val );
+		std::string removePassword(Json::Value &value );
+		std::string removeGcmId(Json::Value& val );
 		std::string  valueToString(Json::Value value);
 		Json::Value stringToValue(std::string jsonStr);
 		std::string getId(std::string jsonStr);
@@ -34,7 +34,7 @@ class JsonParser {
 		std::string getStringFromValue(Json::Value jsonValue,std::string key);
 		std::vector<std::string> getKeyVectorFromValue(Json::Value value);
 		virtual ~JsonParser();
-		std::string removeMember(Json::Value val, std::string valRemove);
+		std::string removeMember(Json::Value &val, std::string valRemove);
 		vector<Interest> getInterest(Json::Value value);
 		std::string getCandidatesJson(vector<User> users);
 		vector<string> getVectorFromValue(Json::Value value);

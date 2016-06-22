@@ -17,14 +17,6 @@ HandlerUsers::HandlerUsers(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificat
 
 msg_t HandlerUsers::handleGet(struct http_message * hm) {
 	/**Manejo el get de user, recibe un mensaje y una base de datos. Devuelve el msg correspondiente**/
-	/**Json::Value val = jsonParse.stringToValue(hm->body.p);
-	if(jsonParse.isNullValue(val))return badRequest("Bad Json");
-	if(!val.isMember("user"))return badRequest("Bad Json");
-	Json::Value user=val["user"];
-	if(jsonParse.isNullValue(user))return badRequest("Bad Json");
-	string a = jsonParse.getStringFromValue(user, "name");
-	DBtuple tp(a);
-	bool ok =DB->get(tp);**/
 	msg_t msg;
 	string id = httpReqParser.getId(hm);
 
@@ -116,6 +108,7 @@ msg_t HandlerUsers::handlePut(struct http_message * hm) {
 }
 
 Json::Value HandlerUsers::saveUserPreferences(Json::Value val,string userId){
+	/**Recibo el mensaje recibido y guardo las preferencias a la hora del match del usuario.**/
 	Json::Value preferences;
 	Json::Value newInterests;
 	Json::Value user=val["user"];
@@ -169,9 +162,6 @@ msg_t HandlerUsers::putUserUpdateProfile(struct http_message * hm) {
 			Json::Value val=jsonParse.replaceNewUserInOldUser(userNew,userOld);
 			LOG(INFO)<<"Modifico "<< id <<" como usuario";
 			LOG(INFO)<<"Modifico "<< userId.value <<" como id_usuario";
-			//string token=tokenAuthentificator->createJsonToken(mail);
-			//val["token"]=token;
-			//string  result = jsonParse.valueToString(val);
 			val=this->saveUserPreferences(val,id);
 			//Va a actualizar un usuario en el Shared
 			string userNew=jsonParse.valueToString(val);
