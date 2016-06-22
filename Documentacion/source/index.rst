@@ -4,20 +4,43 @@
    contain the root `toctree` directive.
 
 Bienvenido a la documentacion de MatchApp
-====================================
+=========================================
 
 
-.. _EstructuraGeneral
+.. _Estructura-General:
 .. toctree::
    :maxdepth: 2
-   :caption: EstructuraGeneral
+   :caption: Estructura General
 
-.. _sharedServer
+   links
+
+.. _shared-Server:
 .. toctree::
    :maxdepth: 2
-   :caption: SharedServer
+   :caption: Shared Server
+   :name: mastertoc2
 
    sharedServer/Tecnologias
+   sharedServer/BaseDeDatos
+   sharedServer/ManualDeUsuario
+   sharedServer/TestUnitarios
+
+.. _Pagina-Web:
+.. toctree::
+   :maxdepth: 2
+   :caption: Pagina Web
+   :name: mastertoc3
+
+   paginaWeb/Tecnologias
+   paginaWeb/ManualDeUsuario
+
+.. _Android-Client:
+.. toctree::
+   :maxdepth: 2
+   :caption: Cliente Android
+   :name: mastertoc4
+
+
 
   
 
