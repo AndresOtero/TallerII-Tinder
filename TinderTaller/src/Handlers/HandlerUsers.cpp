@@ -110,7 +110,7 @@ msg_t HandlerUsers::handlePut(struct http_message * hm) {
 Json::Value HandlerUsers::saveUserPreferences(Json::Value val,string userId){
 	/**Recibo el mensaje recibido y guardo las preferencias a la hora del match del usuario.**/
 	Json::Value preferences;
-	Json::Value newInterests;
+	Json::Value newInterests=Json::Value(Json::arrayValue);
 	Json::Value user=val["user"];
 	if(user.isMember("interests")){
 		Json::Value interests=user["interests"];

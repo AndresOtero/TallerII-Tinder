@@ -274,6 +274,16 @@ vector<User> CandidateService::getUsersPreferences(User user, vector<User> candi
 					break;
 			}
 		}
+		//Voy a recorrer los intereses del usuario
+		for(int iUseInt = 0; iUseInt < candidate.getPreferences().size(); iUseInt ++){
+			Interest candidatePreference = candidate.getPreferences()[iUseInt];
+			string userSex=user.getSex();
+			//Voy a recorrer los intereses del candidato en busca de coincidencias
+			if (candidatePreference.getValue()==userSex){
+				isPreference=true;
+				break;
+			}
+		}
 
 		if (isPreference){
 			LOG(DEBUG) << "Es de la preferencia del usuario (CandidateService - getUsersPreferences): " << candidate.getId();

@@ -35,8 +35,7 @@ msg_t HandlerMatch::handlePost(struct http_message *hm){
 	DBtuple userId(idEmail+"_id");
 	bool ok=DB->get(userId);
 	DBtuple userIdMatch(idEmailMatch+"_id");
-	bool okMatch=DB->get(userIdMatch);
-	if(ok && okMatch){
+	if(ok){
 		StatusCodeMatch rdo = this->candidateService->match(idEmail, idEmailMatch);
 		if (rdo == StatusCodeMatch::OK_UPDATE_MATCH){
 			msg.change(CREATED, "{\"Mensaje\":\"Se produjo Match con el candidato seleccionado.\"}");
@@ -98,14 +97,8 @@ msg_t HandlerMatch::handlePost(struct http_message *hm){
 	} else {
 		LOG(WARNING)<<"Not success";
 		string error = "{\"Mensaje\":\"Id incorrecto: ";
-		if(!ok && okMatch){
+		if(!ok){ //&& okMatch){
 			error.append(idEmail);
-		} else if(ok && !okMatch){
-			error.append(idEmailMatch);
-		} else {
-			error.append(idEmail);
-			error.append(" y ");
-			error.append(idEmailMatch);
 		}
 		error.append("\"}");
 	    msg=this->badRequest(error);
