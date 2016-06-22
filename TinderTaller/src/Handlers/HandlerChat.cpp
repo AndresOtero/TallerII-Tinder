@@ -58,12 +58,21 @@ Json::Value HandlerChat::saveNewMessage(string chatId,string  remitente,string m
 	return newMessage;
 }
 
+/**
+msg_t HandlerChat::seenChat(struct http_message *hm){
+	vector<string> chatsId=getChatsId(hm);
+	string body=jsonParse.stringToValue(hm->body.p);
+	if (std::find(chatsId.begin(), chatsId.end(), "abc") != v.end())
 
-
+}**/
 msg_t HandlerChat::handlePost(struct http_message *hm) {
 	/**	Recibo el post de un mensaje y devuelvo un Ok si se realizo correctamente**/
 	msg_t msg;
 	LOG(INFO) << "Obteniendo los datos para guardar el mensaje del chat.";
+	//string visto=httpReqParser.parsePrefix(hm)[2];
+	/**if(visto=="visto"){
+		return seenChat(hm);
+	}**/
 	Json::Value bodyValue=jsonParse.stringToValue(hm->body.p);
 	string remitente=this->getUser(hm);
 	string destinatario=jsonParse.getStringFromValue(bodyValue,"To");
