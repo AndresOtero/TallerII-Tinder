@@ -18,6 +18,7 @@ Bienvenido a la documentacion de MatchApp
 
    estructura
    links
+   entregas
 
 .. _shared-Server:
 .. toctree::
