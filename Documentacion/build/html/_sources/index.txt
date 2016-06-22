@@ -3,15 +3,20 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+
 Bienvenido a la documentacion de MatchApp
 =========================================
 
+.. image:: iconMaterial4.png
+	:align: center
+	:width: 300
 
 .. _Estructura-General:
 .. toctree::
    :maxdepth: 2
    :caption: Estructura General
 
+   estructura
    links
 
 .. _shared-Server:
@@ -39,6 +44,9 @@ Bienvenido a la documentacion de MatchApp
    :maxdepth: 2
    :caption: Cliente Android
    :name: mastertoc4
+
+   androidClient/Tecnologias
+   androidClient/ManualDeUsuario
 
 
 

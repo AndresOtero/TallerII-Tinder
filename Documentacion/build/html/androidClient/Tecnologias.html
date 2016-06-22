@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Base de datos &mdash; documentación de MatchApp - 3.0.0</title>
+  <title>Tecnologias utilizadas &mdash; documentación de MatchApp - 3.0.0</title>
   
 
   
@@ -31,8 +31,7 @@
 
   
     <link rel="top" title="documentación de MatchApp - 3.0.0" href="../index.html"/>
-        <link rel="next" title="Manual de usuario" href="ManualDeUsuario.html"/>
-        <link rel="prev" title="Tecnologias utilizadas" href="Tecnologias.html"/> 
+        <link rel="prev" title="Manual de usuario" href="../paginaWeb/ManualDeUsuario.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -90,14 +89,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../links.html">Links</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Shared Server</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="Tecnologias.html">Tecnologias utilizadas</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Base de datos</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#diagrama-de-base-de-datos">Diagrama de base de datos</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="ManualDeUsuario.html">Manual de usuario</a></li>
-<li class="toctree-l1"><a class="reference internal" href="TestUnitarios.html">Test Unitarios</a></li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sharedServer/Tecnologias.html">Tecnologias utilizadas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sharedServer/BaseDeDatos.html">Base de datos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sharedServer/ManualDeUsuario.html">Manual de usuario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sharedServer/TestUnitarios.html">Test Unitarios</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Pagina Web</span></p>
 <ul>
@@ -105,8 +101,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../paginaWeb/ManualDeUsuario.html">Manual de usuario</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Cliente Android</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../androidClient/Tecnologias.html">Tecnologias utilizadas</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Tecnologias utilizadas</a></li>
 </ul>
 
             
@@ -137,11 +133,11 @@
   <ul class="wy-breadcrumbs">
     <li><a href="../index.html">Docs</a> &raquo;</li>
       
-    <li>Base de datos</li>
+    <li>Tecnologias utilizadas</li>
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="../_sources/sharedServer/BaseDeDatos.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/androidClient/Tecnologias.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -151,14 +147,29 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="base-de-datos">
-<h1>Base de datos<a class="headerlink" href="#base-de-datos" title="Enlazar permanentemente con este título">¶</a></h1>
-<p>La base de datos esta implementada en PostgreSQL y alojada en heroku.
-PostgreSQL es una base de datos relacional con consultas SQL.</p>
-<div class="section" id="diagrama-de-base-de-datos">
-<h2>Diagrama de base de datos<a class="headerlink" href="#diagrama-de-base-de-datos" title="Enlazar permanentemente con este título">¶</a></h2>
-<img alt="../_images/diagrama.png" src="../_images/diagrama.png" />
-</div>
+  <div class="section" id="tecnologias-utilizadas">
+<h1>Tecnologias utilizadas<a class="headerlink" href="#tecnologias-utilizadas" title="Enlazar permanentemente con este título">¶</a></h1>
+<p>Tecnologias utilizadas para la implementacion del shared server</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="33%" />
+<col width="68%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="../_images/studio.png"><img alt="Html Image" class="align-middle" src="../_images/studio.png" style="width: 100.0px; height: 50.0px;" /></a></td>
+<td>Android Studio como IDE</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../_images/java2.png"><img alt="JavaScript Image" class="align-middle" src="../_images/java2.png" style="width: 100.0px; height: 50.0px;" /></a></td>
+<td>Java como lenguaje principal</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../_images/sdk.jpg"><img alt="alternate text" class="align-middle" src="../_images/sdk.jpg" style="width: 100.0px; height: 50.0px;" /></a></td>
+<td>SDK de Adnroid para la promacion de apps android</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../_images/volley.png"><img alt="alternate text" class="align-middle" src="../_images/volley.png" style="width: 100.0px; height: 50.0px;" /></a></td>
+<td>Volley para realizar los requests http al app server</td>
+</tr>
+</tbody>
+</table>
 </div>
 
 
@@ -168,10 +179,8 @@ PostgreSQL es una base de datos relacional con consultas SQL.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="ManualDeUsuario.html" class="btn btn-neutral float-right" title="Manual de usuario" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-      
-        <a href="Tecnologias.html" class="btn btn-neutral" title="Tecnologias utilizadas" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../paginaWeb/ManualDeUsuario.html" class="btn btn-neutral" title="Manual de usuario" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
