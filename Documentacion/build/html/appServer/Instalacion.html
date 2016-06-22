@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Base de datos &mdash; documentación de MatchApp - 3.0.0</title>
+  <title>Instalacion &mdash; documentación de MatchApp - 3.0.0</title>
   
 
   
@@ -31,8 +31,8 @@
 
   
     <link rel="top" title="documentación de MatchApp - 3.0.0" href="../index.html"/>
-        <link rel="next" title="Manual de usuario" href="ManualDeUsuario.html"/>
-        <link rel="prev" title="Tecnologias utilizadas" href="Tecnologias.html"/> 
+        <link rel="next" title="RestApi" href="RestApi.html"/>
+        <link rel="prev" title="Autentificacion" href="Autentificacion.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -91,14 +91,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../entregas.html">Archivos</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Shared Server</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="Tecnologias.html">Tecnologias utilizadas</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Base de datos</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#diagrama-de-base-de-datos">Diagrama de base de datos</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="ManualDeUsuario.html">Manual de usuario</a></li>
-<li class="toctree-l1"><a class="reference internal" href="TestUnitarios.html">Test Unitarios</a></li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sharedServer/Tecnologias.html">Tecnologias utilizadas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sharedServer/BaseDeDatos.html">Base de datos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sharedServer/ManualDeUsuario.html">Manual de usuario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sharedServer/TestUnitarios.html">Test Unitarios</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Pagina Web</span></p>
 <ul>
@@ -111,11 +108,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../androidClient/ManualDeUsuario.html">Manual de usuario</a></li>
 </ul>
 <p class="caption"><span class="caption-text">App Server</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../appServer/Tecnologias.html">Tecnologias utilizadas</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../appServer/Autentificacion.html">Autentificacion</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../appServer/Instalacion.html">Instalacion</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../appServer/RestApi.html">RestApi</a></li>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Tecnologias.html">Tecnologias utilizadas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Autentificacion.html">Autentificacion</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Instalacion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RestApi.html">RestApi</a></li>
 </ul>
 
             
@@ -146,11 +143,11 @@
   <ul class="wy-breadcrumbs">
     <li><a href="../index.html">Docs</a> &raquo;</li>
       
-    <li>Base de datos</li>
+    <li>Instalacion</li>
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="../_sources/sharedServer/BaseDeDatos.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/appServer/Instalacion.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -160,14 +157,41 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="base-de-datos">
-<h1>Base de datos<a class="headerlink" href="#base-de-datos" title="Enlazar permanentemente con este título">¶</a></h1>
-<p>La base de datos esta implementada en PostgreSQL y alojada en heroku.
-PostgreSQL es una base de datos relacional con consultas SQL.</p>
-<div class="section" id="diagrama-de-base-de-datos">
-<h2>Diagrama de base de datos<a class="headerlink" href="#diagrama-de-base-de-datos" title="Enlazar permanentemente con este título">¶</a></h2>
-<img alt="../_images/diagrama.png" src="../_images/diagrama.png" />
-</div>
+  <div class="section" id="instalacion">
+<h1>Instalacion<a class="headerlink" href="#instalacion" title="Enlazar permanentemente con este título">¶</a></h1>
+<p>Para la instalacion se realizaron una serie de scripts para poder correrlo además de un repositorio de docker, los scripts son los siguientes:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>Para instalar los paquetes necesarios para correr el servidor</dt>
+<dd><p class="first last"><code class="docutils literal"><span class="pre">$</span> <span class="pre">./beforeinstall.sh</span></code></p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Para compilar el proyecto y sus pruebas</dt>
+<dd><p class="first last"><code class="docutils literal"><span class="pre">$</span> <span class="pre">./build.sh</span></code></p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Para correr test unitarios</dt>
+<dd><p class="first last"><code class="docutils literal"><span class="pre">$</span> <span class="pre">./Test.sh</span></code></p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Para correr la aplicacion</dt>
+<dd><p class="first last"><code class="docutils literal"><span class="pre">$</span> <span class="pre">./Tinder.sh</span></code></p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Para correr los tests de integracion con el Shared Server</dt>
+<dd><p class="first last"><code class="docutils literal"><span class="pre">$</span> <span class="pre">./requests.py</span></code></p>
+</dd>
+</dl>
+</li>
+</ul>
 </div>
 
 
@@ -177,10 +201,10 @@ PostgreSQL es una base de datos relacional con consultas SQL.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="ManualDeUsuario.html" class="btn btn-neutral float-right" title="Manual de usuario" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="RestApi.html" class="btn btn-neutral float-right" title="RestApi" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="Tecnologias.html" class="btn btn-neutral" title="Tecnologias utilizadas" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="Autentificacion.html" class="btn btn-neutral" title="Autentificacion" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

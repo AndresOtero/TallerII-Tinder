@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Manual de usuario &mdash; documentación de MatchApp - 3.0.0</title>
+  <title>RestApi &mdash; documentación de MatchApp - 3.0.0</title>
   
 
   
@@ -31,8 +31,7 @@
 
   
     <link rel="top" title="documentación de MatchApp - 3.0.0" href="../index.html"/>
-        <link rel="next" title="Test Unitarios" href="TestUnitarios.html"/>
-        <link rel="prev" title="Base de datos" href="BaseDeDatos.html"/> 
+        <link rel="prev" title="Instalacion" href="Instalacion.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -91,17 +90,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../entregas.html">Archivos</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Shared Server</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="Tecnologias.html">Tecnologias utilizadas</a></li>
-<li class="toctree-l1"><a class="reference internal" href="BaseDeDatos.html">Base de datos</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Manual de usuario</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#usuarios">Usuarios</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#intereses">Intereses</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#categorias">Categorias</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#extras">Extras</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="TestUnitarios.html">Test Unitarios</a></li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sharedServer/Tecnologias.html">Tecnologias utilizadas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sharedServer/BaseDeDatos.html">Base de datos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sharedServer/ManualDeUsuario.html">Manual de usuario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sharedServer/TestUnitarios.html">Test Unitarios</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Pagina Web</span></p>
 <ul>
@@ -114,11 +107,17 @@
 <li class="toctree-l1"><a class="reference internal" href="../androidClient/ManualDeUsuario.html">Manual de usuario</a></li>
 </ul>
 <p class="caption"><span class="caption-text">App Server</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../appServer/Tecnologias.html">Tecnologias utilizadas</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../appServer/Autentificacion.html">Autentificacion</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../appServer/Instalacion.html">Instalacion</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../appServer/RestApi.html">RestApi</a></li>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Tecnologias.html">Tecnologias utilizadas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Autentificacion.html">Autentificacion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Instalacion.html">Instalacion</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">RestApi</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#usuarios">Usuarios</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mach">Mach</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#token">Token</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#chat">Chat</a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -149,11 +148,11 @@
   <ul class="wy-breadcrumbs">
     <li><a href="../index.html">Docs</a> &raquo;</li>
       
-    <li>Manual de usuario</li>
+    <li>RestApi</li>
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="../_sources/sharedServer/ManualDeUsuario.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/appServer/RestApi.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -163,43 +162,42 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="manual-de-usuario">
-<h1>Manual de usuario<a class="headerlink" href="#manual-de-usuario" title="Enlazar permanentemente con este título">¶</a></h1>
-<p>Para comunicar con el shared server se utilizan requests http. Las especificaciones de las requests estan en
-<a class="reference external" href="https://docs.google.com/document/d/144GVnoWe4m9Kgcws2r8ZRZdRQm4i0yN8DmTPEqreVYE/edit?ts=56e5aa7c#">Especificacion de Api</a></p>
+  <div class="section" id="restapi">
+<h1>RestApi<a class="headerlink" href="#restapi" title="Enlazar permanentemente con este título">¶</a></h1>
+<p>Para comunicar con el app server se utilizan requests http. Las especificaciones de las requests estan en
+<a class="reference external" href="https://docs.google.com/document/d/1XcMEDqwGhejQDGJv3rfjrBiuqx6NyNTbgXmal9zrH7A/edit?usp=sharing">Especificacion de RestApi</a></p>
 <div class="section" id="usuarios">
 <h2>Usuarios<a class="headerlink" href="#usuarios" title="Enlazar permanentemente con este título">¶</a></h2>
 <ul class="simple">
 <li>Obtener  todos los usuarios. Request <cite>get</cite> a <a class="reference external" href="http://tander.herokuapp.com/users">http://tander.herokuapp.com/users</a></li>
-<li>Obtener un usuario particular. Request <cite>get</cite> a <a class="reference external" href="http://tander.herokuapp.com/users/user_id">http://tander.herokuapp.com/users/user_id</a></li>
-<li>Alta de un usuario. Request <cite>post</cite> a <a class="reference external" href="http://tander.herokuapp.com/users">http://tander.herokuapp.com/users</a></li>
-<li>Modificacion de campos de un usuario. Request <cite>put</cite> a <a class="reference external" href="http://tander.herokuapp.com/users/user_id">http://tander.herokuapp.com/users/user_id</a></li>
-<li>Cambio de foto de perfil. Request <cite>put</cite> a <a class="reference external" href="http://tander.herokuapp.com/users/user_id/photo">http://tander.herokuapp.com/users/user_id/photo</a></li>
-<li>Eliminacion de usuario. Request <cite>delete</cite> a <a class="reference external" href="http://tander.herokuapp.com/users/user_id">http://tander.herokuapp.com/users/user_id</a></li>
+<li>Obtener un usuario particular. Request <cite>get</cite> a <a class="reference external" href="http://dir_appServer/users/user_id">http://dir_appServer/users/user_id</a></li>
+<li>Alta de un usuario. Request <cite>post</cite> a <a class="reference external" href="http://dir_appServer/users">http://dir_appServer/users</a></li>
+<li>Modificacion de campos de un usuario. Request <cite>put</cite> a <a class="reference external" href="http://dir_appServer/users/user_id">http://dir_appServer/users/user_id</a></li>
+<li>Cambio de foto de perfil. Request <cite>put</cite> a <a class="reference external" href="http://dir_appServer/users/user_id/photo">http://dir_appServer/users/user_id/photo</a></li>
+<li>Eliminacion de usuario. Request <cite>delete</cite> a <a class="reference external" href="http://dir_appServer/users/user_id">http://dir_appServer/users/user_id</a></li>
 </ul>
 </div>
-<div class="section" id="intereses">
-<h2>Intereses<a class="headerlink" href="#intereses" title="Enlazar permanentemente con este título">¶</a></h2>
+<div class="section" id="mach">
+<h2>Mach<a class="headerlink" href="#mach" title="Enlazar permanentemente con este título">¶</a></h2>
 <ul class="simple">
-<li>Listado de intereses. Request <cite>get</cite> a <a class="reference external" href="http://tander.herokuapp.com/interests">http://tander.herokuapp.com/interests</a></li>
-<li>Alta de interes. Request <cite>post</cite> a <a class="reference external" href="http://tander.herokuapp.com/interests">http://tander.herokuapp.com/interests</a></li>
-<li>Baja de interes. Request <cite>delete</cite> a <a class="reference external" href="http://tander.herokuapp.com/interests/interest_id">http://tander.herokuapp.com/interests/interest_id</a></li>
-<li>Modificacion de interes. Request <cite>delete</cite> a <a class="reference external" href="http://tander.herokuapp.com/interests/interest_id">http://tander.herokuapp.com/interests/interest_id</a></li>
+<li>El usuario likeo una foto de otro. Request <cite>post</cite> a <a class="reference external" href="http://dir_appServer/match">http://dir_appServer/match</a></li>
+<li>Obtener candidatos para likear. Request <cite>het</cite> a <a class="reference external" href="http://dir_appServer/match">http://dir_appServer/match</a></li>
 </ul>
 </div>
-<div class="section" id="categorias">
-<h2>Categorias<a class="headerlink" href="#categorias" title="Enlazar permanentemente con este título">¶</a></h2>
+<div class="section" id="token">
+<h2>Token<a class="headerlink" href="#token" title="Enlazar permanentemente con este título">¶</a></h2>
 <ul class="simple">
-<li>Listado de categorias. Request <cite>get</cite> a <a class="reference external" href="http://tander.herokuapp.com/categories">http://tander.herokuapp.com/categories</a></li>
-<li>Alta de categoria. Request <cite>get</cite> a <a class="reference external" href="http://tander.herokuapp.com/categories">http://tander.herokuapp.com/categories</a></li>
-<li>Baja de categoria. Request <cite>delete</cite> a <a class="reference external" href="http://tander.herokuapp.com/categories/category_id">http://tander.herokuapp.com/categories/category_id</a></li>
-<li>Modificacion de categoria. Request <cite>delete</cite> a <a class="reference external" href="http://tander.herokuapp.com/categories/category_id">http://tander.herokuapp.com/categories/category_id</a></li>
+<li>Crear un Token. Request <cite>post</cite> a <a class="reference external" href="http://dir_appServer/token">http://dir_appServer/token</a></li>
+<li>Eliminar un Token. Request <cite>delete</cite> a <a class="reference external" href="http://dir_appServer/token">http://dir_appServer/token</a></li>
+<li>Iniciar secion con un token. Request <cite>post</cite> a <a class="reference external" href="http://dir_appServer/token/singin">http://dir_appServer/token/singin</a></li>
 </ul>
 </div>
-<div class="section" id="extras">
-<h2>Extras<a class="headerlink" href="#extras" title="Enlazar permanentemente con este título">¶</a></h2>
+<div class="section" id="chat">
+<h2>Chat<a class="headerlink" href="#chat" title="Enlazar permanentemente con este título">¶</a></h2>
 <ul class="simple">
-<li>Eliminacion de todos los usuarios de la base de datos, incluidos sus intereses y sus ubicaciones. Request <cite>delete</cite> a <a class="reference external" href="http://tander.herokuapp.com/borrarBase">http://tander.herokuapp.com/borrarBase</a></li>
+<li>Crear un mensaje. Request <cite>post</cite> a <a class="reference external" href="http://dir_appServer/chat">http://dir_appServer/chat</a></li>
+<li>Obtener todos los chats. Request <cite>get</cite> a <a class="reference external" href="http://dir_appServer/chat">http://dir_appServer/chat</a></li>
+<li>Obtener todos los mensajes de un chat. Request <cite>get</cite> a <a class="reference external" href="http://dir_appServer/chat/IdChat-MessageId">http://dir_appServer/chat/IdChat-MessageId</a></li>
 </ul>
 </div>
 </div>
@@ -211,10 +209,8 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="TestUnitarios.html" class="btn btn-neutral float-right" title="Test Unitarios" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-      
-        <a href="BaseDeDatos.html" class="btn btn-neutral" title="Base de datos" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="Instalacion.html" class="btn btn-neutral" title="Instalacion" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
