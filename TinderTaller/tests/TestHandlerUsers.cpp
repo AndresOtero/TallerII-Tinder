@@ -46,8 +46,6 @@ TEST(HandlerUsers,postUser) {
 	EXPECT_TRUE(msg.status==StatusCode::CREATED);
 	Json::Value jsonReturn=jsonParser.stringToValue(msg.body);
 	EXPECT_TRUE(jsonReturn["token"].asString()==mail);
-	EXPECT_TRUE(jsonReturn["user"]["email"].asString()==mail);
-	EXPECT_TRUE(jsonReturn["user"]["gcm_registration_id"].asString()==gmcId);
 
 	delete handler;
 	delete hm;
@@ -82,7 +80,6 @@ TEST(HandlerUsers,delete_) {
 	Json::Value jsonReturn=jsonParser.stringToValue(msg.body);
 	EXPECT_TRUE(jsonReturn["token"].asString()==mail);
 	EXPECT_TRUE(jsonReturn["user"]["email"].asString()==mail);
-	EXPECT_TRUE(jsonReturn["user"]["gcm_registration_id"].asString()==gmcId);
 	hm->method.p="DELETE";
 	hm->method.len=strlen("DELETE");
 	string uriDelete="/users/"+mail+"/";

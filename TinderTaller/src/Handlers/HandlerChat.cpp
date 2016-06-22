@@ -158,7 +158,6 @@ Json::Value HandlerChat::getChatHeader(string user,string chatString,string chat
 	if(chat["User1"].asString()==user){
 		header["Unread"]=chat["LastMessage1"];
 		header["User"]=chat["User2"];
-
 	}else{
 		header["Unread"]=chat["LastMessage2"];
 		header["User"]=chat["User1"];
@@ -207,7 +206,7 @@ string HandlerChat::readChat(string chatString,string user,string messageId,stri
 	Json::Value lastsMessagesMsg;
 	int lastMessageRead;
 	int lastMessageId=chat["message_id"].asInt();
-	if(chat["User1"].asString()==user){
+	if(chat["User1"].asString()!=user){//OJO todo
 		lastMessageRead=chat["LastMessage2"].asInt();
 		chat["LastMessage1"]=0;
 	}else{
