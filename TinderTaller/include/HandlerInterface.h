@@ -25,6 +25,7 @@ class HandlerInterface {
 		virtual msg_t unathorized();
 		virtual msg_t badRequest(string strMsg);
 
+
 	protected:
 		shared_ptr<TokenAuthentificatorInterface> tokenAuthentificator;
 		HTTPRequestParser httpReqParser;
@@ -36,8 +37,8 @@ class HandlerInterface {
 		virtual msg_t handleGet(struct http_message *hm);
 		virtual msg_t handlePut(struct http_message *hm);
 		virtual msg_t handleDelete(struct http_message *hm);
+		Json::Value loadUserPreferences(Json::Value val,string userId);
 		string getUser(struct http_message *hm);
-
 		msg_t methodNotAllowed();
 
 };

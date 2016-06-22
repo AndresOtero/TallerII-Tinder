@@ -5,6 +5,7 @@
 #include "../include/ClientServiceMock.h"
 #include "../include/TokenAuthentificatorMock.h"
 TEST(HandlerChat,isHandler) {
+	Configuration::setPath("./config/testConfig.Json");
 	JsonParser jsonParser;
 	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
 	shared_ptr<TokenAuthentificatorMock> tokenAuth(new TokenAuthentificatorMock());
@@ -22,6 +23,7 @@ TEST(HandlerChat,isHandler) {
 
 TEST(HandlerChat,postChat) {
 	JsonParser jsonParser;
+	Configuration::setPath("./config/testConfig.Json");
 	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
 	shared_ptr<TokenAuthentificatorMock> tokenAuth(new TokenAuthentificatorMock());
 	shared_ptr<ClientServiceMock>clientServ (new ClientServiceMock());
@@ -67,6 +69,7 @@ TEST(HandlerChat,postChat) {
 
 TEST(HandlerChat,getAllChat) {
 	JsonParser jsonParser;
+	Configuration::setPath("./config/testConfig.Json");
 	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
 	shared_ptr<TokenAuthentificatorMock> tokenAuth(new TokenAuthentificatorMock());
 	shared_ptr<ClientServiceMock>clientServ (new ClientServiceMock());
@@ -112,6 +115,7 @@ TEST(HandlerChat,getAllChat) {
 }
 TEST(HandlerChat,getIdChat) {
 	JsonParser jsonParser;
+	Configuration::setPath("./config/testConfig.Json");
 	shared_ptr<DataBase> db(new DataBase("./DBTest/", true, true));
 	shared_ptr<TokenAuthentificatorMock> tokenAuth(new TokenAuthentificatorMock());
 	shared_ptr<ClientServiceMock>clientServ (new ClientServiceMock());

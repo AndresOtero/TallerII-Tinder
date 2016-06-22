@@ -101,6 +101,12 @@ User UserDao::buildUser(string idUser, string userInJsonShared){
 	Json::Value interestsJson = responseJson["interests"];
 	vector<Interest> interests = jsonParser.getInterest(interestsJson);
 	user.setInterests(interests);
+	DBtuple userPreferencesTuple(user.getEmail()+"_preferences");
+	this->dataBase->get(userPreferencesTuple);
+	Json::Value preferencesValue=jsonParser.stringToValue(userPreferencesTuple.value);
+	Json::Value preferencesJson = preferencesValue["preferences"];
+	vector<Interest> preferencesArray = jsonParser.getInterest(preferencesJson);
+	user.setPreferences(preferencesArray);
 	string latitude = jsonParser.getStringFromValue(responseJson["location"], "latitude");
 	user.setLatitude(atof(latitude.c_str()));
 	string longitude = jsonParser.getStringFromValue(responseJson["location"], "longitude");

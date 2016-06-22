@@ -7,7 +7,7 @@ Created on Mon May 23 07:59:04 2016
 import unittest
 
 users=["Andy","Ely","Fede"]
-host="localhost	"
+host='localhost'
 
 
 def crear_usuarios():
@@ -17,7 +17,7 @@ def crear_usuarios():
 		intereses = [{'value':'Boca', 'category':'Deporte'},{'value':'Cuba','category':'Viajes'}]
 		foto = "photo"
 		ubicacion = {'latitude':-34.610510, 'longitude':-58.386391}
-		user = {'gcm_registration_id':"aaaaaaaaaa",'name':user,'password': "hashed",'interests':intereses,'location':ubicacion,'alias':user,'age':45,'sex':'H','photo_profile':foto,'email':mail}
+		user = {'gcm_registration_id':"aaaaaaaaaa",'name':user,'password': "hashed",'interests':intereses,'location':ubicacion,'alias':user,'age':45,'sex':'Hombre','photo_profile':foto,'email':mail}
 		urlGetUsers = 'http://'+host+':8080/users/'
 		metadata = {'version':"0.1"}
 		r['user'] = user
@@ -62,12 +62,18 @@ for user in users:
 	token={'user':{'email': mail,'password': "hashed" } }
 	token_json=json.dumps(token)	
 	response = requests.post(urlToken,data=token_json)
-	myTest.test(response,"200")
 	print response
 	auth[user]={}
 	auth[user]["Authorization"] = response.json()["token"]
-
-
+for user in users:
+	for user2 in users:
+		if(user!=user2):
+			url='http://' + host + ':8080/match/'
+			mail = user2+'@gmail.com'
+			userMatch = {"email" : mail}
+			dataMatchPost_json = json.dumps(userMatch)
+			response = requests.post(url,headers=auth[user],data=dataMatchPost_json)
+		print response
 print "Get mensajes andy"
 print urlChat
 response = requests.get(urlChat ,headers=auth["Andy"])

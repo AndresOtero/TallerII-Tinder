@@ -11,7 +11,16 @@ Interest::Interest() {
 	// TODO Auto-generated constructor stub
 
 }
-
+void Interest::changeInterest(string category,string value){
+	this->category=category;
+	this->value=value;
+}
+Json::Value Interest::getJsonValue(){
+	Json::Value Interest;
+	Interest["category"]=this->category;
+	Interest["value"]=this->value;
+	return Interest;
+}
 Interest::~Interest() {
 	// TODO Auto-generated destructor stub
 }

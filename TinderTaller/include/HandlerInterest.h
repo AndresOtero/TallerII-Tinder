@@ -9,7 +9,7 @@
 #define SRC_HANDLERS_HANDLERINTEREST_H_
 #include "HandlerInterface.h"
 #include "SharedClient.h"
-
+#include "Interest.h"
 class HandlerInterest: public HandlerInterface {
 public:
 	HandlerInterest(shared_ptr<DataBase> DB,shared_ptr<TokenAuthentificatorInterface> tokenAuthentificator,shared_ptr<SharedClient> sharedClient);

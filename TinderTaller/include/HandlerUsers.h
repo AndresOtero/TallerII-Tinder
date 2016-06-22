@@ -18,6 +18,8 @@ public:
 	virtual ~HandlerUsers();
 private:
 	shared_ptr<SharedClient> sharedClient;
+	Json::Value saveUserPreferences(Json::Value user,string userId);
+
 	virtual msg_t handlePost(struct http_message *hm);
 	virtual msg_t handleGet(struct http_message *hm);
 	virtual msg_t handlePut(struct http_message *hm);

@@ -16,8 +16,19 @@ HandlerInterest::HandlerInterest(shared_ptr<DataBase> DB,shared_ptr<TokenAuthent
 }
 
 msg_t HandlerInterest::handleGet(struct http_message *hm){
-	/**Busco todos los intereses del usuario**/
-	return this->sharedClient->getInterests();
+	/**Busco todos los interesemJsonString);
+					 .clear();s del usuario**/
+	msg_t msg=this->sharedClient->getInterests();
+	Json::Value val=jsonParse.stringToValue(msg.body);
+	Interest hombre;
+	hombre.changeInterest("Me interesa conocer","Hombre");
+	Interest mujer;
+	mujer.changeInterest("Me interesa conocer","Mujer");
+	val["interests"].append(hombre.getJsonValue());
+	val["interests"].append(mujer.getJsonValue());
+	val["metadata"]["count"]=val["metadata"]["count"].asInt()+2;
+	msg.body=jsonParse.valueToString(val);
+	return msg;
 }
 msg_t HandlerInterest::handlePost(struct http_message *hm){
 	/**Creo un nuevo interes**/

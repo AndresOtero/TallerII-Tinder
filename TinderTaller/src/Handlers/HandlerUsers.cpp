@@ -35,6 +35,9 @@ msg_t HandlerUsers::handleGet(struct http_message * hm) {
 		if(ok){
 			LOG(INFO)<<"Id:  "<< userId.value;
 			msg = sharedClient->getUser(userId.value);
+			Json::Value val= jsonParse.stringToValue(msg.body);
+			val=this->loadUserPreferences(val,id);
+			msg.body=jsonParse.valueToString(val);
 		}
 		else{
 			LOG(WARNING)<<"Not success";
@@ -61,12 +64,12 @@ msg_t HandlerUsers::handlePost(struct http_message * hm) {
 	Json::Value val = jsonParse.stringToValue(hm->body.p);
 	string pass=jsonParse.removePassword(val);
 	string gcm_registration_id=jsonParse.removeGcmId(val);
-	LOG(INFO)<<"Pass: "<<pass<<"\n";
-	string user=jsonParse.valueToString(val);
 	if(userExists(hm)){
 		msg.change(BAD_REQUEST, "{\"Mensaje\":\"Usuario ya creado\"}");
 		return msg;
 	}
+	val=this->saveUserPreferences(val,val["user"]["email"].asString());
+	string user=jsonParse.valueToString(val);
 	//Va a dar de alta el usuario en el Shared
 	LOG(INFO)<<"Mensaje: "<<user<<"\n";
 	msg_t  response = sharedClient->setUser(user);
@@ -77,6 +80,7 @@ msg_t HandlerUsers::handlePost(struct http_message * hm) {
 		LOG(INFO)<<"Creo "<< mail <<" como usuario";
 		string token=tokenAuthentificator->createJsonToken(mail);
 		val["token"]=token;
+		val=this->loadUserPreferences(val,mail);
 		string  result = jsonParse.valueToString(val);
 		LOG(INFO)<<"Result "<< result ;
 		DBtuple userId(mail+"_id",id);
@@ -111,30 +115,55 @@ msg_t HandlerUsers::handlePut(struct http_message * hm) {
 	}
 }
 
+Json::Value HandlerUsers::saveUserPreferences(Json::Value val,string userId){
+	Json::Value preferences;
+	Json::Value newInterests;
+	Json::Value user=val["user"];
+	if(user.isMember("interests")){
+		Json::Value interests=user["interests"];
+		for( Json::ValueIterator itr = interests.begin() ; itr != interests.end() ; itr++ ){
+			if(((*itr)["category"].asString())=="Me interesa conocer"){
+				Interest interest;
+				interest.changeInterest((*itr)["category"].asString(),(*itr)["value"].asString());
+				preferences["preferences"].append(interest.getJsonValue());
+			}else{
+				newInterests.append(*itr);
+			}
+		}
+		user["interests"]=newInterests;
+	}
+	DBtuple userPreferenceTp(userId+"_preferences",jsonParse.valueToString(preferences));
+ 	DB->put(userPreferenceTp);
+	val["user"]=user;
+	return val;
+}
+
+
 msg_t HandlerUsers::putUserUpdateProfile(struct http_message * hm) {
 	/**Manejo el put de user, recibe un mensaje y una base de datos.Devuelve el msg correspondiente.Modifica un usuario**/
 	msg_t msg;
 	string id = httpReqParser.getId(hm);
 	Json::Value userNew = jsonParse.stringToValue(hm->body.p);
-	string pass=jsonParse.removePassword(userNew);
-	string gcm_registration_id=jsonParse.removeGcmId(userNew);
+	string pass = jsonParse.removePassword(userNew);
+	string gcm_registration_id = jsonParse.removeGcmId(userNew);
 	LOG(INFO)<<"Pass: "<<pass<<"\n";
 	if (httpReqParser.idOk()) {
 		LOG(INFO)<<"Busco "<< id <<" como identificador";
 		DBtuple userId(id+"_id");
 		bool okGet=DB->get(userId);
-		if(pass!=""){
-			DBtuple userPass(id+"_pass",pass);
-			bool okPutPass = DB->put(userPass);
-			bool okDelete =this->deleteToken(hm);
-			LOG(INFO)<<"Registro Nueva Password ";
-		}
-		if(gcm_registration_id!=""){
-			DBtuple userGcmId(id+"_gcmId",gcm_registration_id);
-			bool okPutGcmId = DB->put(userGcmId);
-			LOG(INFO)<<"Registro Nuevo GCM Id ";
-		}
-		if(okGet){
+
+		if(okGet) {
+			if(pass!="") {
+				DBtuple userPass(id+"_pass",pass);
+				bool okPutPass = DB->put(userPass);
+				bool okDelete =this->deleteToken(hm);
+				LOG(INFO)<<"Registro Nueva Password ";
+			}
+			if(gcm_registration_id!="") {
+				DBtuple userGcmId(id+"_gcmId",gcm_registration_id);
+				bool okPutGcmId = DB->put(userGcmId);
+				LOG(INFO)<<"Registro Nuevo GCM Id ";
+			}
 			msg_t msgGet = sharedClient->getUser(userId.value);
 			Json::Value userOld=jsonParse.stringToValue(msgGet.body);
 			Json::Value val=jsonParse.replaceNewUserInOldUser(userNew,userOld);
@@ -143,12 +172,13 @@ msg_t HandlerUsers::putUserUpdateProfile(struct http_message * hm) {
 			//string token=tokenAuthentificator->createJsonToken(mail);
 			//val["token"]=token;
 			//string  result = jsonParse.valueToString(val);
+			val=this->saveUserPreferences(val,id);
 			//Va a actualizar un usuario en el Shared
 			string userNew=jsonParse.valueToString(val);
-			msg_t  response = sharedClient->updateUser(userId.value, userNew);
+			msg_t response = sharedClient->updateUser(userId.value, userNew);
 			msg.status = response.status;
 			msg.body = "";//response.body;
-		}else {
+		} else {
 			LOG(WARNING)<<"Not success";
 			msg=this->badRequest("Not success");
 		}

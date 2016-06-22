@@ -56,6 +56,7 @@ private:
 	vector<User> getUsersNotMatch(User user, vector<User> candidates);
 	vector<User> getUsersNear(User user, vector<User> candidates);
 	vector<User> getUsersCommonInterests(User user, vector<User> candidates);
+	vector<User> getUsersPreferences(User user, vector<User> candidates);
 	string cleanString(string idUserCandidateMatch);
 public:
 	CandidateService(shared_ptr<DataBase> DB,shared_ptr<SharedClient> sharedClient);

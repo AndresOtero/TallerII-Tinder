@@ -76,6 +76,24 @@ msg_t HandlerInterface::handle(struct http_message *hm) {
 	string token =httpReqParser.getTokenFromHeader(hm);
 	return tokenAuthentificator->deleteJsonTokenUser(token);
 }
+ Json::Value HandlerInterface::loadUserPreferences(Json::Value val,string userId){
+ 	Json::Value preferences;
+ 	DBtuple userPreferenceTp(userId+"_preferences");
+ 	DB->get(userPreferenceTp);
+ 	preferences=jsonParse.stringToValue(userPreferenceTp.value);
+ 	Json::Value newInterests;
+ 	Json::Value user=val["user"];
+ 	if(user.isMember("interests")){
+ 		Json::Value interests=user["interests"];
+ 		for( Json::ValueIterator itr = preferences["preferences"].begin() ; itr != preferences["preferences"].end() ; itr++ ){
+ 			LOG(INFO)<<"Interes"<<jsonParse.valueToString(*itr);
+ 			interests.append(*itr);
+ 		}
+ 		user["interests"]=interests;
+ 	}
+ 	val["user"]=user;
+ 	return val;
+ }
  string HandlerInterface::getUser(struct http_message *hm){
 	 /**Devuelve el usuario que manda el mensaje**/
 		string token = httpReqParser.getTokenFromHeader(hm);

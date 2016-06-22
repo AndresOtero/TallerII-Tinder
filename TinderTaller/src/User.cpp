@@ -139,7 +139,13 @@ void User::setUrlPhotoProfile(string urlPhotoProfile){
 string User::getUrlPhotoProfile(){
 	return this->urlPhotoProfile;
 }
+vector<Interest> User::getPreferences() {
+	return preferences;
+}
 
+void User::setPreferences(vector<Interest> preferences) {
+	this->preferences = preferences;
+}
 void User::setInterests(vector<Interest> interests){
 	this->interests = interests;
 }

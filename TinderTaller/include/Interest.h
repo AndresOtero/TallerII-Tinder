@@ -7,8 +7,8 @@
 
 #ifndef ENTITIES_INTEREST_H_
 #define ENTITIES_INTEREST_H_
-
 #include <string>
+#include "json/json.h"
 
 using namespace std;
 
@@ -18,6 +18,8 @@ private:
 	string value;
 public:
 	Interest();
+	void changeInterest(string category,string value);
+	Json::Value getJsonValue();
 	virtual ~Interest();
 	string getCategory();
 	void setCategory(string category);
