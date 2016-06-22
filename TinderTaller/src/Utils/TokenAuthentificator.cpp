@@ -149,4 +149,5 @@ bool TokenAuthentificator::validateJsonToken(string jsonToken){
 
 TokenAuthentificator::~TokenAuthentificator() {
 	// destructor
+}
 
