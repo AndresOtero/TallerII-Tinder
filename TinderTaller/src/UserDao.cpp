@@ -175,6 +175,8 @@ bool UserDao::putMatch(User user, User userToMatch){
 	for(string id : idUserMatchs){
 		data.append(id);
 	}
+	user.setIdUserMatchs(idUserMatchs);
+
 	root["idUserMatchs"] = data;
 	DBtuple keyIdUserMatchs(user.getId() + "_idUserMatchs");
 	keyIdUserMatchs.value = jsonParser.valueToString(root);
@@ -224,6 +226,8 @@ bool UserDao::putCandidateMatch(User user, User userToMatch){
 	for(string id : idUserCandidatesMatchs){
 		data.append(id);
 	}
+	user.setIdUserCandidatesMatchs(idUserCandidatesMatchs);
+
 	root["idUserCandidatesMatchs"] = data;
 	DBtuple keyIdUserCandidatesMatchs(user.getId() + "_idUserCandidatesMatchs");
 	keyIdUserCandidatesMatchs.value = jsonParser.valueToString(root);

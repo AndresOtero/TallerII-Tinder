@@ -389,8 +389,24 @@ string CandidateService::cleanString(string idUserCandidateMatch){
 	 * Details:"RobertoM50.758326710562@gmail.com"
 	 */
 
-	int length = idUserCandidateMatch.size() - 3;
-	string idOk = idUserCandidateMatch.substr(1, length);
+	string idOk = "";
+	char newline = '\n';
+	char tab = '\t';
+	char backspace = '\b';
+	char backslash = '\\';
+	char nullChar = '\0';
+	char back = 34; // '\'
+	char aux = '\0';
+	int lenght = idUserCandidateMatch.length();
+	for (int i = 0; i < lenght; i++){
+		char caracter = idUserCandidateMatch[i];
+		if(caracter != newline && caracter != tab && caracter != backspace
+				&& caracter != backslash && caracter != nullChar && caracter != back
+				&& !(aux == backslash && caracter == 'n')){
+			idOk += caracter;
+		}
+		aux = caracter;
+	}
 
 	return idOk;
 }
