@@ -1,6 +1,6 @@
 {
 "http_port":"localhost:8080",
 "createIfMissing":"true",
-"deleteAll":"true",
+"deleteAll":"false",
 "urlSharedServer": "http://tander.herokuapp.com"
 } 
