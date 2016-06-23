@@ -274,6 +274,10 @@ vector<User> CandidateService::getUsersPreferences(User user, vector<User> candi
 					break;
 			}
 		}
+		if (!isPreference){
+			LOG(DEBUG) << "No es de la preferencia del usuario (CandidateService - getUsersPreferences): " << candidate.getId();
+			continue;
+		}
 		//Voy a recorrer los intereses del usuario
 		for(int iUseInt = 0; iUseInt < candidate.getPreferences().size(); iUseInt ++){
 			Interest candidatePreference = candidate.getPreferences()[iUseInt];
@@ -282,6 +286,8 @@ vector<User> CandidateService::getUsersPreferences(User user, vector<User> candi
 			if (candidatePreference.getValue()==userSex){
 				isPreference=true;
 				break;
+			}else{
+				isPreference=false;
 			}
 		}
 
