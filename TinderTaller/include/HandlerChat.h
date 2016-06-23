@@ -19,8 +19,11 @@ class HandlerChat: public HandlerInterface {
 	private:
 		shared_ptr<SharedClient> sharedClient;
 		shared_ptr<GcmClient> gcmClient;
+		msg_t postRead(struct http_message *hm);
 		virtual msg_t handlePost(struct http_message *hm);
 		virtual msg_t handleGet(struct http_message *hm);
+		//virtual msg_t badRequest(struct http_message *hm);
+
 		vector<string> getChatsId(struct http_message *hm);
 		Json::Value getChatsIdValue(struct http_message *hm);
 		msg_t handleGetAll(struct http_message *hm);
