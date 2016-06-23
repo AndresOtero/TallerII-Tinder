@@ -38,6 +38,13 @@ msg_t GcmClient::setInGcm(string & data){
 
 	return response;
 }
+msg_t GcmClient::setNewRead(string & readMatch){
+	LOG(INFO)<< "Va a informar un nuevo read (GcmClient - setNewRead)";
+	LOG(DEBUG)<< "El json para el nuevo read es: " << readMatch;
+	msg_t  response = setInGcm(readMatch);
+	LOG(INFO)<< "FIN de dar de alta un nuevo read (GcmClient - setNewRead)";
+	return response;
+}
 
 msg_t GcmClient::setNewMatch(string & dataMatch){
 	/**Mando un mensaje de que hay un nuevo match al usuario correspondiente**/

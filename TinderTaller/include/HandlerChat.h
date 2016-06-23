@@ -19,8 +19,11 @@ class HandlerChat: public HandlerInterface {
 	private:
 		shared_ptr<SharedClient> sharedClient;
 		shared_ptr<GcmClient> gcmClient;
+		msg_t postRead(struct http_message *hm);
 		virtual msg_t handlePost(struct http_message *hm);
 		virtual msg_t handleGet(struct http_message *hm);
+		//virtual msg_t badRequest(struct http_message *hm);
+
 		vector<string> getChatsId(struct http_message *hm);
 		Json::Value getChatsIdValue(struct http_message *hm);
 		msg_t handleGetAll(struct http_message *hm);
@@ -30,7 +33,7 @@ class HandlerChat: public HandlerInterface {
 		string getChatId(string remitente,string destinatario);
 		Json::Value  saveNewMessage(string chatId,string  remitente,string message);
 		bool saveNewChat(string chatId,string  remitente,string destinatario);
-		Json::Value getChatHeader(string user,string chatString,string chatId);
+		Json::Value getChatHeader(string user,string chatId);
 		string readChat(string chat,string user,string messageId,string conversationId);
 
 };

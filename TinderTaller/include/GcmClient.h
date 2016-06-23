@@ -21,6 +21,7 @@ public:
 	virtual ~GcmClient();
 	msg_t setNewMatch(string & dataMatch);
 	msg_t setNewChat(string & dataChat);
+	msg_t setNewRead(string & readMatch);
 private:
 	shared_ptr<ClientServiceInterface> clientService ;
 	msg_t setInGcm(string & data);

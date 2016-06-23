@@ -44,6 +44,8 @@ TEST(HandlerChat,postChat) {
 	hm->body.len=jsonIdString.size();
 	hm->method.p="POST";
 	hm->method.len=4;
+	hm->uri.p="chat/";
+	hm->uri.len=strlen("chat/");
 	hm->header_names[3].p="Authorization";
 	hm->header_names[3].len=strlen("Authorization");
 	hm->header_values[3].p=mail.c_str();
@@ -89,6 +91,8 @@ TEST(HandlerChat,getAllChat) {
 	hm->body.len=jsonIdString.size();
 	hm->method.p="POST";
 	hm->method.len=4;
+	hm->uri.p="chat/";
+	hm->uri.len=strlen("chat/");
 	hm->header_names[1].p="Authorization";
 	hm->header_names[1].len=strlen("Authorization");
 	hm->header_values[1].p=mail.c_str();
@@ -136,6 +140,8 @@ TEST(HandlerChat,getIdChat) {
 	hm->body.len=jsonIdString.size();
 	hm->method.p="POST";
 	hm->method.len=4;
+	hm->uri.p="chat/";
+	hm->uri.len=strlen("chat/");
 	hm->header_names[1].p="Authorization";
 	hm->header_names[1].len=strlen("Authorization");
 	hm->header_values[1].p=mail.c_str();
